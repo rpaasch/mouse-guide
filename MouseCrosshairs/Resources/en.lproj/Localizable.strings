@@ -1,0 +1,267 @@
+/* English Localization */
+
+/* App name */
+"app.name" = "Mouse Guide";
+
+/* Menu Bar */
+"menu.toggle" = "Toggle Crosshairs";
+"menu.settings" = "Settings...";
+"menu.about" = "About Mouse Guide";
+"menu.quit" = "Quit";
+
+/* Onboarding */
+"onboarding.title" = "Welcome to Mouse Guide";
+"onboarding.welcome" = "A visible crosshair and reading ruler for your screen.\n\nMouse Guide helps you see where your cursor is and follow text on the screen. Perfect if you have difficulty seeing the cursor, or if you need a reading ruler when reading on the screen.";
+"onboarding.step1.title" = "1. Toggle Crosshairs";
+"onboarding.step1.description" = "Press ⇧⌃L (Shift + Control + L) to toggle crosshairs on and off at any time.";
+"onboarding.step2.title" = "2. Menu Bar Access";
+"onboarding.step2.description" = "Find the crosshair icon in your menu bar for quick access to settings and controls.";
+"onboarding.step3.title" = "3. Customize Appearance";
+"onboarding.step3.description" = "Choose colors, thickness, opacity, and orientation to match your preferences.";
+"onboarding.step4.title" = "4. Multi-Monitor Support";
+"onboarding.step4.description" = "Crosshairs work seamlessly across all your displays and adapt to screen changes.";
+"onboarding.permission.title" = "Accessibility Permission Required";
+"onboarding.permission.description" = "To enable global keyboard shortcuts, Mouse Guide needs Accessibility permission.\n\nPlease go to System Settings → Privacy & Security → Accessibility and enable Mouse Guide.";
+"onboarding.button.openSettings" = "Open System Settings";
+"onboarding.button.getStarted" = "Get Started";
+"onboarding.button.continue" = "Continue";
+
+/* Settings */
+"settings.title" = "Mouse Guide Settings";
+"settings.activation" = "Activation";
+"settings.keyboardShortcut" = "Keyboard Shortcut";
+"settings.current" = "Current:";
+"settings.change" = "Change...";
+"settings.shortcutHelp" = "Press the keyboard shortcut to toggle on/off";
+
+"settings.appearance" = "Appearance";
+"settings.crosshairColor" = "Color:";
+"settings.borderColor" = "Border Color:";
+"settings.invertColors" = "Adapt color automatically based on background";
+"settings.opacity" = "Opacity:";
+"settings.centerRadius" = "Center Radius:";
+"settings.thickness" = "Thickness:";
+"settings.edgePointerThickness" = "Pointer Thickness:";
+"settings.borderSize" = "Border Size:";
+
+"settings.orientation" = "Orientation";
+"settings.orientationLabel" = "Orientation:";
+"settings.orientation.horizontal" = "Horizontal";
+"settings.orientation.vertical" = "Vertical";
+"settings.orientation.both" = "Both";
+"settings.orientation.edgePointers" = "Edge Pointers";
+"settings.orientation.circle" = "Circle";
+"settings.orientation.readingLine" = "Reading Line";
+
+"settings.length" = "Length";
+"settings.fixLength" = "Fix length";
+"settings.fixedLength" = "Fixed Length:";
+
+"settings.circle" = "Circle";
+"settings.showCircle" = "Show circle around cursor";
+"settings.circleRadius" = "Circle radius:";
+"settings.circleFillOpacity" = "Fill Opacity";
+"settings.circleFillOpacity.description" = "Opacity of the circle fill (0% = no fill)";
+
+"settings.lineStyle" = "Line Style";
+"settings.lineStyle.solid" = "Solid";
+"settings.lineStyle.dashed" = "Dashed";
+"settings.lineStyle.dotted" = "Dotted";
+
+"settings.behavior" = "Behavior";
+"settings.autoHide" = "Automatically hide when mouse pointer is hidden";
+"settings.launchAtLogin" = "Launch automatically at login";
+
+"settings.gliding" = "Gliding Cursor";
+"settings.glidingEnable" = "Enable gliding cursor";
+"settings.glidingSpeed" = "Travel Speed:";
+"settings.glidingSpeedHelp" = "Controls how fast the cursor glides";
+"settings.glidingDelay" = "Delay:";
+"settings.glidingDelayHelp" = "Delay before gliding starts";
+"settings.glidingNote" = "Note: Gliding cursor feature is currently experimental";
+
+/* Alerts */
+"alert.shortcut.title" = "Keyboard Shortcut";
+"alert.shortcut.message" = "To change the keyboard shortcut, you need to modify the settings. The default is ⇧⌃L (Shift + Control + L).\n\nYou can customize this in the app preferences.";
+"alert.ok" = "OK";
+
+/* Shareware / Payment */
+"payment.title" = "Thanks for using Mouse Guide!";
+"payment.subtitle" = "A visible crosshair and reading ruler for your screen";
+"payment.description1" = "Mouse Guide helps you see where your cursor is and follow text on the screen.";
+"payment.description2" = "Perfect if you have difficulty seeing the cursor, or if you need a reading ruler when reading on the screen.";
+"payment.ifUseful" = "If you find the app useful,";
+"payment.wouldAppreciate" = "I would appreciate your support.";
+"payment.price" = "€5";
+"payment.worksRegardless" = "The app works fully regardless of whether you purchase or not.";
+"payment.buyButton" = "Support Development - Buy License (€5)";
+"payment.purchasedButton" = "I Already Purchased";
+"payment.continueButton" = "Continue Without Purchase";
+"payment.remindButton" = "Remind Me Later";
+"payment.aboutBuyButton" = "Buy License (€5)";
+"payment.aboutClose" = "Close";
+"payment.thankYou" = "Thanks for your support!";
+
+/* Onboarding - Welcome Step */
+"onboarding.welcome.title" = "Welcome to Mouse Guide";
+"onboarding.welcome.tagline" = "A visible crosshair and reading ruler for your screen";
+"onboarding.welcome.description1" = "Mouse Guide helps you see where your cursor is and follow text on the screen.";
+"onboarding.welcome.description2" = "Perfect if you have difficulty seeing the cursor, or if you need a reading ruler when reading on the screen.";
+"onboarding.welcome.feature1" = "Visible crosshair to find the cursor";
+"onboarding.welcome.feature2" = "Reading ruler to follow text";
+"onboarding.welcome.feature3" = "Toggle on/off with keyboard shortcut";
+"onboarding.welcome.feature4" = "Customize colors and size";
+"onboarding.welcome.button" = "Get Started";
+
+/* Language / Sprog */
+"settings.language" = "Language";
+"settings.language.description" = "Choose language for the app interface";
+"language.danish" = "Dansk";
+"language.english" = "English";
+
+/* License Errors */
+"license.error.invalidFormat" = "License key must be in the format XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX";
+"license.error.invalidKey" = "Invalid license key";
+"license.error.networkError" = "Could not connect to server. Check your internet connection.";
+"license.error.alreadyUsed" = "This license key is already in use";
+"license.error.refunded" = "This purchase has been refunded";
+"license.error.disputed" = "This purchase has been disputed or charged back";
+"license.error.subscriptionEnded" = "This subscription has expired or been canceled";
+
+/* License Tab */
+"license.status" = "License Status";
+"license.activated" = "Mouse Guide is activated";
+"license.thankyou" = "Thanks for your support!";
+"license.trial" = "Trial period";
+"license.trialDays" = "days remaining with full access";
+"license.free" = "Free version";
+"license.freeMinutes" = "until restart recommended";
+"license.freeRestrictions" = "Red crosshair only, 1px, one screen. Restart recommended every 10 minutes for best experience.";
+"license.freeRestart" = "Restart for new session";
+"license.checking" = "Checking license status...";
+"license.buyTitle" = "Buy Mouse Guide";
+"license.buyDescription" = "Get full access without restrictions for only €5";
+"license.buyNow" = "Buy Now - €5";
+"license.manageTitle" = "Manage License";
+"license.alreadyBought" = "Already purchased?";
+"license.enterKey" = "Enter the license key you received from Gumroad";
+"license.placeholder" = "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX";
+"license.active" = "Your license is active";
+"license.activate" = "Activate License";
+"license.activating" = "Activating...";
+"license.activated.title" = "License Activated!";
+"license.activated.message" = "Mouse Guide is now fully activated. Thanks for your support!";
+
+/* Free Session Expiry */
+"freeSession.expired.title" = "Restart Recommended";
+"freeSession.expired.message" = "Your 10 minutes are up.\n\nYou can continue working with the simple red crosshair, or:\n• Restart the app for a new session\n• Buy a license for full access without limitations";
+"freeSession.buyLicense" = "Buy License (€5)";
+"freeSession.restart" = "Restart App";
+
+/* Settings Categories */
+"settings.category.appearance" = "Appearance";
+"settings.category.behavior" = "Behavior";
+"settings.category.license" = "License";
+"settings.category.about" = "About";
+
+/* Appearance Tab */
+"appearance.colors" = "Colors";
+"appearance.colors.warning" = "Automatic color adaptation is enabled in the Behavior tab. These color choices are ignored.";
+"appearance.colors.quickSelect" = "Quick select:";
+"appearance.colors.crosshair.description" = "Main color";
+"appearance.colors.border.description" = "Border color";
+"appearance.dimensions" = "Dimensions";
+"appearance.opacity.description" = "Opacity (higher = more visible)";
+"appearance.centerRadius.description" = "Size of the empty area in the center";
+"appearance.circleRadius.description" = "Radius of the circle";
+"appearance.thickness.description" = "Line thickness";
+"appearance.edgePointerThickness.description" = "Thickness of the edge pointers";
+"appearance.borderSize.description" = "Border thickness";
+"appearance.orientation.description" = "Choose horizontal, vertical or both directions. Reading line shows an unbroken horizontal line.";
+"appearance.readingLine" = "Reading line (unbroken line)";
+"appearance.length.description" = "Limit to a fixed length instead of the full screen";
+"appearance.fixedLength.description" = "Length of each line";
+
+/* Behavior Tab */
+"behavior.colorAdaptation" = "Color Adaptation";
+"behavior.colorAdaptation.description" = "Automatically choose black or white color based on the background under the cursor";
+"behavior.colorAdaptation.info" = "When this is enabled, your selected colors in the Appearance tab are ignored";
+"behavior.general" = "General";
+"behavior.autoHide.description" = "Automatically hide when the system mouse cursor is hidden";
+"behavior.autoHideTyping" = "Hide while typing";
+"behavior.autoHideTyping.description" = "Automatically hide when you start typing on the keyboard";
+"behavior.autoHideTyping.delay" = "Show again after";
+"behavior.autoHideTyping.delay.description" = "How long to wait after the last keystroke before showing again";
+"behavior.autoHideTyping.permissions" = "Requires Accessibility and Input Monitoring permissions. See the About tab for help.";
+"behavior.launchAtLogin.description" = "Start the app automatically when you log in to your Mac";
+"behavior.gliding.description" = "Follow the mouse with a smooth, gliding motion";
+"behavior.gliding.speed.description" = "Controls how fast it glides towards the mouse";
+"behavior.gliding.delay.description" = "Delay before gliding starts after mouse movement";
+"behavior.gliding.note" = "Note: The gliding cursor feature is currently experimental";
+"behavior.shortcut.description" = "Press the keyboard shortcut to toggle on/off";
+
+/* Color Names */
+"color.red" = "Red";
+"color.green" = "Green";
+"color.blue" = "Blue";
+"color.yellow" = "Yellow";
+"color.orange" = "Orange";
+"color.purple" = "Purple";
+"color.white" = "White";
+"color.black" = "Black";
+"color.gray" = "Gray";
+
+/* About Tab */
+"about.app" = "About the App";
+"about.description" = "Mouse Guide helps you find and follow your mouse cursor with precise crosshairs across your entire screen. Especially useful if you have difficulty following the line when reading on screen, or have trouble finding the mouse.";
+"about.features" = "Features:";
+"about.feature.multimonitor" = "Full multi-monitor support";
+"about.feature.colorAdaptation" = "Dynamic color adaptation based on background";
+"about.feature.customizable" = "Customizable dimensions and colors";
+"about.feature.gliding" = "Gliding cursor for smooth movement";
+"about.feature.shortcut" = "Global keyboard shortcut";
+"about.madeBy" = "Made by Rasmus Paasch with ❤️ in Dyssegård, Denmark";
+"about.copyright" = "Copyright © 2025";
+"about.permissions" = "System Permissions";
+"about.permissions.description" = "Mouse Guide needs the following permissions to work correctly.";
+"about.permission.accessibility" = "Accessibility";
+"about.permission.accessibility.description" = "Required for global keyboard shortcuts";
+"about.permission.inputMonitoring" = "Input Monitoring";
+"about.permission.inputMonitoring.description" = "Required for 'Hide while typing' feature";
+"about.permission.screenRecording" = "Screen Recording";
+"about.permission.screenRecording.description" = "Required for automatic color adaptation";
+"about.permission.granted" = "Granted";
+"about.permission.missing" = "Missing";
+"about.permission.openSettings" = "Open Settings";
+"about.reset" = "Reset Settings";
+"about.reset.description" = "Restores all settings to their default values.";
+"about.reset.button" = "Reset to Default";
+"about.reset.confirm.title" = "Reset Settings";
+"about.reset.confirm.message" = "Are you sure you want to reset all settings to default? This action cannot be undone.";
+"about.reset.confirm.cancel" = "Cancel";
+"about.reset.confirm.reset" = "Reset";
+
+/* Common */
+"common.ok" = "OK";
+"common.cancel" = "Cancel";
+"common.close" = "Close";
+
+/* License Tab - Additional */
+"license.manageOrBuy" = "Manage License";
+"license.alreadyPurchasedTitle" = "Already purchased?";
+
+/* Formatted Values */
+"format.percent.visible" = "%d%% visible";
+"format.pixels" = "%d px";
+"format.seconds" = "%.1f sec";
+"format.speed" = "%.2f";
+"format.delay" = "%.2f s";
+"format.minute.singular" = "minute";
+"format.minute.plural" = "minutes";
+
+/* MenuBar */
+"menu.toggleOn" = "Turn on";
+"menu.toggleOff" = "Turn off";
+"menu.about" = "About Mouse Guide...";
+"menu.support" = "❤️ Support Development...";
+"menu.thankyou" = "💚 Thanks for your support!";

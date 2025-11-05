@@ -1,0 +1,267 @@
+/* Danish Localization */
+
+/* App name */
+"app.name" = "Mouse Guide";
+
+/* Menu Bar */
+"menu.toggle" = "Slå trådkors til/fra";
+"menu.settings" = "Indstillinger...";
+"menu.about" = "Om Mouse Guide";
+"menu.quit" = "Afslut";
+
+/* Onboarding */
+"onboarding.title" = "Velkommen til Mouse Guide";
+"onboarding.welcome" = "Mouse Guide hjælper dig med at følge din markør med præcise trådkors på tværs af hele din skærm.";
+"onboarding.step1.title" = "1. Slå trådkors til/fra";
+"onboarding.step1.description" = "Tryk ⇧⌃L (Shift + Control + L) for at slå trådkors til og fra når som helst.";
+"onboarding.step2.title" = "2. Menu bar adgang";
+"onboarding.step2.description" = "Find trådkors-ikonet i din menu bar for hurtig adgang til indstillinger og kontroller.";
+"onboarding.step3.title" = "3. Tilpas udseende";
+"onboarding.step3.description" = "Vælg farver, tykkelse, gennemsigtighed og orientering efter dine præferencer.";
+"onboarding.step4.title" = "4. Understøttelse af flere skærme";
+"onboarding.step4.description" = "Trådkors fungerer problemfrit på tværs af alle dine skærme og tilpasser sig skærmændringer.";
+"onboarding.permission.title" = "Tilgængelighedstilladelse påkrævet";
+"onboarding.permission.description" = "For at aktivere globale tastaturgenveje har Mouse Guide brug for tilgængelighedstilladelse.\n\nGå venligst til Systemindstillinger → Privatliv og sikkerhed → Tilgængelighed og aktiver Mouse Guide.";
+"onboarding.button.openSettings" = "Åbn systemindstillinger";
+"onboarding.button.getStarted" = "Kom i gang";
+"onboarding.button.continue" = "Fortsæt";
+
+/* Settings */
+"settings.title" = "Indstillinger for Mouse Guide";
+"settings.activation" = "Aktivering";
+"settings.keyboardShortcut" = "Tastaturgenvej";
+"settings.current" = "Nuværende:";
+"settings.change" = "Skift...";
+"settings.shortcutHelp" = "Tryk på tastaturgenvejen for at slå til/fra";
+
+"settings.appearance" = "Udseende";
+"settings.crosshairColor" = "Farve:";
+"settings.borderColor" = "Kantfarve:";
+"settings.invertColors" = "Tilpas farve automatisk baseret på baggrund";
+"settings.opacity" = "Gennemsigtighed:";
+"settings.centerRadius" = "Centerradius:";
+"settings.thickness" = "Tykkelse:";
+"settings.edgePointerThickness" = "Pile tykkelse:";
+"settings.borderSize" = "Kantstørrelse:";
+
+"settings.orientation" = "Orientering";
+"settings.orientationLabel" = "Orientering:";
+"settings.orientation.horizontal" = "Vandret";
+"settings.orientation.vertical" = "Lodret";
+"settings.orientation.both" = "Begge";
+"settings.orientation.edgePointers" = "Kantpile";
+"settings.orientation.circle" = "Cirkel";
+"settings.orientation.readingLine" = "Læselinje";
+
+"settings.length" = "Længde";
+"settings.fixLength" = "Fastlås længde";
+"settings.fixedLength" = "Fast længde:";
+
+"settings.circle" = "Cirkel";
+"settings.showCircle" = "Vis cirkel omkring musemarkør";
+"settings.circleRadius" = "Cirkel radius:";
+"settings.circleFillOpacity" = "Fyld gennemsigtighed";
+"settings.circleFillOpacity.description" = "Gennemsigtighed af fyldet i cirklen (0% = ingen fyld)";
+
+"settings.lineStyle" = "Linjestil";
+"settings.lineStyle.solid" = "Solid";
+"settings.lineStyle.dashed" = "Stribled";
+"settings.lineStyle.dotted" = "Prikket";
+
+"settings.behavior" = "Adfærd";
+"settings.autoHide" = "Skjul automatisk når musemarkøren er skjult";
+"settings.launchAtLogin" = "Start automatisk ved login";
+
+"settings.gliding" = "Glidende markør";
+"settings.glidingEnable" = "Aktiver glidende markør";
+"settings.glidingSpeed" = "Rejsehastighed:";
+"settings.glidingSpeedHelp" = "Kontrollerer hvor hurtigt markøren glider";
+"settings.glidingDelay" = "Forsinkelse:";
+"settings.glidingDelayHelp" = "Forsinkelse før glidning starter";
+"settings.glidingNote" = "Bemærk: Funktionen for glidende markør er i øjeblikket eksperimentel";
+
+/* Alerts */
+"alert.shortcut.title" = "Tastaturgenvej";
+"alert.shortcut.message" = "For at ændre tastaturgenvejen skal du ændre indstillingerne. Standarden er ⇧⌃L (Shift + Control + L).\n\nDu kan tilpasse dette i app-præferencerne.";
+"alert.ok" = "OK";
+
+/* Shareware / Payment */
+"payment.title" = "Tak fordi du bruger Mouse Guide!";
+"payment.subtitle" = "Et synligt trådkors og læselineal til din skærm";
+"payment.description1" = "Mouse Guide hjælper dig med at se hvor din mus er og følge tekst på skærmen.";
+"payment.description2" = "Perfekt hvis du har svært ved at se musemarkøren, eller hvis du har brug for en læselineal når du læser på skærmen.";
+"payment.ifUseful" = "Hvis du synes appen er nyttig,";
+"payment.wouldAppreciate" = "vil jeg sætte pris på din støtte.";
+"payment.price" = "€5";
+"payment.worksRegardless" = "Appen fungerer fuldt ud uanset om du køber eller ej.";
+"payment.buyButton" = "Støt udviklingen - Køb license (€5)";
+"payment.purchasedButton" = "Jeg har allerede købt";
+"payment.continueButton" = "Fortsæt uden køb";
+"payment.remindButton" = "Minder mig senere";
+"payment.aboutBuyButton" = "Køb License (€5)";
+"payment.aboutClose" = "Luk";
+"payment.thankYou" = "Tak for din støtte!";
+
+/* Onboarding - Welcome Step */
+"onboarding.welcome.title" = "Velkommen til Mouse Guide";
+"onboarding.welcome.tagline" = "Et synligt trådkors og læselineal til din skærm";
+"onboarding.welcome.description1" = "Mouse Guide hjælper dig med at se hvor din mus er og følge tekst på skærmen.";
+"onboarding.welcome.description2" = "Perfekt hvis du har svært ved at se musemarkøren, eller hvis du har brug for en læselineal når du læser på skærmen.";
+"onboarding.welcome.feature1" = "Synligt trådkors til at finde musen";
+"onboarding.welcome.feature2" = "Læselineal til at følge tekst";
+"onboarding.welcome.feature3" = "Tænd/sluk med genvejstast";
+"onboarding.welcome.feature4" = "Tilpas farver og størrelse";
+"onboarding.welcome.button" = "Kom i gang";
+
+/* Language / Sprog */
+"settings.language" = "Sprog";
+"settings.language.description" = "Vælg sprog til appens brugergrænseflade";
+"language.danish" = "Dansk";
+"language.english" = "English";
+
+/* License Errors */
+"license.error.invalidFormat" = "Licensnøglen skal være i formatet XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX";
+"license.error.invalidKey" = "Ugyldig licensnøgle";
+"license.error.networkError" = "Kunne ikke forbinde til server. Tjek din internetforbindelse.";
+"license.error.alreadyUsed" = "Denne licensnøgle er allerede i brug";
+"license.error.refunded" = "Dette køb er blevet refunderet";
+"license.error.disputed" = "Dette køb er blevet anfægtet eller chargeback";
+"license.error.subscriptionEnded" = "Dette abonnement er udløbet eller aflyst";
+
+/* License Tab */
+"license.status" = "Licens Status";
+"license.activated" = "Mouse Guide er aktiveret";
+"license.thankyou" = "Tak for din støtte!";
+"license.trial" = "Trial periode";
+"license.trialDays" = "dage tilbage med fuld adgang";
+"license.free" = "Gratis version";
+"license.freeMinutes" = "til genstart anbefalet";
+"license.freeRestrictions" = "Kun rødt kryds på 1px, én skærm. Genstart anbefalet hvert 10. minut for bedre oplevelse.";
+"license.freeRestart" = "Genstart for ny session";
+"license.checking" = "Tjekker licens status...";
+"license.buyTitle" = "Køb Mouse Guide";
+"license.buyDescription" = "Få fuld adgang uden begrænsninger for kun €5";
+"license.buyNow" = "Køb Nu - €5";
+"license.manageTitle" = "Administrer Licens";
+"license.alreadyBought" = "Har du allerede købt?";
+"license.enterKey" = "Indtast licensnøglen du modtog fra Gumroad";
+"license.placeholder" = "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX";
+"license.active" = "Din licens er aktiv";
+"license.activate" = "Aktivér Licens";
+"license.activating" = "Aktiverer...";
+"license.activated.title" = "Licens Aktiveret!";
+"license.activated.message" = "Mouse Guide er nu fuldt aktiveret. Tak for din støtte!";
+
+/* Free Session Expiry */
+"freeSession.expired.title" = "Genstart Anbefalet";
+"freeSession.expired.message" = "Dine 10 minutter er gået.\n\nDu kan fortsætte med at arbejde med det enkle røde kryds, eller:\n• Genstart appen for en ny session\n• Køb en licens for fuld adgang uden begrænsninger";
+"freeSession.buyLicense" = "Køb Licens (€5)";
+"freeSession.restart" = "Genstart App";
+
+/* Settings Categories */
+"settings.category.appearance" = "Udseende";
+"settings.category.behavior" = "Adfærd";
+"settings.category.license" = "Licens";
+"settings.category.about" = "Om";
+
+/* Appearance Tab */
+"appearance.colors" = "Farver";
+"appearance.colors.warning" = "Automatisk farvetilpasning er slået til i Adfærd-fanen. Disse farvevalg ignoreres.";
+"appearance.colors.quickSelect" = "Hurtigvalg:";
+"appearance.colors.crosshair.description" = "Hovedfarven";
+"appearance.colors.border.description" = "Farve på kanten";
+"appearance.dimensions" = "Dimensioner";
+"appearance.opacity.description" = "Gennemsigtighed (højere = mere synligt)";
+"appearance.centerRadius.description" = "Størrelse af det tomme område i midten";
+"appearance.circleRadius.description" = "Radius for cirklen";
+"appearance.thickness.description" = "Tykkelse på linjen";
+"appearance.edgePointerThickness.description" = "Tykkelse på kantpilene";
+"appearance.borderSize.description" = "Tykkelse på kanten";
+"appearance.orientation.description" = "Vælg vandret, lodret eller begge retninger. Læselinje viser en ubrudt vandret linje.";
+"appearance.readingLine" = "Læselinje (ubrudt linje)";
+"appearance.length.description" = "Begræns til en fast længde i stedet for hele skærmen";
+"appearance.fixedLength.description" = "Længde på hver linje";
+
+/* Behavior Tab */
+"behavior.colorAdaptation" = "Farvetilpasning";
+"behavior.colorAdaptation.description" = "Vælg automatisk sort eller hvid farve baseret på baggrunden under markøren";
+"behavior.colorAdaptation.info" = "Når denne er slået til, ignoreres dine valgte farver i Udseende-fanen";
+"behavior.general" = "Generelt";
+"behavior.autoHide.description" = "Skjul automatisk når systemets musemarkør bliver skjult";
+"behavior.autoHideTyping" = "Skjul mens du skriver";
+"behavior.autoHideTyping.description" = "Skjul automatisk når du begynder at skrive på tastaturet";
+"behavior.autoHideTyping.delay" = "Vis igen efter";
+"behavior.autoHideTyping.delay.description" = "Hvor længe skal der gå efter sidste tastetryk før det vises igen";
+"behavior.autoHideTyping.permissions" = "Kræver Tilgængelighed og Indtastningsovervågning tilladelser. Se Om-fanen for hjælp.";
+"behavior.launchAtLogin.description" = "Start appen automatisk når du logger ind på din Mac";
+"behavior.gliding.description" = "Følg musen med en blød, glidende bevægelse";
+"behavior.gliding.speed.description" = "Kontrollerer hvor hurtigt det glider mod musen";
+"behavior.gliding.delay.description" = "Forsinkelse før glidning starter efter musebevægelse";
+"behavior.gliding.note" = "Bemærk: Funktionen for glidende markør er i øjeblikket eksperimentel";
+"behavior.shortcut.description" = "Tryk på tastaturgenvejen for at slå til/fra";
+
+/* Color Names */
+"color.red" = "Rød";
+"color.green" = "Grøn";
+"color.blue" = "Blå";
+"color.yellow" = "Gul";
+"color.orange" = "Orange";
+"color.purple" = "Lilla";
+"color.white" = "Hvid";
+"color.black" = "Sort";
+"color.gray" = "Grå";
+
+/* About Tab */
+"about.app" = "Om Appen";
+"about.description" = "Mouse Guide hjælper dig med at finde og følge din musemarkør med præcise trådkors på tværs af hele din skærm. Særligt nyttig hvis du har svært ved at følge linjen når du læser på skærmen, eller har problemer med at finde musen.";
+"about.features" = "Features:";
+"about.feature.multimonitor" = "Fuld multi-monitor support";
+"about.feature.colorAdaptation" = "Dynamisk farvetilpasning baseret på baggrund";
+"about.feature.customizable" = "Tilpasselige dimensioner og farver";
+"about.feature.gliding" = "Glidende markør for flydende bevægelse";
+"about.feature.shortcut" = "Global genvejstast";
+"about.madeBy" = "Lavet af Rasmus Paasch med ❤️ i Dyssegård, Danmark";
+"about.copyright" = "Copyright © 2025";
+"about.permissions" = "System Tilladelser";
+"about.permissions.description" = "Mouse Guide har brug for følgende tilladelser for at fungere korrekt.";
+"about.permission.accessibility" = "Tilgængelighed";
+"about.permission.accessibility.description" = "Påkrævet for globale tastaturgenveje";
+"about.permission.inputMonitoring" = "Indtastningsovervågning";
+"about.permission.inputMonitoring.description" = "Påkrævet for 'Skjul mens du skriver' funktion";
+"about.permission.screenRecording" = "Skærmoptagelse";
+"about.permission.screenRecording.description" = "Påkrævet for automatisk farvetilpasning";
+"about.permission.granted" = "Givet";
+"about.permission.missing" = "Mangler";
+"about.permission.openSettings" = "Åbn Indstilling";
+"about.reset" = "Nulstil Indstillinger";
+"about.reset.description" = "Gendanner alle indstillinger til deres standardværdier.";
+"about.reset.button" = "Nulstil til Standard";
+"about.reset.confirm.title" = "Nulstil Indstillinger";
+"about.reset.confirm.message" = "Er du sikker på at du vil nulstille alle indstillinger til standard? Denne handling kan ikke fortrydes.";
+"about.reset.confirm.cancel" = "Annuller";
+"about.reset.confirm.reset" = "Nulstil";
+
+/* Common */
+"common.ok" = "OK";
+"common.cancel" = "Annuller";
+"common.close" = "Luk";
+
+/* License Tab - Additional */
+"license.manageOrBuy" = "Administrer Licens";
+"license.alreadyPurchasedTitle" = "Har du allerede købt?";
+
+/* Formatted Values */
+"format.percent.visible" = "%d%% synligt";
+"format.pixels" = "%d px";
+"format.seconds" = "%.1f sek";
+"format.speed" = "%.2f";
+"format.delay" = "%.2f s";
+"format.minute.singular" = "minut";
+"format.minute.plural" = "minutter";
+
+/* MenuBar */
+"menu.toggleOn" = "Slå til";
+"menu.toggleOff" = "Slå fra";
+"menu.about" = "Om Mouse Guide...";
+"menu.support" = "❤️ Støt Udviklingen...";
+"menu.thankyou" = "💚 Tak for støtten!";
