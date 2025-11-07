@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Build script for Mouse Crosshairs app
+# Build script for Mouse Guide app
 
-echo "Building Mouse Crosshairs..."
+echo "Building Mouse Guide..."
 echo ""
 
 # Check if Xcode is installed

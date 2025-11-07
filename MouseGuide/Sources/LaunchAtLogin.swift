@@ -66,7 +66,7 @@ class LaunchAtLogin {
             // Fallback for older macOS
             let script = """
             tell application "System Events"
-                delete (every login item whose name is "MouseCrosshairs")
+                delete (every login item whose name is "Mouse Guide")
             end tell
             """
 

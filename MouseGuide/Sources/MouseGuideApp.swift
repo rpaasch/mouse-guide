@@ -2,7 +2,7 @@ import SwiftUI
 import AppKit
 
 @main
-struct MouseCrosshairsApp: App {
+struct MouseGuideApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
@@ -13,13 +13,13 @@ struct MouseCrosshairsApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var menuBarManager: MenuBarManager?
     var crosshairsWindow: CrosshairsWindow?
     var settingsWindow: NSWindow?
     var onboardingWindow: NSWindow?
     var sharewareWindow: NSWindow?
     var keyboardShortcutMonitor: KeyboardShortcutMonitor?
     var sessionExpiryWindow: NSWindow?
+    var menuBarManager: MenuBarManager?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         print("🚀 App launching...")
@@ -46,16 +46,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         print("✅ Free session expiry observer registered")
 
-        // Setup menu bar
+        // Setup notification observer for crosshairs visibility changes (for MenuBarManager)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateMenuBarToggle),
+            name: NSNotification.Name("CrosshairsVisibilityChanged"),
+            object: nil
+        )
+        print("✅ Crosshairs visibility observer registered")
+
+        // Setup menu bar with MenuBarManager
         menuBarManager = MenuBarManager(appDelegate: self)
-        print("✅ Menu bar manager created")
+        print("✅ MenuBarManager initialized")
 
         // Setup keyboard shortcut monitor
         keyboardShortcutMonitor = KeyboardShortcutMonitor(appDelegate: self)
         print("✅ Keyboard shortcut monitor created")
 
         // Show onboarding on first launch
-        let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "com.mousecrosshairs.hasCompletedOnboarding")
+        let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "dk.netdot.mouseguide.hasCompletedOnboarding")
         print("📝 Has completed onboarding: \(hasCompletedOnboarding)")
 
         if !hasCompletedOnboarding {
@@ -69,7 +78,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func showOnboarding() {
         let onboardingView = SmartOnboardingView {
             // Mark onboarding as completed
-            UserDefaults.standard.set(true, forKey: "com.mousecrosshairs.hasCompletedOnboarding")
+            UserDefaults.standard.set(true, forKey: "dk.netdot.mouseguide.hasCompletedOnboarding")
             UserDefaults.standard.synchronize()
             print("✅ Onboarding completed and saved")
 
@@ -89,6 +98,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         onboardingWindow?.makeKeyAndOrderFront(nil)
 
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    @objc func updateMenuBarToggle(_ notification: Notification) {
+        menuBarManager?.updateToggleState()
     }
 
     func toggleCrosshairs() {
@@ -119,11 +132,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         print("  ✅ Crosshairs window created and shown")
 
-        // Update menu bar toggle
-        menuBarManager?.updateToggleState()
-
-        // Notify settings window to update toggle button
-        NotificationCenter.default.post(name: NSNotification.Name("CrosshairsVisibilityChanged"), object: nil)
+        // Notify observers (AppState and settings window) to update toggle state
+        NotificationCenter.default.post(name: NSNotification.Name("CrosshairsVisibilityChanged"), object: true)
     }
 
     func hideCrosshairs() {
@@ -134,28 +144,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         print("  ✅ Crosshairs hidden")
 
-        // Update menu bar toggle
-        menuBarManager?.updateToggleState()
-
-        // Notify settings window to update toggle button
-        NotificationCenter.default.post(name: NSNotification.Name("CrosshairsVisibilityChanged"), object: nil)
-
-        // Force menubar to redraw
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            if let statusItem = self.menuBarManager?.statusItem {
-                statusItem.isVisible = true
-            }
-        }
+        // Notify observers (AppState and settings window) to update toggle state
+        NotificationCenter.default.post(name: NSNotification.Name("CrosshairsVisibilityChanged"), object: false)
     }
 
     func showSettings() {
         print("📍 showSettings() called")
+
         if settingsWindow == nil {
             print("  → Creating settings window...")
             var contentView = SettingsView()
             contentView.appDelegate = self  // Pass AppDelegate reference
             settingsWindow = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 600, height: 700),
+                contentRect: NSRect(x: 0, y: 0, width: 850, height: 700),
                 styleMask: [.titled, .closable, .miniaturizable, .resizable],
                 backing: .buffered,
                 defer: false

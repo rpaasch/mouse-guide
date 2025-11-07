@@ -49,6 +49,7 @@ enum LocalizedString {
 
     // Menu Bar
     static var menuToggle: String { "menu.toggle".localized() }
+    static var menuToggleLabel: String { "menu.toggleLabel".localized() }
     static var menuToggleOn: String { "menu.toggleOn".localized() }
     static var menuToggleOff: String { "menu.toggleOff".localized() }
     static var menuSettings: String { "menu.settings".localized() }
@@ -249,6 +250,10 @@ enum LocalizedString {
     static var licenseStatus: String { "license.status".localized() }
     static var licenseActivated: String { "license.activated".localized() }
     static var licenseThankyou: String { "license.thankyou".localized() }
+    static var licenseEmail: String { "license.email".localized() }
+    static var licenseProduct: String { "license.product".localized() }
+    static var licenseActivatedDate: String { "license.activatedDate".localized() }
+    static var licenseKey: String { "license.key".localized() }
     static var licenseTrial: String { "license.trial".localized() }
     static var licenseTrialDays: String { "license.trialDays".localized() }
     static var licenseFree: String { "license.free".localized() }
@@ -259,19 +264,133 @@ enum LocalizedString {
     static var licenseBuyTitle: String { "license.buyTitle".localized() }
     static var licenseBuyDescription: String { "license.buyDescription".localized() }
     static var licenseBuyNow: String { "license.buyNow".localized() }
-    static var licenseManageTitle: String { "license.manageTitle".localized() }
     static var licenseAlreadyBought: String { "license.alreadyBought".localized() }
     static var licenseEnterKey: String { "license.enterKey".localized() }
     static var licensePlaceholder: String { "license.placeholder".localized() }
-    static var licenseActive: String { "license.active".localized() }
     static var licenseActivate: String { "license.activate".localized() }
     static var licenseActivating: String { "license.activating".localized() }
     static var licenseActivatedTitle: String { "license.activated.title".localized() }
     static var licenseActivatedMessage: String { "license.activated.message".localized() }
+    static var licenseRestorePurchases: String { "license.restorePurchases".localized() }
+    static var licenseDeveloperTesting: String { "license.developerTesting".localized() }
+    static var licenseSimulateExpiredTrial: String { "license.simulateExpiredTrial".localized() }
+    static var licenseResetTrial: String { "license.resetTrial".localized() }
 
     // Free Session Expiry
     static var freeSessionExpiredTitle: String { "freeSession.expired.title".localized() }
     static var freeSessionExpiredMessage: String { "freeSession.expired.message".localized() }
     static var freeSessionBuyLicense: String { "freeSession.buyLicense".localized() }
     static var freeSessionRestart: String { "freeSession.restart".localized() }
+
+    // Updates
+    static var updateCheck: String { "update.check".localized() }
+    static var updateChecking: String { "update.checking".localized() }
+    static var updateUpToDate: String { "update.upToDate".localized() }
+    static var updateUpToDateMessage: String { "update.upToDateMessage".localized() }
+    static var updateAvailable: String { "update.available".localized() }
+    static var updateAvailableMessage: String { "update.availableMessage".localized() }
+    static var updateDownload: String { "update.download".localized() }
+    static var updateError: String { "update.error".localized() }
+    static var updateErrorMessage: String { "update.errorMessage".localized() }
+    static var updateCurrentVersion: String { "update.currentVersion".localized() }
+
+    // Accessibility
+    static var accessibilityMenubarToggleLabel: String { "accessibility.menubar.toggle.label".localized() }
+    static var accessibilityMenubarToggleHelp: String { "accessibility.menubar.toggle.help".localized() }
+    static var accessibilityStateOn: String { "accessibility.state.on".localized() }
+    static var accessibilityStateOff: String { "accessibility.state.off".localized() }
+    static var accessibilityStateSelected: String { "accessibility.state.selected".localized() }
+    static var accessibilityStateNotSelected: String { "accessibility.state.notSelected".localized() }
+    static var accessibilityStateGranted: String { "accessibility.state.granted".localized() }
+    static var accessibilityStateMissing: String { "accessibility.state.missing".localized() }
+
+    // Accessibility - Navigation
+    static var accessibilityNavigationSettingsSuffix: String { "accessibility.navigation.settings.suffix".localized() }
+    static var accessibilityNavigationSettingsHint: String { "accessibility.navigation.settings.hint".localized() }
+
+    // Accessibility - Main Toggle
+    static var accessibilityToggleMainLabel: String { "accessibility.toggle.main.label".localized() }
+    static var accessibilityToggleMainHint: String { "accessibility.toggle.main.hint".localized() }
+
+    // Accessibility - Orientations
+    static var accessibilityOrientationHorizontalLabel: String { "accessibility.orientation.horizontal.label".localized() }
+    static var accessibilityOrientationHorizontalHint: String { "accessibility.orientation.horizontal.hint".localized() }
+    static var accessibilityOrientationVerticalLabel: String { "accessibility.orientation.vertical.label".localized() }
+    static var accessibilityOrientationVerticalHint: String { "accessibility.orientation.vertical.hint".localized() }
+    static var accessibilityOrientationBothLabel: String { "accessibility.orientation.both.label".localized() }
+    static var accessibilityOrientationBothHint: String { "accessibility.orientation.both.hint".localized() }
+    static var accessibilityOrientationReadingLineLabel: String { "accessibility.orientation.readingLine.label".localized() }
+    static var accessibilityOrientationReadingLineHint: String { "accessibility.orientation.readingLine.hint".localized() }
+    static var accessibilityOrientationEdgePointersLabel: String { "accessibility.orientation.edgePointers.label".localized() }
+    static var accessibilityOrientationEdgePointersHint: String { "accessibility.orientation.edgePointers.hint".localized() }
+    static var accessibilityOrientationCircleLabel: String { "accessibility.orientation.circle.label".localized() }
+    static var accessibilityOrientationCircleHint: String { "accessibility.orientation.circle.hint".localized() }
+
+    // Accessibility - Colors
+    static var accessibilityColorCrosshairLabel: String { "accessibility.color.crosshair.label".localized() }
+    static var accessibilityColorCrosshairHint: String { "accessibility.color.crosshair.hint".localized() }
+    static var accessibilityColorBorderLabel: String { "accessibility.color.border.label".localized() }
+    static var accessibilityColorBorderHint: String { "accessibility.color.border.hint".localized() }
+
+    // Accessibility - Fixed Length
+    static var accessibilityFixedLengthToggleLabel: String { "accessibility.fixedLength.toggle.label".localized() }
+    static var accessibilityFixedLengthToggleHint: String { "accessibility.fixedLength.toggle.hint".localized() }
+
+    // Accessibility - Line Styles
+    static var accessibilityLineStyleSolidLabel: String { "accessibility.lineStyle.solid.label".localized() }
+    static var accessibilityLineStyleSolidHint: String { "accessibility.lineStyle.solid.hint".localized() }
+    static var accessibilityLineStyleDashedLabel: String { "accessibility.lineStyle.dashed.label".localized() }
+    static var accessibilityLineStyleDashedHint: String { "accessibility.lineStyle.dashed.hint".localized() }
+    static var accessibilityLineStyleDottedLabel: String { "accessibility.lineStyle.dotted.label".localized() }
+    static var accessibilityLineStyleDottedHint: String { "accessibility.lineStyle.dotted.hint".localized() }
+
+    // Accessibility - Behaviors
+    static var accessibilityBehaviorColorAdaptationLabel: String { "accessibility.behavior.colorAdaptation.label".localized() }
+    static var accessibilityBehaviorColorAdaptationHint: String { "accessibility.behavior.colorAdaptation.hint".localized() }
+    static var accessibilityBehaviorAutoHidePointerLabel: String { "accessibility.behavior.autoHidePointer.label".localized() }
+    static var accessibilityBehaviorAutoHidePointerHint: String { "accessibility.behavior.autoHidePointer.hint".localized() }
+    static var accessibilityBehaviorAutoHideTypingLabel: String { "accessibility.behavior.autoHideTyping.label".localized() }
+    static var accessibilityBehaviorAutoHideTypingHint: String { "accessibility.behavior.autoHideTyping.hint".localized() }
+    static var accessibilityBehaviorLaunchAtLoginLabel: String { "accessibility.behavior.launchAtLogin.label".localized() }
+    static var accessibilityBehaviorLaunchAtLoginHint: String { "accessibility.behavior.launchAtLogin.hint".localized() }
+    static var accessibilityBehaviorGlidingLabel: String { "accessibility.behavior.gliding.label".localized() }
+    static var accessibilityBehaviorGlidingHint: String { "accessibility.behavior.gliding.hint".localized() }
+
+    // Accessibility - License
+    static var accessibilityLicenseActive: String { "accessibility.license.active".localized() }
+    static var accessibilityLicenseTrial: String { "accessibility.license.trial".localized() }
+    static var accessibilityLicenseRestoreLabel: String { "accessibility.license.restore.label".localized() }
+    static var accessibilityLicenseRestoreHint: String { "accessibility.license.restore.hint".localized() }
+    static var accessibilityLicenseBuyLabel: String { "accessibility.license.buy.label".localized() }
+    static var accessibilityLicenseBuyHint: String { "accessibility.license.buy.hint".localized() }
+    static var accessibilityLicenseRestorePreviousLabel: String { "accessibility.license.restorePrevious.label".localized() }
+    static var accessibilityLicenseRestorePreviousHint: String { "accessibility.license.restorePrevious.hint".localized() }
+
+    // Accessibility - Updates
+    static var accessibilityUpdateCheckLabel: String { "accessibility.update.check.label".localized() }
+    static var accessibilityUpdateCheckHint: String { "accessibility.update.check.hint".localized() }
+
+    // Accessibility - Language
+    static var accessibilityLanguagePickerLabel: String { "accessibility.language.picker.label".localized() }
+    static var accessibilityLanguagePickerHint: String { "accessibility.language.picker.hint".localized() }
+
+    // Accessibility - Reset
+    static var accessibilityResetButtonLabel: String { "accessibility.reset.button.label".localized() }
+    static var accessibilityResetButtonHint: String { "accessibility.reset.button.hint".localized() }
+
+    // Accessibility - Permissions
+    static var accessibilityPermissionStatusFormat: String { "accessibility.permission.status.format".localized() }
+    static var accessibilityPermissionOpenSettingsLabel: String { "accessibility.permission.openSettings.label".localized() }
+    static var accessibilityPermissionOpenSettingsHint: String { "accessibility.permission.openSettings.hint".localized() }
+
+    // Accessibility - Color Presets
+    static var accessibilityColorPresetLabel: String { "accessibility.colorPreset.label".localized() }
+    static var accessibilityColorPresetHint: String { "accessibility.colorPreset.hint".localized() }
+    static var accessibilityColorTypeCrosshair: String { "accessibility.colorType.crosshair".localized() }
+    static var accessibilityColorTypeBorder: String { "accessibility.colorType.border".localized() }
+
+    // Accessibility - Keyboard Shortcut
+    static var accessibilityShortcutRecorderLabel: String { "accessibility.shortcutRecorder.label".localized() }
+    static var accessibilityShortcutRecorderHint: String { "accessibility.shortcutRecorder.hint".localized() }
+    static var accessibilityShortcutRecorderRecording: String { "accessibility.shortcutRecorder.recording".localized() }
 }

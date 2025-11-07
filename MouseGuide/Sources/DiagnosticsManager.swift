@@ -11,7 +11,7 @@ class DiagnosticsManager {
     func generateDiagnostics() -> String {
         var diagnostics = """
         ═══════════════════════════════════════════════════
-        Mouse Crosshairs - Diagnostisk Rapport
+        Mouse Guide - Diagnostisk Rapport
         ═══════════════════════════════════════════════════
         Genereret: \(formattedDate())
 
@@ -35,7 +35,7 @@ class DiagnosticsManager {
 
     func saveDiagnosticsToFile() -> URL? {
         let diagnostics = generateDiagnostics()
-        let fileName = "MouseCrosshairs_Diagnostics_\(timestamp()).txt"
+        let fileName = "MouseGuide_Diagnostics_\(timestamp()).txt"
 
         // Gem på Skrivebordet
         let desktopURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first

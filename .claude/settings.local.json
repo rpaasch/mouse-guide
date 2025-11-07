@@ -49,7 +49,19 @@
       "Bash(/Users/rp/Library/Developer/Xcode/DerivedData/MouseCrosshairs-gizghbpflggddmetutnzsutjlnwx/Build/Products/Release/MouseCrosshairs.app/Contents/MacOS/MouseCrosshairs)",
       "Bash(xargs kill:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Mouse Guide - Crosshair utility for macOS\n\nA macOS utility that displays customizable crosshairs across all monitors to help track the mouse cursor and assist with reading on screen.\n\nFeatures:\n- Multiple crosshair orientations (horizontal, vertical, both, edge pointers, circle, reading line)\n- Customizable colors, thickness, and opacity\n- Automatic color adaptation based on background\n- Multi-monitor support\n- Keyboard shortcut toggle (Shift+Ctrl+L)\n- License management with Gumroad integration\n- Danish and English localization\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git config:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Mouse Guide - Crosshair utility for macOS\n\nA macOS utility that displays customizable crosshairs across all monitors to help track the mouse cursor and assist with reading on screen.\n\nFeatures:\n- Multiple crosshair orientations (horizontal, vertical, both, edge pointers, circle, reading line)\n- Customizable colors, thickness, and opacity\n- Automatic color adaptation based on background\n- Multi-monitor support\n- Keyboard shortcut toggle (Shift+Ctrl+L)\n- License management with Gumroad integration\n- Danish and English localization\n- Resizable settings window\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(gh:*)",
+      "Bash(brew install:*)",
+      "Bash(tccutil check:*)",
+      "WebFetch(domain:kazakov.life)",
+      "WebFetch(domain:duhanebel.wordpress.com)",
+      "WebFetch(domain:tailscale.com)",
+      "WebFetch(domain:apps.apple.com)",
+      "WebFetch(domain:tailscale.dev)",
+      "Bash(/Users/rp/Library/Developer/Xcode/DerivedData/MouseGuide-bwfkadnrzkysetaxyhrbffjaqryn/Build/Products/Release/MouseGuide.app/Contents/MacOS/MouseGuide)"
     ],
     "deny": [],
     "ask": []

@@ -58,6 +58,8 @@ struct SettingsView: View {
             List(SettingsCategory.allCases, id: \.self, selection: $selectedCategory) { category in
                 Label(category.localizedName, systemImage: category.icon)
                     .tag(category)
+                    .accessibilityLabel(String(format: "%@ %@", accessibilityLabelForCategory(category), LocalizedString.accessibilityNavigationSettingsSuffix))
+                    .accessibilityHint(String(format: LocalizedString.accessibilityNavigationSettingsHint, accessibilityLabelForCategory(category)))
             }
             .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 220)
             .listStyle(.sidebar)
@@ -69,6 +71,7 @@ struct SettingsView: View {
                     Image(systemName: selectedCategory.icon)
                         .font(.system(size: 32))
                         .foregroundColor(.accentColor)
+                        .accessibilityHidden(true)
                     Text(selectedCategory.localizedName)
                         .font(.largeTitle)
                         .fontWeight(.bold)
@@ -78,9 +81,12 @@ struct SettingsView: View {
                     HStack(spacing: 12) {
                         Text(LocalizedString.appName)
                             .font(.body)
+                        Spacer()
                         Toggle("", isOn: $crosshairsVisible)
                             .labelsHidden()
                             .toggleStyle(.switch)
+                            .accessibilityLabel("\(LocalizedString.accessibilityToggleMainLabel), \(crosshairsVisible ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
+                            .accessibilityHint(LocalizedString.accessibilityToggleMainHint)
                             .onChange(of: crosshairsVisible) { newValue in
                                 NSLog("🔵 Toggle onChange: \(newValue), ignoreNextChange: \(ignoreNextChange)")
                                 if ignoreNextChange {
@@ -162,6 +168,10 @@ struct SettingsView: View {
             }
         }
     }
+
+    private func accessibilityLabelForCategory(_ category: SettingsCategory) -> String {
+        return category.localizedName
+    }
 }
 
 // MARK: - Appearance Tab
@@ -179,6 +189,35 @@ struct AppearanceTab: View {
             return true
         }
         return false
+    }
+
+    private func colorNameForAccessibility(_ color: Color) -> String {
+        let nsColor = NSColor(color)
+        guard let rgb = nsColor.usingColorSpace(.deviceRGB) else {
+            return LocalizedString.colorRed
+        }
+
+        // Find closest color name
+        if rgb.redComponent > 0.8 && rgb.greenComponent < 0.3 && rgb.blueComponent < 0.3 {
+            return LocalizedString.colorRed
+        } else if rgb.redComponent < 0.3 && rgb.greenComponent > 0.8 && rgb.blueComponent < 0.3 {
+            return LocalizedString.colorGreen
+        } else if rgb.redComponent < 0.3 && rgb.greenComponent < 0.3 && rgb.blueComponent > 0.8 {
+            return LocalizedString.colorBlue
+        } else if rgb.redComponent > 0.8 && rgb.greenComponent > 0.8 && rgb.blueComponent < 0.3 {
+            return LocalizedString.colorYellow
+        } else if rgb.redComponent > 0.8 && rgb.greenComponent > 0.4 && rgb.greenComponent < 0.7 && rgb.blueComponent < 0.3 {
+            return LocalizedString.colorOrange
+        } else if rgb.redComponent > 0.6 && rgb.greenComponent < 0.5 && rgb.blueComponent > 0.6 {
+            return LocalizedString.colorPurple
+        } else if rgb.redComponent > 0.9 && rgb.greenComponent > 0.9 && rgb.blueComponent > 0.9 {
+            return LocalizedString.colorWhite
+        } else if rgb.redComponent < 0.2 && rgb.greenComponent < 0.2 && rgb.blueComponent < 0.2 {
+            return LocalizedString.colorBlack
+        } else if rgb.redComponent > 0.4 && rgb.redComponent < 0.6 && rgb.greenComponent > 0.4 && rgb.greenComponent < 0.6 && rgb.blueComponent > 0.4 && rgb.blueComponent < 0.6 {
+            return LocalizedString.colorGray
+        }
+        return LocalizedString.colorRed
     }
 
     var body: some View {
@@ -210,13 +249,17 @@ struct AppearanceTab: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: settings.orientation == .horizontal ? "circle.inset.filled" : "circle")
                                         .foregroundColor(settings.orientation == .horizontal ? .accentColor : .secondary)
+                                        .accessibilityHidden(true)
                                     Image(systemName: "arrow.left.and.right")
                                         .foregroundColor(.primary)
+                                        .accessibilityHidden(true)
                                     Text(LocalizedString.settingsOrientationHorizontal)
                                         .foregroundColor(.primary)
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("\(LocalizedString.accessibilityOrientationHorizontalLabel), \(settings.orientation == .horizontal ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                            .accessibilityHint(LocalizedString.accessibilityOrientationHorizontalHint)
 
                             // Vertical
                             Button(action: {
@@ -225,13 +268,17 @@ struct AppearanceTab: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: settings.orientation == .vertical ? "circle.inset.filled" : "circle")
                                         .foregroundColor(settings.orientation == .vertical ? .accentColor : .secondary)
+                                        .accessibilityHidden(true)
                                     Image(systemName: "arrow.up.and.down")
                                         .foregroundColor(.primary)
+                                        .accessibilityHidden(true)
                                     Text(LocalizedString.settingsOrientationVertical)
                                         .foregroundColor(.primary)
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("\(LocalizedString.accessibilityOrientationVerticalLabel), \(settings.orientation == .vertical ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                            .accessibilityHint(LocalizedString.accessibilityOrientationVerticalHint)
 
                             // Both
                             Button(action: {
@@ -240,13 +287,17 @@ struct AppearanceTab: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: settings.orientation == .both ? "circle.inset.filled" : "circle")
                                         .foregroundColor(settings.orientation == .both ? .accentColor : .secondary)
+                                        .accessibilityHidden(true)
                                     Image(systemName: "arrow.up.left.and.arrow.down.right")
                                         .foregroundColor(.primary)
+                                        .accessibilityHidden(true)
                                     Text(LocalizedString.settingsOrientationBoth)
                                         .foregroundColor(.primary)
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("\(LocalizedString.accessibilityOrientationBothLabel), \(settings.orientation == .both ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                            .accessibilityHint(LocalizedString.accessibilityOrientationBothHint)
 
                             // Reading Line
                             Button(action: {
@@ -255,13 +306,17 @@ struct AppearanceTab: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: settings.orientation == .readingLine ? "circle.inset.filled" : "circle")
                                         .foregroundColor(settings.orientation == .readingLine ? .accentColor : .secondary)
+                                        .accessibilityHidden(true)
                                     Image(systemName: "text.alignleft")
                                         .foregroundColor(.primary)
+                                        .accessibilityHidden(true)
                                     Text(LocalizedString.settingsOrientationReadingLine)
                                         .foregroundColor(.primary)
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("\(LocalizedString.accessibilityOrientationReadingLineLabel), \(settings.orientation == .readingLine ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                            .accessibilityHint(LocalizedString.accessibilityOrientationReadingLineHint)
 
                             // Edge Pointers
                             Button(action: {
@@ -270,13 +325,17 @@ struct AppearanceTab: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: settings.orientation == .edgePointers ? "circle.inset.filled" : "circle")
                                         .foregroundColor(settings.orientation == .edgePointers ? .accentColor : .secondary)
+                                        .accessibilityHidden(true)
                                     Image(systemName: "arrowtriangle.right.fill")
                                         .foregroundColor(.primary)
+                                        .accessibilityHidden(true)
                                     Text(LocalizedString.settingsOrientationEdgePointers)
                                         .foregroundColor(.primary)
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("\(LocalizedString.accessibilityOrientationEdgePointersLabel), \(settings.orientation == .edgePointers ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                            .accessibilityHint(LocalizedString.accessibilityOrientationEdgePointersHint)
 
                             // Circle
                             Button(action: {
@@ -285,13 +344,17 @@ struct AppearanceTab: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: settings.orientation == .circle ? "circle.inset.filled" : "circle")
                                         .foregroundColor(settings.orientation == .circle ? .accentColor : .secondary)
+                                        .accessibilityHidden(true)
                                     Image(systemName: "circle")
                                         .foregroundColor(.primary)
+                                        .accessibilityHidden(true)
                                     Text(LocalizedString.settingsOrientationCircle)
                                         .foregroundColor(.primary)
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("\(LocalizedString.accessibilityOrientationCircleLabel), \(settings.orientation == .circle ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                            .accessibilityHint(LocalizedString.accessibilityOrientationCircleHint)
                         }
 
                         Divider()
@@ -428,6 +491,7 @@ struct AppearanceTab: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundColor(.orange)
+                                    .accessibilityHidden(true)
                                 Text(LocalizedString.appearanceColorsWarning)
                                     .font(.caption)
                                     .foregroundColor(.orange)
@@ -443,6 +507,9 @@ struct AppearanceTab: View {
                                     .labelsHidden()
                                     .frame(width: 60)
                                     .disabled(settings.invertColors || !hasFullAccess)
+                                    .accessibilityLabel(LocalizedString.accessibilityColorCrosshairLabel)
+                                    .accessibilityValue(colorNameForAccessibility(settings.crosshairColor))
+                                    .accessibilityHint(LocalizedString.accessibilityColorCrosshairHint)
                             }
 
                             // Quick color presets
@@ -452,14 +519,14 @@ struct AppearanceTab: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
 
-                                    ColorPresetButton(color: .red, currentColor: $settings.crosshairColor)
-                                    ColorPresetButton(color: .green, currentColor: $settings.crosshairColor)
-                                    ColorPresetButton(color: .blue, currentColor: $settings.crosshairColor)
-                                    ColorPresetButton(color: .yellow, currentColor: $settings.crosshairColor)
-                                    ColorPresetButton(color: .orange, currentColor: $settings.crosshairColor)
-                                    ColorPresetButton(color: .purple, currentColor: $settings.crosshairColor)
-                                    ColorPresetButton(color: .white, currentColor: $settings.crosshairColor)
-                                    ColorPresetButton(color: .black, currentColor: $settings.crosshairColor)
+                                    ColorPresetButton(color: .red, currentColor: $settings.crosshairColor, colorType: "crosshair")
+                                    ColorPresetButton(color: .green, currentColor: $settings.crosshairColor, colorType: "crosshair")
+                                    ColorPresetButton(color: .blue, currentColor: $settings.crosshairColor, colorType: "crosshair")
+                                    ColorPresetButton(color: .yellow, currentColor: $settings.crosshairColor, colorType: "crosshair")
+                                    ColorPresetButton(color: .orange, currentColor: $settings.crosshairColor, colorType: "crosshair")
+                                    ColorPresetButton(color: .purple, currentColor: $settings.crosshairColor, colorType: "crosshair")
+                                    ColorPresetButton(color: .white, currentColor: $settings.crosshairColor, colorType: "crosshair")
+                                    ColorPresetButton(color: .black, currentColor: $settings.crosshairColor, colorType: "crosshair")
                                 }
                                 .padding(.top, 4)
                             }
@@ -480,6 +547,9 @@ struct AppearanceTab: View {
                                     .labelsHidden()
                                     .frame(width: 60)
                                     .disabled(settings.invertColors || !hasFullAccess)
+                                    .accessibilityLabel(LocalizedString.accessibilityColorBorderLabel)
+                                    .accessibilityValue(colorNameForAccessibility(settings.borderColor))
+                                    .accessibilityHint(LocalizedString.accessibilityColorBorderHint)
                             }
 
                             // Quick color presets
@@ -489,14 +559,14 @@ struct AppearanceTab: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
 
-                                    ColorPresetButton(color: .black, currentColor: $settings.borderColor)
-                                    ColorPresetButton(color: .white, currentColor: $settings.borderColor)
-                                    ColorPresetButton(color: .gray, currentColor: $settings.borderColor)
-                                    ColorPresetButton(color: .red, currentColor: $settings.borderColor)
-                                    ColorPresetButton(color: .blue, currentColor: $settings.borderColor)
-                                    ColorPresetButton(color: .green, currentColor: $settings.borderColor)
-                                    ColorPresetButton(color: .yellow, currentColor: $settings.borderColor)
-                                    ColorPresetButton(color: .orange, currentColor: $settings.borderColor)
+                                    ColorPresetButton(color: .black, currentColor: $settings.borderColor, colorType: "border")
+                                    ColorPresetButton(color: .white, currentColor: $settings.borderColor, colorType: "border")
+                                    ColorPresetButton(color: .gray, currentColor: $settings.borderColor, colorType: "border")
+                                    ColorPresetButton(color: .red, currentColor: $settings.borderColor, colorType: "border")
+                                    ColorPresetButton(color: .blue, currentColor: $settings.borderColor, colorType: "border")
+                                    ColorPresetButton(color: .green, currentColor: $settings.borderColor, colorType: "border")
+                                    ColorPresetButton(color: .yellow, currentColor: $settings.borderColor, colorType: "border")
+                                    ColorPresetButton(color: .orange, currentColor: $settings.borderColor, colorType: "border")
                                 }
                                 .padding(.top, 4)
                             }
@@ -541,6 +611,8 @@ struct AppearanceTab: View {
                             Toggle("", isOn: $settings.useFixedLength)
                                 .labelsHidden()
                                 .toggleStyle(.switch)
+                                .accessibilityLabel("\(LocalizedString.accessibilityFixedLengthToggleLabel), \(settings.useFixedLength ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
+                                .accessibilityHint(LocalizedString.accessibilityFixedLengthToggleHint)
                         }
                         Text(LocalizedString.appearanceLengthDescription)
                             .font(.caption)
@@ -592,13 +664,17 @@ struct AppearanceTab: View {
                             HStack(spacing: 8) {
                                 Image(systemName: settings.lineStyle == .solid ? "circle.inset.filled" : "circle")
                                     .foregroundColor(settings.lineStyle == .solid ? .accentColor : .secondary)
+                                    .accessibilityHidden(true)
                                 Image(systemName: "line.horizontal.3")
                                     .foregroundColor(.primary)
+                                    .accessibilityHidden(true)
                                 Text(LocalizedString.settingsLineStyleSolid)
                                     .foregroundColor(.primary)
                             }
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel("\(LocalizedString.accessibilityLineStyleSolidLabel), \(settings.lineStyle == .solid ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                        .accessibilityHint(LocalizedString.accessibilityLineStyleSolidHint)
 
                         // Dashed
                         Button(action: {
@@ -607,13 +683,17 @@ struct AppearanceTab: View {
                             HStack(spacing: 8) {
                                 Image(systemName: settings.lineStyle == .dashed ? "circle.inset.filled" : "circle")
                                     .foregroundColor(settings.lineStyle == .dashed ? .accentColor : .secondary)
+                                    .accessibilityHidden(true)
                                 Image(systemName: "line.horizontal.3.decrease")
                                     .foregroundColor(.primary)
+                                    .accessibilityHidden(true)
                                 Text(LocalizedString.settingsLineStyleDashed)
                                     .foregroundColor(.primary)
                             }
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel("\(LocalizedString.accessibilityLineStyleDashedLabel), \(settings.lineStyle == .dashed ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                        .accessibilityHint(LocalizedString.accessibilityLineStyleDashedHint)
 
                         // Dotted
                         Button(action: {
@@ -622,13 +702,17 @@ struct AppearanceTab: View {
                             HStack(spacing: 8) {
                                 Image(systemName: settings.lineStyle == .dotted ? "circle.inset.filled" : "circle")
                                     .foregroundColor(settings.lineStyle == .dotted ? .accentColor : .secondary)
+                                    .accessibilityHidden(true)
                                 Image(systemName: "circle.grid.3x3")
                                     .foregroundColor(.primary)
+                                    .accessibilityHidden(true)
                                 Text(LocalizedString.settingsLineStyleDotted)
                                     .foregroundColor(.primary)
                             }
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel("\(LocalizedString.accessibilityLineStyleDottedLabel), \(settings.lineStyle == .dotted ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                        .accessibilityHint(LocalizedString.accessibilityLineStyleDottedHint)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 16)
@@ -689,6 +773,8 @@ struct BehaviorTab: View {
                             Toggle("", isOn: $settings.invertColors)
                                 .labelsHidden()
                                 .toggleStyle(.switch)
+                                .accessibilityLabel("\(LocalizedString.accessibilityBehaviorColorAdaptationLabel), \(settings.invertColors ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
+                                .accessibilityHint(LocalizedString.accessibilityBehaviorColorAdaptationHint)
                         }
                         Text(LocalizedString.behaviorColorAdaptationDescription)
                             .font(.caption)
@@ -698,6 +784,7 @@ struct BehaviorTab: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.blue)
+                                    .accessibilityHidden(true)
                                 Text(LocalizedString.behaviorColorAdaptationInfo)
                                     .font(.caption)
                                     .foregroundColor(.blue)
@@ -728,6 +815,8 @@ struct BehaviorTab: View {
                                 Toggle("", isOn: $settings.autoHideWhenPointerHidden)
                                     .labelsHidden()
                                     .toggleStyle(.switch)
+                                    .accessibilityLabel("\(LocalizedString.accessibilityBehaviorAutoHidePointerLabel), \(settings.autoHideWhenPointerHidden ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
+                                    .accessibilityHint(LocalizedString.accessibilityBehaviorAutoHidePointerHint)
                             }
                             Text(LocalizedString.behaviorAutoHideDescription)
                                 .font(.caption)
@@ -743,6 +832,8 @@ struct BehaviorTab: View {
                                 Toggle("", isOn: $settings.autoHideWhileTyping)
                                     .labelsHidden()
                                     .toggleStyle(.switch)
+                                    .accessibilityLabel("\(LocalizedString.accessibilityBehaviorAutoHideTypingLabel), \(settings.autoHideWhileTyping ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
+                                    .accessibilityHint(LocalizedString.accessibilityBehaviorAutoHideTypingHint)
                             }
                             Text(LocalizedString.behaviorAutoHideTypingDescription)
                                 .font(.caption)
@@ -763,6 +854,7 @@ struct BehaviorTab: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: "exclamationmark.triangle.fill")
                                         .foregroundColor(.orange)
+                                        .accessibilityHidden(true)
                                     Text(LocalizedString.behaviorAutoHideTypingPermissions)
                                         .font(.caption)
                                         .foregroundColor(.orange)
@@ -783,6 +875,8 @@ struct BehaviorTab: View {
                                 ))
                                 .labelsHidden()
                                 .toggleStyle(.switch)
+                                .accessibilityLabel("\(LocalizedString.accessibilityBehaviorLaunchAtLoginLabel), \(LaunchAtLogin.shared.isEnabled ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
+                                .accessibilityHint(LocalizedString.accessibilityBehaviorLaunchAtLoginHint)
                             }
                             Text(LocalizedString.behaviorLaunchAtLoginDescription)
                                 .font(.caption)
@@ -821,6 +915,8 @@ struct BehaviorTab: View {
                             Toggle("", isOn: $settings.glidingEnabled)
                                 .labelsHidden()
                                 .toggleStyle(.switch)
+                                .accessibilityLabel("\(LocalizedString.accessibilityBehaviorGlidingLabel), \(settings.glidingEnabled ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
+                                .accessibilityHint(LocalizedString.accessibilityBehaviorGlidingHint)
                         }
                         Text(LocalizedString.behaviorGlidingDescription)
                             .font(.caption)
@@ -850,6 +946,7 @@ struct BehaviorTab: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.orange)
+                                    .accessibilityHidden(true)
                                 Text(LocalizedString.settingsGlidingNote)
                                     .font(.caption)
                                     .foregroundColor(.orange)
@@ -887,6 +984,7 @@ struct BehaviorTab: View {
                         HStack(spacing: 8) {
                             Image(systemName: "info.circle")
                                 .foregroundColor(.blue)
+                                .accessibilityHidden(true)
                             Text(LocalizedString.settingsShortcutHelp)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -933,6 +1031,7 @@ struct ShortcutsTab: View {
                         HStack(spacing: 8) {
                             Image(systemName: "info.circle")
                                 .foregroundColor(.blue)
+                                .accessibilityHidden(true)
                             Text(LocalizedString.settingsShortcutHelp)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -955,10 +1054,9 @@ struct ShortcutsTab: View {
 struct LicenseTab: View {
     @ObservedObject var settings: CrosshairsSettings
     @ObservedObject var licenseManager = LicenseManager.shared
-    @State private var licenseKey: String = ""
-    @State private var showActivationSuccess: Bool = false
-    @State private var activationError: String?
-    @State private var isActivating: Bool = false
+    @ObservedObject var storeKitManager = StoreKitManager.shared
+    @State private var showPurchaseSuccess: Bool = false
+    @State private var isPurchasing: Bool = false
 
     var body: some View {
         ScrollView {
@@ -971,11 +1069,12 @@ struct LicenseTab: View {
                     VStack(alignment: .leading, spacing: 16) {
                         switch licenseManager.licenseState {
                         case .licensed:
-                            // Licensed
+                            // Licensed via StoreKit
                             HStack(spacing: 12) {
                                 Image(systemName: "checkmark.seal.fill")
                                     .font(.system(size: 40))
                                     .foregroundColor(.green)
+                                    .accessibilityHidden(true)
 
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(LocalizedString.licenseActivated)
@@ -987,6 +1086,8 @@ struct LicenseTab: View {
                                         .foregroundColor(.secondary)
                                 }
                             }
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel(LocalizedString.accessibilityLicenseActive)
 
                         case .fullTrial(let daysRemaining):
                             // Full trial
@@ -994,6 +1095,7 @@ struct LicenseTab: View {
                                 Image(systemName: "clock.fill")
                                     .font(.system(size: 40))
                                     .foregroundColor(.blue)
+                                    .accessibilityHidden(true)
 
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(LocalizedString.licenseTrial)
@@ -1005,6 +1107,8 @@ struct LicenseTab: View {
                                         .foregroundColor(.secondary)
                                 }
                             }
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel(String(format: LocalizedString.accessibilityLicenseTrial, daysRemaining))
 
                         case .free(let minutesRemaining):
                             // Free version - 10 minute restart cycles
@@ -1073,9 +1177,34 @@ struct LicenseTab: View {
                 }
                 .padding(.horizontal, 24)
 
-                // Purchase
+                // Purchase via StoreKit
                 if case .licensed = licenseManager.licenseState {
-                    // Don't show purchase section if licensed
+                    // Show restore purchases button if licensed
+                    VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Button(action: {
+                                Task {
+                                    await licenseManager.restorePurchases()
+                                }
+                            }) {
+                                HStack {
+                                    Image(systemName: "arrow.clockwise.circle.fill")
+                                    Text(LocalizedString.licenseRestorePurchases)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                            }
+                            .buttonStyle(.bordered)
+                            .accessibilityLabel(LocalizedString.accessibilityLicenseRestoreLabel)
+                            .accessibilityHint(LocalizedString.accessibilityLicenseRestoreHint)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 16)
+                        .padding(.horizontal, 24)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .cornerRadius(8)
+                    }
+                    .padding(.horizontal, 24)
                 } else {
                     VStack(alignment: .leading, spacing: 12) {
                         Text(LocalizedString.licenseBuyTitle)
@@ -1085,12 +1214,15 @@ struct LicenseTab: View {
                             Text(LocalizedString.licenseBuyDescription)
                                 .font(.body)
 
+                            // Buy button
                             Button(action: {
-                                if let url = URL(string: "https://gumroad.com/l/mouseguide") {
-                                    NSWorkspace.shared.open(url)
-                                }
+                                purchaseNow()
                             }) {
                                 HStack {
+                                    if isPurchasing {
+                                        ProgressView()
+                                            .controlSize(.small)
+                                    }
                                     Image(systemName: "cart.fill")
                                     Text(LocalizedString.licenseBuyNow)
                                 }
@@ -1099,6 +1231,28 @@ struct LicenseTab: View {
                             }
                             .buttonStyle(.borderedProminent)
                             .controlSize(.large)
+                            .disabled(isPurchasing || storeKitManager.product == nil)
+                            .accessibilityLabel(LocalizedString.accessibilityLicenseBuyLabel)
+                            .accessibilityHint(LocalizedString.accessibilityLicenseBuyHint)
+
+                            Divider()
+
+                            // Restore purchases
+                            Button(action: {
+                                Task {
+                                    await licenseManager.restorePurchases()
+                                }
+                            }) {
+                                HStack {
+                                    Image(systemName: "arrow.clockwise.circle.fill")
+                                    Text(LocalizedString.licenseRestorePurchases)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                            }
+                            .buttonStyle(.bordered)
+                            .accessibilityLabel(LocalizedString.accessibilityLicenseRestorePreviousLabel)
+                            .accessibilityHint(LocalizedString.accessibilityLicenseRestorePreviousHint)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 16)
@@ -1109,73 +1263,11 @@ struct LicenseTab: View {
                     .padding(.horizontal, 24)
                 }
 
-                // Activate License
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(settings.isPurchased ? LocalizedString.licenseManageTitle : LocalizedString.licenseAlreadyBought)
-                        .font(.headline)
-
-                    VStack(alignment: .leading, spacing: 16) {
-                        if case .licensed = licenseManager.licenseState {
-                            Text(LocalizedString.licenseActive)
-                                .font(.body)
-                                .foregroundColor(.secondary)
-                        } else {
-                            Text(LocalizedString.licenseEnterKey)
-                                .font(.body)
-                                .foregroundColor(.secondary)
-
-                            TextField(LocalizedString.licensePlaceholder, text: $licenseKey)
-                                .textFieldStyle(.roundedBorder)
-                                .font(.system(.body, design: .monospaced))
-                                .textCase(.uppercase)
-                                .disabled(isActivating)
-                                .onChange(of: licenseKey) { newValue in
-                                    NSLog("📝 TextField changed: '\(newValue)' (isEmpty: \(newValue.isEmpty))")
-                                }
-
-                            if let error = activationError {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "exclamationmark.circle.fill")
-                                        .foregroundColor(.red)
-                                    Text(error)
-                                        .font(.callout)
-                                        .foregroundColor(.red)
-                                }
-                            }
-
-                            Button(action: {
-                                let btnMsg = "🔴 BUTTON CLICKED! licenseKey = '\(licenseKey)'\n"
-                                try? btnMsg.appendToFile(at: "/tmp/mouse_debug.log")
-                                NSLog("🔴 BUTTON CLICKED! licenseKey = '\(licenseKey)'")
-                                activateLicense()
-                            }) {
-                                HStack {
-                                    if isActivating {
-                                        ProgressView()
-                                            .controlSize(.small)
-                                    }
-                                    Image(systemName: "key.fill")
-                                    Text(isActivating ? LocalizedString.licenseActivating : LocalizedString.licenseActivate)
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 8)
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .disabled(licenseKey.isEmpty || isActivating)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 24)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                }
-                .padding(.horizontal, 24)
 
                 // Developer Testing
                 #if DEBUG
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("🧪 Developer Testing")
+                    Text(LocalizedString.licenseDeveloperTesting)
                         .font(.headline)
 
                     VStack(alignment: .leading, spacing: 12) {
@@ -1207,7 +1299,7 @@ struct LicenseTab: View {
                         }) {
                             HStack {
                                 Image(systemName: "clock.badge.xmark")
-                                Text("Simuler udløbet trial (gratis mode)")
+                                Text(LocalizedString.licenseSimulateExpiredTrial)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 8)
@@ -1219,7 +1311,7 @@ struct LicenseTab: View {
                         }) {
                             HStack {
                                 Image(systemName: "arrow.counterclockwise")
-                                Text("Reset trial (7 dages fuld trial)")
+                                Text(LocalizedString.licenseResetTrial)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 8)
@@ -1237,48 +1329,28 @@ struct LicenseTab: View {
             }
             .padding(.vertical, 24)
         }
-        .alert(LocalizedString.licenseActivatedTitle, isPresented: $showActivationSuccess) {
+        .alert(LocalizedString.licenseActivatedTitle, isPresented: $showPurchaseSuccess) {
             Button("OK") {}
         } message: {
             Text(LocalizedString.licenseActivatedMessage)
         }
-        .onAppear {
-            let appearMsg = "🟢 LicenseTab appeared - NEW VERSION WITH LOGGING IS RUNNING\n"
-            try? appearMsg.appendToFile(at: "/tmp/mouse_debug.log")
-            NSLog("🟢 LicenseTab appeared - NEW VERSION WITH LOGGING IS RUNNING")
-        }
     }
 
-    private func activateLicense() {
-        let logMsg = "🎯 SettingsView.activateLicense() CALLED - licenseKey: \(licenseKey)\n"
-        try? logMsg.appendToFile(at: "/tmp/mouse_debug.log")
-        NSLog("🎯 SettingsView.activateLicense() CALLED - licenseKey: \(licenseKey)")
-        isActivating = true
-        activationError = nil
+    private func purchaseNow() {
+        isPurchasing = true
 
         Task {
-            let taskMsg = "🎯 Task started, about to call licenseManager.activateLicense()\n"
-            try? taskMsg.appendToFile(at: "/tmp/mouse_debug.log")
-            NSLog("🎯 Task started, about to call licenseManager.activateLicense()")
-            let result = await licenseManager.activateLicense(licenseKey)
-            let returnMsg = "🎯 licenseManager.activateLicense() returned\n"
-            try? returnMsg.appendToFile(at: "/tmp/mouse_debug.log")
-            NSLog("🎯 licenseManager.activateLicense() returned")
+            NSLog("🛒 Starting StoreKit purchase...")
+            let success = await licenseManager.purchase()
 
             await MainActor.run {
-                NSLog("🎯 MainActor.run - processing result")
-                isActivating = false
+                isPurchasing = false
 
-                switch result {
-                case .success:
-                    NSLog("✅ License activation SUCCESS")
-                    showActivationSuccess = true
-                    licenseKey = ""
-                    activationError = nil
-
-                case .failure(let error):
-                    NSLog("❌ License activation FAILED: \(error.localizedDescription)")
-                    activationError = error.localizedDescription
+                if success {
+                    NSLog("✅ Purchase successful!")
+                    showPurchaseSuccess = true
+                } else {
+                    NSLog("❌ Purchase failed or cancelled")
                 }
             }
         }
@@ -1323,6 +1395,8 @@ struct SliderRow: View {
                     .frame(minWidth: 60, alignment: .trailing)
             }
             Slider(value: $value, in: range)
+                .accessibilityLabel(label)
+                .accessibilityValue(format(value))
         }
     }
 }
@@ -1345,6 +1419,9 @@ struct SettingSlider: View {
                     .frame(minWidth: 60, alignment: .trailing)
             }
             Slider(value: $value, in: range)
+                .accessibilityLabel(label)
+                .accessibilityValue(format(value))
+                .accessibilityHint(description)
             Text(description)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -1357,10 +1434,15 @@ struct SettingSlider: View {
 struct AboutTab: View {
     @ObservedObject var settings: CrosshairsSettings
     @ObservedObject var localizationManager = LocalizationManager.shared
+    @ObservedObject var updateChecker = UpdateChecker.shared
     @State private var showResetConfirmation = false
     @State private var hasAccessibilityPermission = false
     @State private var hasScreenRecordingPermission = false
     @State private var hasInputMonitoringPermission = false
+    @State private var showUpdateAlert = false
+    @State private var updateAlertTitle = ""
+    @State private var updateAlertMessage = ""
+    @State private var updateDownloadURL: String?
 
     let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
 
@@ -1371,13 +1453,35 @@ struct AboutTab: View {
                     Image(systemName: "crosshair.circle.fill")
                         .font(.system(size: 64))
                         .foregroundColor(.accentColor)
+                        .accessibilityHidden(true)
 
                     Text(LocalizedString.appName)
                         .font(.title)
                         .fontWeight(.bold)
 
-                    Text("Version 1.0")
+                    Text("Version \(updateChecker.getCurrentVersion())")
                         .foregroundColor(.secondary)
+
+                    // Check for Updates button
+                    Button(action: checkForUpdates) {
+                        HStack {
+                            if updateChecker.isChecking {
+                                ProgressView()
+                                    .controlSize(.small)
+                                Text(LocalizedString.updateChecking)
+                            } else {
+                                Image(systemName: "arrow.down.circle")
+                                    .accessibilityHidden(true)
+                                Text(LocalizedString.updateCheck)
+                            }
+                        }
+                        .frame(minWidth: 200)
+                        .padding(.vertical, 6)
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(updateChecker.isChecking)
+                    .accessibilityLabel(LocalizedString.accessibilityUpdateCheckLabel)
+                    .accessibilityHint(LocalizedString.accessibilityUpdateCheckHint)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.top, 40)
@@ -1496,6 +1600,8 @@ struct AboutTab: View {
                         .pickerStyle(.menu)
                         .labelsHidden()
                         .frame(width: 200)
+                        .accessibilityLabel(LocalizedString.accessibilityLanguagePickerLabel)
+                        .accessibilityHint(LocalizedString.accessibilityLanguagePickerHint)
 
                         Spacer()
                     }
@@ -1523,6 +1629,7 @@ struct AboutTab: View {
                     }) {
                         HStack {
                             Image(systemName: "arrow.counterclockwise.circle.fill")
+                                .accessibilityHidden(true)
                             Text(LocalizedString.aboutResetButton)
                         }
                         .frame(maxWidth: .infinity)
@@ -1530,6 +1637,8 @@ struct AboutTab: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.red)
+                    .accessibilityLabel(LocalizedString.accessibilityResetButtonLabel)
+                    .accessibilityHint(LocalizedString.accessibilityResetButtonHint)
                     .alert(LocalizedString.aboutResetConfirmTitle, isPresented: $showResetConfirmation) {
                         Button(LocalizedString.aboutResetConfirmCancel, role: .cancel) {}
                         Button(LocalizedString.aboutResetConfirmReset, role: .destructive) {
@@ -1551,6 +1660,18 @@ struct AboutTab: View {
         .onReceive(timer) { _ in
             checkPermissions()
         }
+        .alert(updateAlertTitle, isPresented: $showUpdateAlert) {
+            if let downloadURL = updateDownloadURL {
+                Button(LocalizedString.updateDownload) {
+                    updateChecker.openDownloadURL(downloadURL)
+                }
+                Button(LocalizedString.commonClose, role: .cancel) {}
+            } else {
+                Button(LocalizedString.commonOK) {}
+            }
+        } message: {
+            Text(updateAlertMessage)
+        }
     }
 
     private func checkPermissions() {
@@ -1569,6 +1690,33 @@ struct AboutTab: View {
             NSEvent.removeMonitor(monitor)
         }
     }
+
+    private func checkForUpdates() {
+        updateChecker.checkForUpdates { result in
+            switch result {
+            case .success(let updateInfo):
+                if let update = updateInfo {
+                    // Update available
+                    updateAlertTitle = LocalizedString.updateAvailable
+                    updateAlertMessage = String(format: LocalizedString.updateAvailableMessage, update.version, updateChecker.getCurrentVersion())
+                    updateDownloadURL = update.downloadURL
+                    showUpdateAlert = true
+                } else {
+                    // Up to date
+                    updateAlertTitle = LocalizedString.updateUpToDate
+                    updateAlertMessage = LocalizedString.updateUpToDateMessage
+                    updateDownloadURL = nil
+                    showUpdateAlert = true
+                }
+            case .failure(let error):
+                // Error checking
+                updateAlertTitle = LocalizedString.updateError
+                updateAlertMessage = "\(LocalizedString.updateErrorMessage)\n\n\(error.localizedDescription)"
+                updateDownloadURL = nil
+                showUpdateAlert = true
+            }
+        }
+    }
 }
 
 struct FeatureRow: View {
@@ -1580,6 +1728,7 @@ struct FeatureRow: View {
             Image(systemName: icon)
                 .foregroundColor(.accentColor)
                 .frame(width: 20)
+                .accessibilityHidden(true)
             Text(text)
                 .font(.body)
         }
@@ -1600,6 +1749,7 @@ struct PermissionRow: View {
                     .font(.system(size: 24))
                     .foregroundColor(isGranted ? .green : .orange)
                     .frame(width: 32)
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
@@ -1615,23 +1765,29 @@ struct PermissionRow: View {
                 HStack(spacing: 6) {
                     Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
                         .foregroundColor(isGranted ? .green : .orange)
+                        .accessibilityHidden(true)
                     Text(isGranted ? LocalizedString.aboutPermissionGranted : LocalizedString.aboutPermissionMissing)
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundColor(isGranted ? .green : .orange)
                 }
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(String(format: LocalizedString.accessibilityPermissionStatusFormat, title, description, isGranted ? LocalizedString.accessibilityStateGranted : LocalizedString.accessibilityStateMissing))
 
             if !isGranted {
                 Button(action: action) {
                     HStack {
                         Image(systemName: "gearshape.fill")
+                            .accessibilityHidden(true)
                         Text(LocalizedString.aboutPermissionOpenSettings)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
                 }
                 .buttonStyle(.bordered)
+                .accessibilityLabel(String(format: LocalizedString.accessibilityPermissionOpenSettingsLabel, title))
+                .accessibilityHint(String(format: LocalizedString.accessibilityPermissionOpenSettingsHint, title))
             }
         }
         .padding(.vertical, 8)
@@ -1643,6 +1799,7 @@ struct PermissionRow: View {
 struct ColorPresetButton: View {
     let color: Color
     @Binding var currentColor: Color
+    var colorType: String? = nil  // "crosshair" or "border"
 
     var body: some View {
         Button(action: {
@@ -1662,12 +1819,31 @@ struct ColorPresetButton: View {
                             Image(systemName: "checkmark")
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundColor(color == .white || color == .yellow ? .black : .white)
+                                .accessibilityHidden(true)
                         }
                     }
                 )
         }
         .buttonStyle(.plain)
         .help(colorName(color))
+        .accessibilityLabel(buildAccessibilityLabel())
+        .accessibilityHint(String(format: LocalizedString.accessibilityColorPresetHint, colorNameEnglish(color)))
+    }
+
+    private func buildAccessibilityLabel() -> String {
+        var label = String(format: LocalizedString.accessibilityColorPresetLabel, colorNameEnglish(color))
+
+        // Add color type if specified
+        if let type = colorType {
+            let typeString = type == "crosshair" ? LocalizedString.accessibilityColorTypeCrosshair : LocalizedString.accessibilityColorTypeBorder
+            label += ", \(typeString)"
+        }
+
+        // Add selection state
+        let stateString = colorMatches(color, currentColor) ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected
+        label += ", \(stateString)"
+
+        return label
     }
 
     private func colorMatches(_ c1: Color, _ c2: Color) -> Bool {
@@ -1682,17 +1858,23 @@ struct ColorPresetButton: View {
 
     private func colorName(_ color: Color) -> String {
         switch color {
-        case .red: return "Rød"
-        case .green: return "Grøn"
-        case .blue: return "Blå"
-        case .yellow: return "Gul"
-        case .orange: return "Orange"
-        case .purple: return "Lilla"
-        case .white: return "Hvid"
-        case .black: return "Sort"
-        case .gray: return "Grå"
-        default: return "Farve"
+        case .red: return LocalizedString.colorRed
+        case .green: return LocalizedString.colorGreen
+        case .blue: return LocalizedString.colorBlue
+        case .yellow: return LocalizedString.colorYellow
+        case .orange: return LocalizedString.colorOrange
+        case .purple: return LocalizedString.colorPurple
+        case .white: return LocalizedString.colorWhite
+        case .black: return LocalizedString.colorBlack
+        case .gray: return LocalizedString.colorGray
+        default: return LocalizedString.colorRed
         }
+    }
+
+    private func colorNameEnglish(_ color: Color) -> String {
+        // Use the same localized color names for accessibility
+        // This ensures consistency across the app
+        return colorName(color)
     }
 }
 

@@ -46,6 +46,9 @@ class ShortcutRecorderView: NSView {
         button.action = #selector(startRecording)
         button.translatesAutoresizingMaskIntoConstraints = false
 
+        // Accessibility
+        updateAccessibility()
+
         addSubview(button)
 
         NSLayoutConstraint.activate([
@@ -55,6 +58,14 @@ class ShortcutRecorderView: NSView {
             button.bottomAnchor.constraint(equalTo: bottomAnchor),
             button.heightAnchor.constraint(equalToConstant: 28)
         ])
+    }
+
+    private func updateAccessibility() {
+        let shortcut = shortcutString()
+        button.setAccessibilityLabel(String(format: LocalizedString.accessibilityShortcutRecorderLabel, shortcut))
+        button.setAccessibilityHelp(LocalizedString.accessibilityShortcutRecorderHint)
+        button.setAccessibilityRole(.button)
+        button.setAccessibilityElement(true)
     }
 
     private func shortcutString() -> String {
@@ -74,6 +85,9 @@ class ShortcutRecorderView: NSView {
         isRecording = true
         button.title = "⌨️ Tryk tastekombination..."
         button.highlight(true)
+
+        // Update accessibility for recording state
+        button.setAccessibilityLabel(LocalizedString.accessibilityShortcutRecorderRecording)
 
         // Start monitoring keyboard events
         localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .flagsChanged]) { [weak self] event in
@@ -127,6 +141,9 @@ class ShortcutRecorderView: NSView {
         isRecording = false
         button.highlight(false)
         button.title = shortcutString()
+
+        // Update accessibility to reflect the new shortcut
+        updateAccessibility()
 
         if let monitor = localMonitor {
             NSEvent.removeMonitor(monitor)

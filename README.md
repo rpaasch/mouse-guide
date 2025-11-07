@@ -1,4 +1,4 @@
-# Mouse Crosshairs for macOS
+# Mouse Guide for macOS
 
 En macOS-app der efterligner Microsoft PowerToys' "Mouse Pointer Crosshairs" funktion.
 

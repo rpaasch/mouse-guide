@@ -13,7 +13,7 @@ if accessibilityEnabled {
     print("\nTo fix this:")
     print("1. Open System Settings")
     print("2. Go to Privacy & Security → Accessibility")
-    print("3. Add and enable MouseCrosshairs")
+    print("3. Add and enable Mouse Guide")
 }
 
 exit(accessibilityEnabled ? 0 : 1)

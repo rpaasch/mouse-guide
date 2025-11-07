@@ -1,0 +1,40 @@
+{
+  "identifier" : "MouseGuideProducts",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "5.00",
+      "familyShareable" : false,
+      "internalID" : "6738494738",
+      "localizations" : [
+        {
+          "description" : "Unlock all features of Mouse Guide with a one-time purchase. Full customization, multi-monitor support, and all future updates.",
+          "displayName" : "Mouse Guide Full Version",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "Lås op for alle funktioner i Mouse Guide med et engangskøb. Fuld tilpasning, multi-skærm support og alle fremtidige opdateringer.",
+          "displayName" : "Mouse Guide Fuld Version",
+          "locale" : "da"
+        }
+      ],
+      "productID" : "com.mouseguide.fullversion",
+      "referenceName" : "Mouse Guide Full Version",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6738494738",
+    "_developerTeamID" : "YOUR_TEAM_ID",
+    "_lastSynchronizedDate" : 738511347.04738104
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

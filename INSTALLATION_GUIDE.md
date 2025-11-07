@@ -48,7 +48,7 @@ ELLER dobbeltklik på `MouseCrosshairs.xcodeproj` i Finder.
    - Dette er nødvendigt for globale tastaturgenveje
    - Klik på "Åbn systemindstillinger" knappen
    - I Systemindstillinger: **Privatliv og sikkerhed → Tilgængelighed**
-   - Aktiver **MouseCrosshairs**
+   - Aktiver **Mouse Guide**
 
 ## Trin 4: Brug Appen
 
@@ -75,7 +75,7 @@ ELLER dobbeltklik på `MouseCrosshairs.xcodeproj` i Finder.
 Hvis macOS blokerer appen første gang:
 1. Gå til **Systemindstillinger → Privatliv og sikkerhed**
 2. Rul ned til "Sikkerhed" sektionen
-3. Klik **Åbn alligevel** ved siden af advarslen om MouseCrosshairs
+3. Klik **Åbn alligevel** ved siden af advarslen om Mouse Guide
 
 ### Xcode bygge-fejl:
 Hvis du får fejl under bygning:
@@ -129,4 +129,4 @@ Hvis du oplever problemer:
 2. Se README.md for tekniske detaljer
 3. Tjek at alle systemkrav er opfyldt
 
-God fornøjelse med Mouse Crosshairs! 🎯
+God fornøjelse med Mouse Guide! 🎯

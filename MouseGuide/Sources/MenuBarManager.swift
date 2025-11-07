@@ -4,7 +4,7 @@ import SwiftUI
 class MenuBarManager {
     var statusItem: NSStatusItem?  // Changed to var so AppDelegate can access it
     weak var appDelegate: AppDelegate?
-    private var toggleSwitch: NSSwitch?
+    private var toggleMenuItem: NSMenuItem?
     private var appNameMenuItem: NSMenuItem?
     private var settingsMenuItem: NSMenuItem?
     private var quitMenuItem: NSMenuItem?
@@ -36,25 +36,14 @@ class MenuBarManager {
     private func setupMenu() {
         let menu = NSMenu()
 
-        // Toggle switch with label
-        let toggleItem = NSMenuItem()
-
-        // Create a container view with label and switch
-        let container = NSView(frame: NSRect(x: 0, y: 0, width: 200, height: 25))
-
-        let label = NSTextField(labelWithString: LocalizedString.appName)
-        label.frame = NSRect(x: 14, y: 4, width: 120, height: 17)  // 14px for better alignment
-        label.font = NSFont.menuFont(ofSize: 0)  // Use system menu font size
-        container.addSubview(label)
-
-        let switchControl = NSSwitch()
-        switchControl.frame = NSRect(x: 148, y: 2, width: 40, height: 20)
-        switchControl.target = self
-        switchControl.action = #selector(toggleSwitchChanged(_:))
-        toggleSwitch = switchControl
-        container.addSubview(switchControl)
-
-        toggleItem.view = container
+        // Toggle menu item with checkmark (keyboard accessible)
+        let toggleItem = NSMenuItem(
+            title: LocalizedString.menuToggleLabel,
+            action: #selector(toggleMenuItemClicked),
+            keyEquivalent: ""
+        )
+        toggleItem.target = self
+        toggleMenuItem = toggleItem
         menu.addItem(toggleItem)
 
         menu.addItem(NSMenuItem.separator())
@@ -85,14 +74,14 @@ class MenuBarManager {
         updateToggleState()
     }
 
-    @objc private func toggleSwitchChanged(_ sender: NSSwitch) {
+    @objc private func toggleMenuItemClicked() {
         appDelegate?.toggleCrosshairs()
     }
 
     func updateToggleState() {
         if let appDelegate = appDelegate {
             let isVisible = appDelegate.crosshairsWindow != nil
-            toggleSwitch?.state = isVisible ? .on : .off
+            toggleMenuItem?.state = isVisible ? .on : .off
         }
     }
 
@@ -105,10 +94,8 @@ class MenuBarManager {
     }
 
     @objc private func languageChanged() {
-        // Update all menu item titles
-        appNameMenuItem?.title = LocalizedString.appName
-        settingsMenuItem?.title = LocalizedString.menuSettings
-        quitMenuItem?.title = LocalizedString.menuQuit
+        // Rebuild the entire menu to update the toggle label
+        setupMenu()
     }
 
     private func modifierFlagsToString(_ flags: NSEvent.ModifierFlags) -> String {
