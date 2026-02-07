@@ -88,8 +88,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSLog("✅ Input Monitoring permission is GRANTED")
         } else {
             NSLog("⚠️ Input Monitoring permission NOT granted yet")
-            NSLog("   macOS should have shown a permission dialog")
-            NSLog("   If not visible, check System Settings → Privacy & Security → Input Monitoring")
+            // Show dialog to guide user to System Settings
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.showInputMonitoringPermissionDialog()
+            }
+        }
+    }
+
+    private func showInputMonitoringPermissionDialog() {
+        let alert = NSAlert()
+        alert.messageText = LocalizedString.alertInputMonitoringTitle
+        alert.informativeText = """
+\(LocalizedString.alertInputMonitoringMessage)
+
+\(LocalizedString.alertInputMonitoringExplanation)
+\(LocalizedString.alertInputMonitoringFeature1)
+\(LocalizedString.alertInputMonitoringFeature2)
+
+\(LocalizedString.alertInputMonitoringInstruction)
+"""
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: LocalizedString.permissionButtonOpenSettings)
+        alert.addButton(withTitle: LocalizedString.commonButtonLater)
+
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            // Open System Settings to Input Monitoring
+            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
+                NSWorkspace.shared.open(url)
+            }
         }
     }
 
