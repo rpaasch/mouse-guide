@@ -23,6 +23,8 @@ struct SettingsView: View {
     @State private var languageRefreshID = UUID()
     @State private var crosshairsVisible: Bool = false
     @State private var ignoreNextChange: Bool = false
+    @State private var visibilityTimer: Timer?
+    @State private var visibilityObserver: NSObjectProtocol?
 
     // Store reference to AppDelegate
     weak var appDelegate: AppDelegate?
@@ -130,18 +132,37 @@ struct SettingsView: View {
         .onAppear {
             checkCrosshairsVisibility()
 
+            // Invalidate existing timer if any
+            visibilityTimer?.invalidate()
+
             // Poll state every 0.1 seconds to keep in sync
-            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            visibilityTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
                 checkCrosshairsVisibility()
             }
 
+            // Remove existing observer if any
+            if let observer = visibilityObserver {
+                NotificationCenter.default.removeObserver(observer)
+            }
+
             // Listen for crosshairs state changes
-            NotificationCenter.default.addObserver(
+            visibilityObserver = NotificationCenter.default.addObserver(
                 forName: NSNotification.Name("CrosshairsVisibilityChanged"),
                 object: nil,
                 queue: .main
             ) { _ in
                 checkCrosshairsVisibility()
+            }
+        }
+        .onDisappear {
+            // Clean up timer
+            visibilityTimer?.invalidate()
+            visibilityTimer = nil
+
+            // Clean up observer
+            if let observer = visibilityObserver {
+                NotificationCenter.default.removeObserver(observer)
+                visibilityObserver = nil
             }
         }
     }

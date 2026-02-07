@@ -157,7 +157,12 @@ class CrosshairsWindowManager {
         stopKeyboardMonitoring()
         unhideTimer?.invalidate()
         unhideTimer = nil
+
+        // Stop display links on all views BEFORE removing windows
         for window in windows {
+            if let view = window.contentView as? CrosshairsNativeView {
+                view.stopDisplayLink()
+            }
             window.orderOut(nil)
         }
         windows.removeAll()
@@ -456,24 +461,35 @@ class CrosshairsNativeView: NSView {
         CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
         if let displayLink = displayLink {
             CVDisplayLinkSetOutputCallback(displayLink, { (_, _, _, _, _, userInfo) -> CVReturn in
-                let view = Unmanaged<CrosshairsNativeView>.fromOpaque(userInfo!).takeUnretainedValue()
+                guard let userInfo = userInfo else { return kCVReturnSuccess }
+                let view = Unmanaged<CrosshairsNativeView>.fromOpaque(userInfo).takeUnretainedValue()
                 DispatchQueue.main.async {
-                    view.needsDisplay = true
+                    // Check if view is still valid before accessing
+                    if view.window != nil {
+                        view.needsDisplay = true
+                    }
                 }
                 return kCVReturnSuccess
             }, Unmanaged.passUnretained(self).toOpaque())
             CVDisplayLinkStart(displayLink)
         }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-        if let displayLink = displayLink {
-            CVDisplayLinkStop(displayLink)
+
+    func stopDisplayLink() {
+        // Call this before removing view from window
+        if let dl = displayLink {
+            CVDisplayLinkStop(dl)
+            displayLink = nil
         }
+    }
+
+    deinit {
+        // Stop display link FIRST to prevent callbacks during deallocation
+        stopDisplayLink()
         if let observer = settingsObserver {
             NotificationCenter.default.removeObserver(observer)
         }
