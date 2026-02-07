@@ -349,23 +349,28 @@ class CrosshairsWindowManager {
     }
 
     private func handleKeyPress(_ event: NSEvent) {
-        guard settings.autoHideWhileTyping else { return }
+        // Dispatch to main thread for thread safety
+        // Event monitors can be called from background threads
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard self.settings.autoHideWhileTyping else { return }
 
-        print("⌨️ Key pressed: \(event.charactersIgnoringModifiers ?? "unknown")")
+            print("⌨️ Key pressed: \(event.charactersIgnoringModifiers ?? "unknown")")
 
-        // Hide windows
-        if !isHiddenByTyping {
-            print("🙈 Hiding crosshairs due to typing")
-            isHiddenByTyping = true
-            for window in windows {
-                window.orderOut(nil)
+            // Hide windows
+            if !self.isHiddenByTyping {
+                print("🙈 Hiding crosshairs due to typing")
+                self.isHiddenByTyping = true
+                for window in self.windows {
+                    window.orderOut(nil)
+                }
             }
-        }
 
-        // Reset unhide timer
-        unhideTimer?.invalidate()
-        unhideTimer = Timer.scheduledTimer(withTimeInterval: settings.autoHideTypingDelay, repeats: false) { [weak self] _ in
-            self?.unhideAfterTyping()
+            // Reset unhide timer
+            self.unhideTimer?.invalidate()
+            self.unhideTimer = Timer.scheduledTimer(withTimeInterval: self.settings.autoHideTypingDelay, repeats: false) { [weak self] _ in
+                self?.unhideAfterTyping()
+            }
         }
     }
 

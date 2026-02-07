@@ -113,6 +113,7 @@ class LicenseManager: ObservableObject {
 
         var secondsLeft = totalSeconds
         freeTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            // Timer already runs on main thread when scheduled on main RunLoop
             guard let self = self else { return }
 
             secondsLeft -= 1

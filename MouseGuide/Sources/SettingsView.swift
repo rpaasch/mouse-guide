@@ -841,11 +841,22 @@ struct BehaviorTab: View {
                             Toggle("", isOn: Binding(
                                 get: { settings.invertColors },
                                 set: { newValue in
-                                    settings.invertColors = newValue
                                     if newValue {
-                                        // Request Screen Recording - macOS will show system dialog automatically
+                                        // Request Screen Recording permission first
                                         settings.requestScreenRecordingPermission()
-                                        NSLog("✅ Screen Recording permission requested for color adaptation")
+
+                                        // Check if permission was granted after a short delay
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            if settings.hasScreenRecordingPermission() {
+                                                settings.invertColors = true
+                                                NSLog("✅ Screen Recording permission granted - color adaptation enabled")
+                                            } else {
+                                                settings.invertColors = false
+                                                NSLog("⚠️ Screen Recording permission denied - color adaptation disabled")
+                                            }
+                                        }
+                                    } else {
+                                        settings.invertColors = false
                                     }
                                 }
                             ))
@@ -858,7 +869,24 @@ struct BehaviorTab: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
 
-                        if settings.invertColors {
+                        if settings.invertColors && !settings.hasScreenRecordingPermission() {
+                            // Warning if enabled but permission missing
+                            HStack(spacing: 8) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.orange)
+                                    .accessibilityHidden(true)
+                                Text(LocalizedString.aboutPermissionMissing)
+                                    .font(.caption)
+                                    .foregroundColor(.orange)
+                                Button(LocalizedString.aboutPermissionOpenSettings) {
+                                    if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture") {
+                                        NSWorkspace.shared.open(url)
+                                    }
+                                }
+                                .font(.caption)
+                            }
+                            .padding(.top, 4)
+                        } else if settings.invertColors {
                             HStack(spacing: 8) {
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.blue)
