@@ -97,7 +97,15 @@ class LicenseManager: ObservableObject {
     }
 
     private func startFreeSession() {
-        var trial = loadTrialData()!
+        // Safely load trial data, or create new if missing
+        var trial: TrialData
+        if let existingTrial = loadTrialData() {
+            trial = existingTrial
+        } else {
+            // Create new trial data if somehow missing
+            trial = TrialData(firstLaunchDate: Date(), sessionStartDate: Date())
+            NSLog("⚠️ Trial data was missing, created new")
+        }
         trial.sessionStartDate = Date()
         saveTrialData(trial)
 

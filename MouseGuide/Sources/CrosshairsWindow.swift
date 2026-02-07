@@ -125,7 +125,9 @@ class CrosshairsWindowManager {
 
         // Redraw all windows with new settings
         for window in windows {
-            window.contentView?.setNeedsDisplay(window.contentView!.bounds)
+            if let contentView = window.contentView {
+                contentView.setNeedsDisplay(contentView.bounds)
+            }
         }
     }
 
@@ -146,7 +148,9 @@ class CrosshairsWindowManager {
         } else {
             // Just redraw with new settings
             for window in windows {
-                window.contentView?.setNeedsDisplay(window.contentView!.bounds)
+                if let contentView = window.contentView {
+                    contentView.setNeedsDisplay(contentView.bounds)
+                }
             }
         }
     }
@@ -428,6 +432,12 @@ class CrosshairsWindow: NSWindow {
 
 }
 
+// Wrapper class to safely pass weak reference to CVDisplayLink callback
+private class DisplayLinkContext {
+    weak var view: CrosshairsNativeView?
+    init(view: CrosshairsNativeView) { self.view = view }
+}
+
 // Native NSView implementation for better control over multi-monitor setups
 class CrosshairsNativeView: NSView {
     private var mouseTracker: MouseTracker
@@ -435,6 +445,7 @@ class CrosshairsNativeView: NSView {
     private var screenFrame: NSRect
     private var displayLink: CVDisplayLink?
     private var settingsObserver: Any?
+    private var displayLinkContext: UnsafeMutablePointer<DisplayLinkContext>?
 
     // Hysteresis state for color adaptation - prevents flickering
     // true = currently using light crosshair, false = currently using dark crosshair
@@ -463,19 +474,24 @@ class CrosshairsNativeView: NSView {
         }
 
         // Setup display link for smooth 60fps updates
+        // Use a context wrapper with weak reference to prevent crash on deallocation
         CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
         if let displayLink = displayLink {
+            // Allocate context on heap so it survives beyond init
+            let context = DisplayLinkContext(view: self)
+            displayLinkContext = UnsafeMutablePointer<DisplayLinkContext>.allocate(capacity: 1)
+            displayLinkContext?.initialize(to: context)
+
             CVDisplayLinkSetOutputCallback(displayLink, { (_, _, _, _, _, userInfo) -> CVReturn in
                 guard let userInfo = userInfo else { return kCVReturnSuccess }
-                let view = Unmanaged<CrosshairsNativeView>.fromOpaque(userInfo).takeUnretainedValue()
-                DispatchQueue.main.async {
-                    // Check if view is still valid before accessing
-                    if view.window != nil {
-                        view.needsDisplay = true
-                    }
+                let context = userInfo.assumingMemoryBound(to: DisplayLinkContext.self).pointee
+                // Use weak reference - safely returns nil if view was deallocated
+                guard let view = context.view else { return kCVReturnSuccess }
+                DispatchQueue.main.async { [weak view] in
+                    view?.needsDisplay = true
                 }
                 return kCVReturnSuccess
-            }, Unmanaged.passUnretained(self).toOpaque())
+            }, displayLinkContext)
             CVDisplayLinkStart(displayLink)
         }
     }
@@ -489,6 +505,12 @@ class CrosshairsNativeView: NSView {
         if let dl = displayLink {
             CVDisplayLinkStop(dl)
             displayLink = nil
+        }
+        // Clean up the context pointer
+        if let context = displayLinkContext {
+            context.deinitialize(count: 1)
+            context.deallocate()
+            displayLinkContext = nil
         }
     }
 
