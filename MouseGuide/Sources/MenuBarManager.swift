@@ -82,6 +82,30 @@ class MenuBarManager {
         if let appDelegate = appDelegate {
             let isVisible = appDelegate.crosshairsWindow != nil
             toggleMenuItem?.state = isVisible ? .on : .off
+
+            // Update title based on state: "Slå Mouse Guide til" / "Slå Mouse Guide fra"
+            toggleMenuItem?.title = isVisible ? LocalizedString.menuToggleHide : LocalizedString.menuToggleShow
+
+            // Update accessibility label to include state
+            let statusText = isVisible ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff
+            toggleMenuItem?.setAccessibilityLabel("\(toggleMenuItem?.title ?? ""), \(statusText)")
+
+            // Update keyboard shortcut display if hotkeys work
+            updateShortcutDisplay()
+        }
+    }
+
+    private func updateShortcutDisplay() {
+        guard let appDelegate = appDelegate else { return }
+
+        if appDelegate.canShowShortcutInMenu {
+            // Show the actual shortcut: Shift+Ctrl+L
+            toggleMenuItem?.keyEquivalent = "l"
+            toggleMenuItem?.keyEquivalentModifierMask = [.shift, .control]
+        } else {
+            // Hide shortcut when it doesn't work
+            toggleMenuItem?.keyEquivalent = ""
+            toggleMenuItem?.keyEquivalentModifierMask = []
         }
     }
 

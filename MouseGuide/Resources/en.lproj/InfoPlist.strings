@@ -1,0 +1,5 @@
+/* English localization for Info.plist */
+
+"NSInputMonitoringUsageDescription" = "Mouse Guide needs access to keyboard input to toggle the crosshair with a keyboard shortcut and automatically hide it while you type.";
+
+"NSScreenCaptureUsageDescription" = "Mouse Guide needs screen recording access to automatically adapt the crosshair color based on the background under the mouse cursor.";

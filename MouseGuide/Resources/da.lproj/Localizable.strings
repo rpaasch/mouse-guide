@@ -9,6 +9,13 @@
 "menu.settings" = "Indstillinger...";
 "menu.about" = "Om Mouse Guide";
 "menu.quit" = "Afslut";
+"menu.toggleOn" = "Slå til";
+"menu.toggleOff" = "Slå fra";
+"menu.gettingStarted" = "📖 Kom godt i gang...";
+"menu.support" = "❤️ Støt Udviklingen...";
+"menu.thankyou" = "💚 Tak for støtten!";
+"menu.toggle.show" = "Slå Mouse Guide til";
+"menu.toggle.hide" = "Slå Mouse Guide fra";
 
 /* Onboarding */
 "onboarding.title" = "Velkommen til Mouse Guide";
@@ -63,6 +70,7 @@
 "settings.circleRadius" = "Cirkel radius:";
 "settings.circleFillOpacity" = "Fyld gennemsigtighed";
 "settings.circleFillOpacity.description" = "Gennemsigtighed af fyldet i cirklen (0% = ingen fyld)";
+"settings.circleFillColor" = "Fyldfarve";
 
 "settings.lineStyle" = "Linjestil";
 "settings.lineStyle.solid" = "Hel";
@@ -81,37 +89,11 @@
 "settings.glidingDelayHelp" = "Forsinkelse før glidning starter";
 "settings.glidingNote" = "Bemærk: Funktionen for glidende markør er i øjeblikket eksperimentel";
 
-/* Alerts */
-"alert.shortcut.title" = "Tastaturgenvej";
-"alert.shortcut.message" = "For at ændre tastaturgenvejen skal du ændre indstillingerne. Standarden er ⇧⌃L (Shift + Control + L).\n\nDu kan tilpasse dette i app-præferencerne.";
-"alert.ok" = "OK";
-
-/* Shareware / Payment */
-"payment.title" = "Tak fordi du bruger Mouse Guide!";
-"payment.subtitle" = "Et synligt trådkors og læselineal til din skærm";
-"payment.description1" = "Mouse Guide hjælper dig med at se hvor din mus er og følge tekst på skærmen.";
-"payment.description2" = "Perfekt hvis du har svært ved at se musemarkøren, eller hvis du har brug for en læselineal når du læser på skærmen.";
-"payment.ifUseful" = "Hvis du synes appen er nyttig,";
-"payment.wouldAppreciate" = "vil jeg sætte pris på din støtte.";
-"payment.worksRegardless" = "Appen fungerer fuldt ud uanset om du køber eller ej.";
-"payment.buyButton" = "Støt udviklingen - Køb license";
-"payment.purchasedButton" = "Jeg har allerede købt";
-"payment.continueButton" = "Fortsæt uden køb";
-"payment.remindButton" = "Minder mig senere";
-"payment.aboutBuyButton" = "Køb License";
-"payment.aboutClose" = "Luk";
-"payment.thankYou" = "Tak for din støtte!";
-
-/* Onboarding - Welcome Step */
-"onboarding.welcome.title" = "Velkommen til Mouse Guide";
-"onboarding.welcome.tagline" = "Et synligt trådkors og læselineal til din skærm";
-"onboarding.welcome.description1" = "Mouse Guide hjælper dig med at se hvor din mus er og følge tekst på skærmen.";
-"onboarding.welcome.description2" = "Perfekt hvis du har svært ved at se musemarkøren, eller hvis du har brug for en læselineal når du læser på skærmen.";
-"onboarding.welcome.feature1" = "Synligt trådkors til at finde musen";
-"onboarding.welcome.feature2" = "Læselineal til at følge tekst";
-"onboarding.welcome.feature3" = "Tænd/sluk med genvejstast";
-"onboarding.welcome.feature4" = "Tilpas farver og størrelse";
-"onboarding.welcome.button" = "Kom i gang";
+/* Settings Categories */
+"settings.category.appearance" = "Udseende";
+"settings.category.behavior" = "Adfærd";
+"settings.category.license" = "Licens";
+"settings.category.about" = "Om";
 
 /* Language / Sprog */
 "settings.language" = "Sprog";
@@ -119,56 +101,49 @@
 "language.danish" = "Dansk";
 "language.english" = "English";
 
-/* License Errors */
-"license.error.invalidFormat" = "Licensnøglen skal være i formatet XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX";
-"license.error.invalidKey" = "Ugyldig licensnøgle";
-"license.error.networkError" = "Kunne ikke forbinde til server. Tjek din internetforbindelse.";
-"license.error.alreadyUsed" = "Denne licensnøgle er allerede i brug";
-"license.error.refunded" = "Dette køb er blevet refunderet";
-"license.error.disputed" = "Dette køb er blevet anfægtet eller chargeback";
-"license.error.subscriptionEnded" = "Dette abonnement er udløbet eller aflyst";
+/* Alerts */
+"alert.shortcut.title" = "Tastaturgenvej";
+"alert.shortcut.message" = "For at ændre tastaturgenvejen skal du ændre indstillingerne. Standarden er ⇧⌃L (Shift + Control + L).\n\nDu kan tilpasse dette i app-præferencerne.";
+"alert.ok" = "OK";
 
-/* License Tab */
-"license.status" = "Licens Status";
-"license.activated" = "Mouse Guide er aktiveret";
-"license.thankyou" = "Tak for din støtte!";
-"license.email" = "Licenseret til:";
-"license.product" = "Produkt:";
-"license.activatedDate" = "Aktiveret:";
-"license.key" = "Licens nøgle:";
-"license.trial" = "Trial periode";
-"license.trialDays" = "dage tilbage med fuld adgang";
-"license.free" = "Gratis version";
-"license.freeMinutes" = "til genstart anbefalet";
-"license.freeRestrictions" = "Kun rødt kryds på 1px, én skærm. Genstart anbefalet hvert 10. minut for bedre oplevelse.";
-"license.freeRestart" = "Genstart for ny session";
-"license.checking" = "Tjekker licens status...";
-"license.buyTitle" = "Køb Mouse Guide";
-"license.buyDescription" = "Få fuld adgang uden begrænsninger";
-"license.buyNow" = "Køb Nu";
-"license.alreadyBought" = "Har du allerede købt?";
-"license.enterKey" = "Indtast licensnøglen du modtog fra Gumroad";
-"license.placeholder" = "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX";
-"license.activate" = "Aktivér Licens";
-"license.activating" = "Aktiverer...";
-"license.activated.title" = "Licens Aktiveret!";
-"license.activated.message" = "Mouse Guide er nu fuldt aktiveret. Tak for din støtte!";
-"license.restorePurchases" = "Gendan køb";
-"license.developerTesting" = "🧪 Udvikler Test";
-"license.simulateExpiredTrial" = "Simuler udløbet trial (gratis mode)";
-"license.resetTrial" = "Reset trial (7 dages fuld trial)";
+/* Alerts - Accessibility */
+"alert.accessibility.message" = "Mouse Guide har brug for Tilgængelighed-tilladelse for at kunne:";
+"alert.accessibility.feature1" = "• Bruge globale tastaturgenveje (⇧⌃L)";
+"alert.accessibility.feature2" = "• Vise/skjule trådkorset med tastaturet";
+"alert.accessibility.instruction" = "Klik \"Åbn Indstillinger\" for at give tilladelse.";
 
-/* Free Session Expiry */
-"freeSession.expired.title" = "Genstart Anbefalet";
-"freeSession.expired.message" = "Dine 10 minutter er gået.\n\nDu kan fortsætte med at arbejde med det enkle røde kryds, eller:\n• Genstart appen for en ny session\n• Køb en licens for fuld adgang uden begrænsninger";
-"freeSession.buyLicense" = "Køb Licens";
-"freeSession.restart" = "Genstart App";
+/* Alerts - Input Monitoring */
+"alert.inputMonitoring.title" = "Input Monitoring-tilladelse mangler";
+"alert.inputMonitoring.message" = "Du har aktiveret \"Skjul mens du skriver\", men appen har ikke Input Monitoring-tilladelse.";
+"alert.inputMonitoring.explanation" = "Denne tilladelse er nødvendig for at:";
+"alert.inputMonitoring.feature1" = "• Registrere når du skriver";
+"alert.inputMonitoring.feature2" = "• Automatisk skjule trådkorset mens du skriver";
+"alert.inputMonitoring.instruction" = "Klik \"Åbn Indstillinger\" for at give tilladelse.";
 
-/* Settings Categories */
-"settings.category.appearance" = "Udseende";
-"settings.category.behavior" = "Adfærd";
-"settings.category.license" = "Licens";
-"settings.category.about" = "Om";
+/* Alerts - Development */
+"alert.development.warning" = "⚠️ VIGTIGT: Du kører fra en udviklingsmappe:";
+"alert.development.instruction" = "For bedst resultat, kopier appen til /Applications først.";
+"alert.development.permissionNote" = "Tilladelser gives pr. app-sti. Hvis du flytter appen senere, skal du give tilladelserne igen.";
+
+/* Alerts - About */
+"alert.about.title" = "Om Mouse Guide";
+"alert.copied.title" = "✅ Kopieret til udklipsholder";
+
+/* Permissions */
+"permission.accessibility.required" = "Tilgængelighed-tilladelse påkrævet";
+"permission.accessibility.title" = "Tilgængelighed";
+"permission.accessibility.description" = "Påkrævet for globale tastaturgenveje";
+"permission.button.openSettings" = "Åbn Systemindstillinger";
+
+/* Common */
+"common.ok" = "OK";
+"common.cancel" = "Annuller";
+"common.close" = "Luk";
+
+/* Common Buttons */
+"common.button.later" = "Senere";
+"common.button.disable" = "Slå funktionen fra";
+"common.button.copyInfo" = "Kopier Info";
 
 /* Appearance Tab */
 "appearance.colors" = "Farver";
@@ -176,8 +151,13 @@
 "appearance.colors.quickSelect" = "Hurtigvalg:";
 "appearance.colors.crosshair.description" = "Hovedfarven";
 "appearance.colors.border.description" = "Farve på kanten";
+"appearance.colors.circleFill" = "Cirkel Fyld";
+"appearance.colors.circleFill.description" = "Farve på cirklens fyld";
 "appearance.dimensions" = "Dimensioner";
 "appearance.opacity.description" = "Gennemsigtighed (højere = mere synligt)";
+"appearance.opacity.description.lines" = "Gennemsigtighed af linjerne (højere = mere synligt)";
+"appearance.opacity.description.circle" = "Gennemsigtighed af cirkelens kant (højere = mere synligt)";
+"appearance.opacity.description.edgePointers" = "Gennemsigtighed af pilene (højere = mere synligt)";
 "appearance.centerRadius.description" = "Størrelse af det tomme område i midten";
 "appearance.circleRadius.description" = "Radius for cirklen";
 "appearance.thickness.description" = "Tykkelse på linjen";
@@ -247,15 +227,6 @@
 "about.reset.confirm.cancel" = "Annuller";
 "about.reset.confirm.reset" = "Nulstil";
 
-/* Common */
-"common.ok" = "OK";
-"common.cancel" = "Annuller";
-"common.close" = "Luk";
-
-/* License Tab - Additional */
-"license.manageOrBuy" = "Administrer Licens";
-"license.alreadyPurchasedTitle" = "Har du allerede købt?";
-
 /* Formatted Values */
 "format.percent.visible" = "%d%% synligt";
 "format.pixels" = "%d px";
@@ -265,12 +236,41 @@
 "format.minute.singular" = "minut";
 "format.minute.plural" = "minutter";
 
-/* MenuBar */
-"menu.toggleOn" = "Slå til";
-"menu.toggleOff" = "Slå fra";
-"menu.about" = "Om Mouse Guide...";
-"menu.support" = "❤️ Støt Udviklingen...";
-"menu.thankyou" = "💚 Tak for støtten!";
+/* License Tab */
+"license.status" = "Licens Status";
+"license.activated" = "Mouse Guide er aktiveret";
+"license.thankyou" = "Tak for din støtte!";
+"license.email" = "Licenseret til:";
+"license.product" = "Produkt:";
+"license.activatedDate" = "Aktiveret:";
+"license.key" = "Licens nøgle:";
+"license.trial" = "Trial periode";
+"license.trialDays" = "dage tilbage med fuld adgang";
+"license.free" = "Gratis version";
+"license.freeMinutes" = "til genstart anbefalet";
+"license.freeRestrictions" = "Kun rødt kryds på 1px, én skærm. Genstart anbefalet hvert 10. minut for bedre oplevelse.";
+"license.freeRestart" = "Genstart for ny session";
+"license.checking" = "Tjekker licens status...";
+"license.buyTitle" = "Køb Mouse Guide";
+"license.buyDescription" = "Få fuld adgang uden begrænsninger";
+"license.buyNow" = "Køb Nu";
+"license.alreadyBought" = "Har du allerede købt?";
+"license.enterKey" = "Indtast licensnøglen du modtog fra Gumroad";
+"license.placeholder" = "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX";
+"license.activate" = "Aktivér Licens";
+"license.activating" = "Aktiverer...";
+"license.activated.title" = "Licens Aktiveret!";
+"license.activated.message" = "Mouse Guide er nu fuldt aktiveret. Tak for din støtte!";
+"license.restorePurchases" = "Gendan køb";
+"license.developerTesting" = "🧪 Udvikler Test";
+"license.simulateExpiredTrial" = "Simuler udløbet trial (gratis mode)";
+"license.resetTrial" = "Reset trial (7 dages fuld trial)";
+
+/* Free Session Expiry */
+"freeSession.expired.title" = "Genstart Anbefalet";
+"freeSession.expired.message" = "Dine 10 minutter er gået.\n\nDu kan fortsætte med at arbejde med det enkle røde kryds, eller:\n• Genstart appen for en ny session\n• Køb en licens for fuld adgang uden begrænsninger";
+"freeSession.buyLicense" = "Køb Licens";
+"freeSession.restart" = "Genstart App";
 
 /* Updates */
 "update.check" = "Tjek for opdateringer";
@@ -294,15 +294,15 @@
 "accessibility.state.granted" = "Givet";
 "accessibility.state.missing" = "Mangler";
 
-/* Accessibility - Navigation / Tilgængelighed - Navigation */
+/* Accessibility - Navigation */
 "accessibility.navigation.settings.suffix" = "indstillinger";
 "accessibility.navigation.settings.hint" = "Naviger til %@ indstillinger";
 
-/* Accessibility - Main Toggle / Tilgængelighed - Hovedknap */
+/* Accessibility - Main Toggle */
 "accessibility.toggle.main.label" = "Mouse Guide";
 "accessibility.toggle.main.hint" = "Viser eller skjuler Mouse Guide på skærmen";
 
-/* Accessibility - Orientations / Tilgængelighed - Orienteringer */
+/* Accessibility - Orientations */
 "accessibility.orientation.horizontal.label" = "Vandret";
 "accessibility.orientation.horizontal.hint" = "Indstiller Mouse Guide til kun at vise en vandret linje";
 "accessibility.orientation.vertical.label" = "Lodret";
@@ -316,17 +316,19 @@
 "accessibility.orientation.circle.label" = "Cirkel";
 "accessibility.orientation.circle.hint" = "Viser en cirkulær markering omkring markøren";
 
-/* Accessibility - Colors / Tilgængelighed - Farver */
+/* Accessibility - Colors */
 "accessibility.color.crosshair.label" = "Mouse Guide farvevælger";
 "accessibility.color.crosshair.hint" = "Vælg farven til Mouse Guide linjerne";
 "accessibility.color.border.label" = "Kantfarve vælger";
 "accessibility.color.border.hint" = "Vælg farven til Mouse Guide kantomridset";
+"accessibility.color.circleFill.label" = "Cirkel fyldfarve";
+"accessibility.color.circleFill.hint" = "Tryk for at ændre cirkel fyldfarve";
 
-/* Accessibility - Fixed Length / Tilgængelighed - Fast længde */
+/* Accessibility - Fixed Length */
 "accessibility.fixedLength.toggle.label" = "Fastlås længde";
 "accessibility.fixedLength.toggle.hint" = "Når aktiveret, indstiller en fast længde i stedet for at spænde over hele skærmen";
 
-/* Accessibility - Line Styles / Tilgængelighed - Linjestile */
+/* Accessibility - Line Styles */
 "accessibility.lineStyle.solid.label" = "Hel linjestil";
 "accessibility.lineStyle.solid.hint" = "Indstiller Mouse Guide til at bruge en sammenhængende hel linje";
 "accessibility.lineStyle.dashed.label" = "Stiplet linjestil";
@@ -334,7 +336,7 @@
 "accessibility.lineStyle.dotted.label" = "Prikket linjestil";
 "accessibility.lineStyle.dotted.hint" = "Indstiller Mouse Guide til at bruge et prikket linjemønster";
 
-/* Accessibility - Behaviors / Tilgængelighed - Adfærd */
+/* Accessibility - Behaviors */
 "accessibility.behavior.colorAdaptation.label" = "Tilpas farve automatisk baseret på baggrund";
 "accessibility.behavior.colorAdaptation.hint" = "Tilpasser automatisk Mouse Guide farven baseret på baggrunden for bedre synlighed";
 "accessibility.behavior.autoHidePointer.label" = "Skjul automatisk når musemarkøren er skjult";
@@ -346,7 +348,7 @@
 "accessibility.behavior.gliding.label" = "Aktiver glidende markør";
 "accessibility.behavior.gliding.hint" = "Får Mouse Guide til at glide jævnt for at følge markørbevægelser i stedet for at hoppe øjeblikkeligt";
 
-/* Accessibility - License / Tilgængelighed - Licens */
+/* Accessibility - License */
 "accessibility.license.active" = "Licens aktiv. Mouse Guide er fuldt aktiveret. Tak for din støtte";
 "accessibility.license.trial" = "Prøveperiode. %d dage tilbage med fuld adgang";
 "accessibility.license.restore.label" = "Gendan køb";
@@ -356,30 +358,44 @@
 "accessibility.license.restorePrevious.label" = "Gendan tidligere køb";
 "accessibility.license.restorePrevious.hint" = "Gendanner dit køb hvis du købte Mouse Guide på en anden enhed";
 
-/* Accessibility - Updates / Tilgængelighed - Opdateringer */
+/* Accessibility - Updates */
 "accessibility.update.check.label" = "Tjek for opdateringer";
 "accessibility.update.check.hint" = "Tjekker om en nyere version af Mouse Guide er tilgængelig til download";
 
-/* Accessibility - Language / Tilgængelighed - Sprog */
+/* Accessibility - Language */
 "accessibility.language.picker.label" = "Applikationssprog";
 "accessibility.language.picker.hint" = "Vælg sproget for brugergrænsefladen";
 
-/* Accessibility - Reset / Tilgængelighed - Nulstil */
+/* Accessibility - Reset */
 "accessibility.reset.button.label" = "Nulstil alle indstillinger til standardværdier";
 "accessibility.reset.button.hint" = "Dette vil gendanne alle indstillinger til deres oprindelige standarder. Denne handling kræver bekræftelse";
 
-/* Accessibility - Permissions / Tilgængelighed - Tilladelser */
+/* Accessibility - Permissions */
 "accessibility.permission.status.format" = "%@. %@. Status: %@";
 "accessibility.permission.openSettings.label" = "Åbn Systemindstillinger for %@";
 "accessibility.permission.openSettings.hint" = "Åbner macOS Systemindstillinger for at give %@ tilladelse";
 
-/* Accessibility - Color Presets / Tilgængelighed - Farveforudindstillinger */
+/* Accessibility - Color Presets */
 "accessibility.colorPreset.label" = "%@ farveforudindstilling";
 "accessibility.colorPreset.hint" = "Indstiller farven til %@";
 "accessibility.colorType.crosshair" = "fyldfarve";
 "accessibility.colorType.border" = "kantfarve";
 
-/* Accessibility - Keyboard Shortcut / Tilgængelighed - Genvejstast */
+/* Accessibility - Keyboard Shortcut */
 "accessibility.shortcutRecorder.label" = "Genvejstast til at vise eller skjule Mouse Guide, Nuværende genvej: %@";
 "accessibility.shortcutRecorder.hint" = "Klik for at optage en ny genvejstast";
 "accessibility.shortcutRecorder.recording" = "Tryk en tastekombination for at optage en ny genvej";
+
+/* Keyboard Shortcut Recorder */
+"shortcut.recorder.placeholder" = "Klik for at optage...";
+"shortcut.recorder.recording" = "⌨️ Tryk tastekombination...";
+
+/* Keyboard Shortcut Permission Alert */
+"shortcut.permission.title" = "Aktivér Tastaturgenvej";
+"shortcut.permission.message" = "For at bruge tastaturgenvejen ⇧⌃L har Mouse Guide brug for Indtastningsovervågning-tilladelse.\n\nDu kan stadig bruge menu bar til at tænde/slukke uden denne tilladelse.";
+"shortcut.permission.openSettings" = "Åbn Systemindstillinger";
+"shortcut.permission.later" = "Senere";
+
+/* Window Titles */
+"window.settings.title" = "Mouse Guide - Indstillinger";
+"window.gettingStarted.title" = "Kom godt i gang med Mouse Guide";

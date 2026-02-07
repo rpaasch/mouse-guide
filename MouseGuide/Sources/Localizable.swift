@@ -52,11 +52,14 @@ enum LocalizedString {
     static var menuToggleLabel: String { "menu.toggleLabel".localized() }
     static var menuToggleOn: String { "menu.toggleOn".localized() }
     static var menuToggleOff: String { "menu.toggleOff".localized() }
+    static var menuGettingStarted: String { "menu.gettingStarted".localized() }
     static var menuSettings: String { "menu.settings".localized() }
     static var menuAbout: String { "menu.about".localized() }
     static var menuSupport: String { "menu.support".localized() }
     static var menuThankyou: String { "menu.thankyou".localized() }
     static var menuQuit: String { "menu.quit".localized() }
+    static var menuToggleShow: String { "menu.toggle.show".localized() }
+    static var menuToggleHide: String { "menu.toggle.hide".localized() }
 
     // Onboarding
     static var onboardingTitle: String { "onboarding.title".localized() }
@@ -111,6 +114,7 @@ enum LocalizedString {
     static var settingsCircleRadius: String { "settings.circleRadius".localized() }
     static var settingsCircleFillOpacity: String { "settings.circleFillOpacity".localized() }
     static var settingsCircleFillOpacityDescription: String { "settings.circleFillOpacity.description".localized() }
+    static var settingsCircleFillColor: String { "settings.circleFillColor".localized() }
 
     static var settingsLineStyle: String { "settings.lineStyle".localized() }
     static var settingsLineStyleSolid: String { "settings.lineStyle.solid".localized() }
@@ -134,6 +138,40 @@ enum LocalizedString {
     static var alertShortcutMessage: String { "alert.shortcut.message".localized() }
     static var alertOK: String { "alert.ok".localized() }
 
+    // Permissions
+    static var permissionAccessibilityRequired: String { "permission.accessibility.required".localized() }
+    static var permissionAccessibilityTitle: String { "permission.accessibility.title".localized() }
+    static var permissionAccessibilityDescription: String { "permission.accessibility.description".localized() }
+    static var permissionButtonOpenSettings: String { "permission.button.openSettings".localized() }
+
+    // Alerts - Accessibility
+    static var alertAccessibilityMessage: String { "alert.accessibility.message".localized() }
+    static var alertAccessibilityFeature1: String { "alert.accessibility.feature1".localized() }
+    static var alertAccessibilityFeature2: String { "alert.accessibility.feature2".localized() }
+    static var alertAccessibilityInstruction: String { "alert.accessibility.instruction".localized() }
+
+    // Alerts - Input Monitoring
+    static var alertInputMonitoringTitle: String { "alert.inputMonitoring.title".localized() }
+    static var alertInputMonitoringMessage: String { "alert.inputMonitoring.message".localized() }
+    static var alertInputMonitoringExplanation: String { "alert.inputMonitoring.explanation".localized() }
+    static var alertInputMonitoringFeature1: String { "alert.inputMonitoring.feature1".localized() }
+    static var alertInputMonitoringFeature2: String { "alert.inputMonitoring.feature2".localized() }
+    static var alertInputMonitoringInstruction: String { "alert.inputMonitoring.instruction".localized() }
+
+    // Alerts - Development
+    static var alertDevelopmentWarning: String { "alert.development.warning".localized() }
+    static var alertDevelopmentInstruction: String { "alert.development.instruction".localized() }
+    static var alertDevelopmentPermissionNote: String { "alert.development.permissionNote".localized() }
+
+    // Alerts - About
+    static var alertAboutTitle: String { "alert.about.title".localized() }
+    static var alertCopiedTitle: String { "alert.copied.title".localized() }
+
+    // Common Buttons
+    static var commonButtonLater: String { "common.button.later".localized() }
+    static var commonButtonDisable: String { "common.button.disable".localized() }
+    static var commonButtonCopyInfo: String { "common.button.copyInfo".localized() }
+
     // Language
     static var settingsLanguage: String { "settings.language".localized() }
     static var settingsLanguageDescription: String { "settings.language.description".localized() }
@@ -146,8 +184,13 @@ enum LocalizedString {
     static var appearanceColorsQuickSelect: String { "appearance.colors.quickSelect".localized() }
     static var appearanceColorsCrosshairDescription: String { "appearance.colors.crosshair.description".localized() }
     static var appearanceColorsBorderDescription: String { "appearance.colors.border.description".localized() }
+    static var appearanceColorsCircleFill: String { "appearance.colors.circleFill".localized() }
+    static var appearanceColorsCircleFillDescription: String { "appearance.colors.circleFill.description".localized() }
     static var appearanceDimensions: String { "appearance.dimensions".localized() }
     static var appearanceOpacityDescription: String { "appearance.opacity.description".localized() }
+    static var appearanceOpacityDescriptionLines: String { "appearance.opacity.description.lines".localized() }
+    static var appearanceOpacityDescriptionCircle: String { "appearance.opacity.description.circle".localized() }
+    static var appearanceOpacityDescriptionEdgePointers: String { "appearance.opacity.description.edgePointers".localized() }
     static var appearanceCenterRadiusDescription: String { "appearance.centerRadius.description".localized() }
     static var appearanceCircleRadiusDescription: String { "appearance.circleRadius.description".localized() }
     static var appearanceThicknessDescription: String { "appearance.thickness.description".localized() }
@@ -219,6 +262,7 @@ enum LocalizedString {
 
     // Common
     static var commonOK: String { "common.ok".localized() }
+    static var commonOk: String { "common.ok".localized() }
     static var commonCancel: String { "common.cancel".localized() }
     static var commonClose: String { "common.close".localized() }
 
@@ -331,6 +375,8 @@ enum LocalizedString {
     static var accessibilityColorCrosshairHint: String { "accessibility.color.crosshair.hint".localized() }
     static var accessibilityColorBorderLabel: String { "accessibility.color.border.label".localized() }
     static var accessibilityColorBorderHint: String { "accessibility.color.border.hint".localized() }
+    static var accessibilityColorCircleFillLabel: String { "accessibility.color.circleFill.label".localized() }
+    static var accessibilityColorCircleFillHint: String { "accessibility.color.circleFill.hint".localized() }
 
     // Accessibility - Fixed Length
     static var accessibilityFixedLengthToggleLabel: String { "accessibility.fixedLength.toggle.label".localized() }
@@ -393,4 +439,18 @@ enum LocalizedString {
     static var accessibilityShortcutRecorderLabel: String { "accessibility.shortcutRecorder.label".localized() }
     static var accessibilityShortcutRecorderHint: String { "accessibility.shortcutRecorder.hint".localized() }
     static var accessibilityShortcutRecorderRecording: String { "accessibility.shortcutRecorder.recording".localized() }
+
+    // Keyboard Shortcut Recorder
+    static var shortcutRecorderPlaceholder: String { "shortcut.recorder.placeholder".localized() }
+    static var shortcutRecorderRecording: String { "shortcut.recorder.recording".localized() }
+
+    // Keyboard Shortcut Permission Alert
+    static var shortcutPermissionTitle: String { "shortcut.permission.title".localized() }
+    static var shortcutPermissionMessage: String { "shortcut.permission.message".localized() }
+    static var shortcutPermissionOpenSettings: String { "shortcut.permission.openSettings".localized() }
+    static var shortcutPermissionLater: String { "shortcut.permission.later".localized() }
+
+    // Window Titles
+    static var windowSettingsTitle: String { "window.settings.title".localized() }
+    static var gettingStartedTitle: String { "window.gettingStarted.title".localized() }
 }

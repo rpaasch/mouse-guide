@@ -78,12 +78,12 @@ class ShortcutRecorderView: NSView {
         if !parts.isEmpty {
             return parts.joined() + currentKey
         }
-        return "Klik for at optage..."
+        return LocalizedString.shortcutRecorderPlaceholder
     }
 
     @objc private func startRecording() {
         isRecording = true
-        button.title = "⌨️ Tryk tastekombination..."
+        button.title = LocalizedString.shortcutRecorderRecording
         button.highlight(true)
 
         // Update accessibility for recording state

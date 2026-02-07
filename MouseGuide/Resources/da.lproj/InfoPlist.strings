@@ -1,0 +1,5 @@
+/* Danish localization for Info.plist */
+
+"NSInputMonitoringUsageDescription" = "Mouse Guide har brug for adgang til tastaturindtastning for at kunne aktivere/deaktivere trådkorset med tastaturgenvej og skjule det automatisk mens du skriver.";
+
+"NSScreenCaptureUsageDescription" = "Mouse Guide har brug for skærmoptagelse for at kunne tilpasse trådkorsets farve automatisk baseret på baggrunden under musemarkøren.";

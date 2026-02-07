@@ -111,7 +111,7 @@ struct SettingsView: View {
                     case .appearance:
                         AppearanceTab(settings: settings)
                     case .behavior:
-                        BehaviorTab(settings: settings)
+                        BehaviorTab(settings: settings, appDelegate: appDelegate)
                     case .license:
                         LicenseTab(settings: settings)
                     case .about:
@@ -191,6 +191,18 @@ struct AppearanceTab: View {
         return false
     }
 
+    // Dynamic opacity description based on orientation
+    private var opacityDescription: String {
+        switch settings.orientation {
+        case .circle:
+            return LocalizedString.appearanceOpacityDescriptionCircle
+        case .edgePointers:
+            return LocalizedString.appearanceOpacityDescriptionEdgePointers
+        default:
+            return LocalizedString.appearanceOpacityDescriptionLines
+        }
+    }
+
     private func colorNameForAccessibility(_ color: Color) -> String {
         let nsColor = NSColor(color)
         guard let rgb = nsColor.usingColorSpace(.deviceRGB) else {
@@ -242,24 +254,41 @@ struct AppearanceTab: View {
 
                     VStack(alignment: .leading, spacing: 12) {
                         VStack(alignment: .leading, spacing: 8) {
-                            // Horizontal
-                            Button(action: {
-                                settings.orientation = .horizontal
-                            }) {
+                            // Horizontal with Reading Line option
+                            VStack(alignment: .leading, spacing: 4) {
+                                Button(action: {
+                                    settings.orientation = .horizontal
+                                }) {
+                                    HStack(spacing: 8) {
+                                        Image(systemName: settings.orientation == .horizontal ? "circle.inset.filled" : "circle")
+                                            .foregroundColor(settings.orientation == .horizontal ? .accentColor : .secondary)
+                                            .accessibilityHidden(true)
+                                        Image(systemName: "arrow.left.and.right")
+                                            .foregroundColor(.primary)
+                                            .accessibilityHidden(true)
+                                        Text(LocalizedString.settingsOrientationHorizontal)
+                                            .foregroundColor(.primary)
+                                        Spacer()
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("\(LocalizedString.accessibilityOrientationHorizontalLabel), \(settings.orientation == .horizontal ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
+                                .accessibilityHint(LocalizedString.accessibilityOrientationHorizontalHint)
+
+                                // Reading Line checkbox - always visible, indented
                                 HStack(spacing: 8) {
-                                    Image(systemName: settings.orientation == .horizontal ? "circle.inset.filled" : "circle")
-                                        .foregroundColor(settings.orientation == .horizontal ? .accentColor : .secondary)
-                                        .accessibilityHidden(true)
-                                    Image(systemName: "arrow.left.and.right")
-                                        .foregroundColor(.primary)
-                                        .accessibilityHidden(true)
-                                    Text(LocalizedString.settingsOrientationHorizontal)
-                                        .foregroundColor(.primary)
+                                    Spacer().frame(width: 36) // Indent to align with text
+                                    Toggle("", isOn: $settings.useReadingLine)
+                                        .labelsHidden()
+                                        .toggleStyle(.checkbox)
+                                        .accessibilityLabel(LocalizedString.settingsOrientationReadingLine)
+                                        .disabled(settings.orientation != .horizontal)
+                                    Text(LocalizedString.settingsOrientationReadingLine)
+                                        .font(.caption)
+                                        .foregroundColor(settings.orientation == .horizontal ? .secondary : Color.secondary.opacity(0.5))
+                                    Spacer()
                                 }
                             }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel("\(LocalizedString.accessibilityOrientationHorizontalLabel), \(settings.orientation == .horizontal ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
-                            .accessibilityHint(LocalizedString.accessibilityOrientationHorizontalHint)
 
                             // Vertical
                             Button(action: {
@@ -298,25 +327,6 @@ struct AppearanceTab: View {
                             .buttonStyle(.plain)
                             .accessibilityLabel("\(LocalizedString.accessibilityOrientationBothLabel), \(settings.orientation == .both ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
                             .accessibilityHint(LocalizedString.accessibilityOrientationBothHint)
-
-                            // Reading Line
-                            Button(action: {
-                                settings.orientation = .readingLine
-                            }) {
-                                HStack(spacing: 8) {
-                                    Image(systemName: settings.orientation == .readingLine ? "circle.inset.filled" : "circle")
-                                        .foregroundColor(settings.orientation == .readingLine ? .accentColor : .secondary)
-                                        .accessibilityHidden(true)
-                                    Image(systemName: "text.alignleft")
-                                        .foregroundColor(.primary)
-                                        .accessibilityHidden(true)
-                                    Text(LocalizedString.settingsOrientationReadingLine)
-                                        .foregroundColor(.primary)
-                                }
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel("\(LocalizedString.accessibilityOrientationReadingLineLabel), \(settings.orientation == .readingLine ? LocalizedString.accessibilityStateSelected : LocalizedString.accessibilityStateNotSelected)")
-                            .accessibilityHint(LocalizedString.accessibilityOrientationReadingLineHint)
 
                             // Edge Pointers
                             Button(action: {
@@ -393,7 +403,7 @@ struct AppearanceTab: View {
                     VStack(alignment: .leading, spacing: 16) {
                         SettingSlider(
                             label: LocalizedString.settingsOpacity,
-                            description: LocalizedString.appearanceOpacityDescription,
+                            description: opacityDescription,
                             value: $settings.opacity,
                             range: 0.1...1.0,
                             format: { LocalizedString.formatPercentVisible($0) }
@@ -519,14 +529,15 @@ struct AppearanceTab: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
 
+                                    ColorPresetButton(color: .black, currentColor: $settings.crosshairColor, colorType: "crosshair")
+                                    ColorPresetButton(color: .white, currentColor: $settings.crosshairColor, colorType: "crosshair")
+                                    ColorPresetButton(color: .gray, currentColor: $settings.crosshairColor, colorType: "crosshair")
                                     ColorPresetButton(color: .red, currentColor: $settings.crosshairColor, colorType: "crosshair")
                                     ColorPresetButton(color: .green, currentColor: $settings.crosshairColor, colorType: "crosshair")
                                     ColorPresetButton(color: .blue, currentColor: $settings.crosshairColor, colorType: "crosshair")
                                     ColorPresetButton(color: .yellow, currentColor: $settings.crosshairColor, colorType: "crosshair")
                                     ColorPresetButton(color: .orange, currentColor: $settings.crosshairColor, colorType: "crosshair")
                                     ColorPresetButton(color: .purple, currentColor: $settings.crosshairColor, colorType: "crosshair")
-                                    ColorPresetButton(color: .white, currentColor: $settings.crosshairColor, colorType: "crosshair")
-                                    ColorPresetButton(color: .black, currentColor: $settings.crosshairColor, colorType: "crosshair")
                                 }
                                 .padding(.top, 4)
                             }
@@ -563,10 +574,11 @@ struct AppearanceTab: View {
                                     ColorPresetButton(color: .white, currentColor: $settings.borderColor, colorType: "border")
                                     ColorPresetButton(color: .gray, currentColor: $settings.borderColor, colorType: "border")
                                     ColorPresetButton(color: .red, currentColor: $settings.borderColor, colorType: "border")
-                                    ColorPresetButton(color: .blue, currentColor: $settings.borderColor, colorType: "border")
                                     ColorPresetButton(color: .green, currentColor: $settings.borderColor, colorType: "border")
+                                    ColorPresetButton(color: .blue, currentColor: $settings.borderColor, colorType: "border")
                                     ColorPresetButton(color: .yellow, currentColor: $settings.borderColor, colorType: "border")
                                     ColorPresetButton(color: .orange, currentColor: $settings.borderColor, colorType: "border")
+                                    ColorPresetButton(color: .purple, currentColor: $settings.borderColor, colorType: "border")
                                 }
                                 .padding(.top, 4)
                             }
@@ -574,6 +586,51 @@ struct AppearanceTab: View {
                             Text(LocalizedString.appearanceColorsBorderDescription)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
+
+                            // Circle Fill Color - only show in circle mode
+                            if settings.orientation == .circle {
+                                Divider()
+                                    .padding(.vertical, 12)
+
+                                Text(LocalizedString.appearanceColorsCircleFill)
+                                    .font(.headline)
+
+                                HStack {
+                                    Text(LocalizedString.settingsCircleFillColor)
+                                    Spacer()
+                                    ColorPicker("", selection: $settings.circleFillColor)
+                                        .labelsHidden()
+                                        .frame(width: 60)
+                                        .disabled(settings.invertColors || !hasFullAccess)
+                                        .accessibilityLabel(LocalizedString.accessibilityColorCircleFillLabel)
+                                        .accessibilityValue(colorNameForAccessibility(settings.circleFillColor))
+                                        .accessibilityHint(LocalizedString.accessibilityColorCircleFillHint)
+                                }
+
+                                // Quick select buttons
+                                if !settings.invertColors {
+                                    HStack(spacing: 8) {
+                                        Text(LocalizedString.appearanceColorsQuickSelect)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+
+                                        ColorPresetButton(color: .black, currentColor: $settings.circleFillColor, colorType: "circleFill")
+                                        ColorPresetButton(color: .white, currentColor: $settings.circleFillColor, colorType: "circleFill")
+                                        ColorPresetButton(color: .gray, currentColor: $settings.circleFillColor, colorType: "circleFill")
+                                        ColorPresetButton(color: .red, currentColor: $settings.circleFillColor, colorType: "circleFill")
+                                        ColorPresetButton(color: .green, currentColor: $settings.circleFillColor, colorType: "circleFill")
+                                        ColorPresetButton(color: .blue, currentColor: $settings.circleFillColor, colorType: "circleFill")
+                                        ColorPresetButton(color: .yellow, currentColor: $settings.circleFillColor, colorType: "circleFill")
+                                        ColorPresetButton(color: .orange, currentColor: $settings.circleFillColor, colorType: "circleFill")
+                                        ColorPresetButton(color: .purple, currentColor: $settings.circleFillColor, colorType: "circleFill")
+                                    }
+                                    .padding(.top, 4)
+                                }
+
+                                Text(LocalizedString.appearanceColorsCircleFillDescription)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                         .opacity(settings.invertColors ? 0.5 : 1.0)
                     }
@@ -587,57 +644,59 @@ struct AppearanceTab: View {
                 .disabled(!hasFullAccess)
                 .opacity(hasFullAccess ? 1.0 : 0.6)
 
-                // Length Section
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text(LocalizedString.settingsLength)
-                            .font(.headline)
-                        if !isLicensed {
-                            Text("Pro")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Color.purple)
-                                .cornerRadius(4)
-                        }
-                    }
-
-                    VStack(alignment: .leading, spacing: 6) {
+                // Length Section - only show for line-based orientations, not for circle or edge pointers
+                if settings.orientation != .circle && settings.orientation != .edgePointers {
+                    VStack(alignment: .leading, spacing: 12) {
                         HStack {
-                            Text(LocalizedString.settingsFixLength)
-                            Spacer()
-                            Toggle("", isOn: $settings.useFixedLength)
-                                .labelsHidden()
-                                .toggleStyle(.switch)
-                                .accessibilityLabel("\(LocalizedString.accessibilityFixedLengthToggleLabel), \(settings.useFixedLength ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
-                                .accessibilityHint(LocalizedString.accessibilityFixedLengthToggleHint)
+                            Text(LocalizedString.settingsLength)
+                                .font(.headline)
+                            if !isLicensed {
+                                Text("Pro")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(Color.purple)
+                                    .cornerRadius(4)
+                            }
                         }
-                        Text(LocalizedString.appearanceLengthDescription)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
 
-                        if settings.useFixedLength {
-                            Divider().padding(.vertical, 4)
-                            SettingSlider(
-                                label: LocalizedString.settingsFixedLength,
-                                description: LocalizedString.appearanceFixedLengthDescription,
-                                value: $settings.fixedLength,
-                                range: 50...2000,
-                                format: { LocalizedString.formatPixels($0) }
-                            )
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text(LocalizedString.settingsFixLength)
+                                Spacer()
+                                Toggle("", isOn: $settings.useFixedLength)
+                                    .labelsHidden()
+                                    .toggleStyle(.switch)
+                                    .accessibilityLabel("\(LocalizedString.accessibilityFixedLengthToggleLabel), \(settings.useFixedLength ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
+                                    .accessibilityHint(LocalizedString.accessibilityFixedLengthToggleHint)
+                            }
+                            Text(LocalizedString.appearanceLengthDescription)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            if settings.useFixedLength {
+                                Divider().padding(.vertical, 4)
+                                SettingSlider(
+                                    label: LocalizedString.settingsFixedLength,
+                                    description: LocalizedString.appearanceFixedLengthDescription,
+                                    value: $settings.fixedLength,
+                                    range: 50...2000,
+                                    format: { LocalizedString.formatPixels($0) }
+                                )
+                            }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 16)
+                        .padding(.horizontal, 24)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .cornerRadius(8)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 16)
                     .padding(.horizontal, 24)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
+                    .disabled(!hasFullAccess)
+                    .opacity(hasFullAccess ? 1.0 : 0.6)
                 }
-                .padding(.horizontal, 24)
-                .disabled(!hasFullAccess)
-                .opacity(hasFullAccess ? 1.0 : 0.6)
 
                 // Line Style Section
                 VStack(alignment: .leading, spacing: 12) {
@@ -734,6 +793,8 @@ struct AppearanceTab: View {
 struct BehaviorTab: View {
     @ObservedObject var settings: CrosshairsSettings
     @ObservedObject var licenseManager = LicenseManager.shared
+    @State private var showResetConfirmation = false
+    weak var appDelegate: AppDelegate?
 
     private var hasFullAccess: Bool {
         settings.hasFullAccess
@@ -770,7 +831,17 @@ struct BehaviorTab: View {
                         HStack {
                             Text(LocalizedString.settingsInvertColors)
                             Spacer()
-                            Toggle("", isOn: $settings.invertColors)
+                            Toggle("", isOn: Binding(
+                                get: { settings.invertColors },
+                                set: { newValue in
+                                    settings.invertColors = newValue
+                                    if newValue {
+                                        // Request Screen Recording - macOS will show system dialog automatically
+                                        settings.requestScreenRecordingPermission()
+                                        NSLog("✅ Screen Recording permission requested for color adaptation")
+                                    }
+                                }
+                            ))
                                 .labelsHidden()
                                 .toggleStyle(.switch)
                                 .accessibilityLabel("\(LocalizedString.accessibilityBehaviorColorAdaptationLabel), \(settings.invertColors ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
@@ -829,7 +900,18 @@ struct BehaviorTab: View {
                             HStack {
                                 Text(LocalizedString.behaviorAutoHideTyping)
                                 Spacer()
-                                Toggle("", isOn: $settings.autoHideWhileTyping)
+                                Toggle("", isOn: Binding(
+                                    get: { settings.autoHideWhileTyping },
+                                    set: { newValue in
+                                        if newValue {
+                                            // Check permission before enabling
+                                            handleAutoHideWhileTypingToggle(enable: true)
+                                        } else {
+                                            // Disable without permission check
+                                            settings.autoHideWhileTyping = false
+                                        }
+                                    }
+                                ))
                                     .labelsHidden()
                                     .toggleStyle(.switch)
                                     .accessibilityLabel("\(LocalizedString.accessibilityBehaviorAutoHideTypingLabel), \(settings.autoHideWhileTyping ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
@@ -848,18 +930,6 @@ struct BehaviorTab: View {
                                     format: { LocalizedString.formatSeconds($0) }
                                 )
                                 .padding(.top, 8)
-                            }
-
-                            if settings.autoHideWhileTyping && !AXIsProcessTrusted() {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "exclamationmark.triangle.fill")
-                                        .foregroundColor(.orange)
-                                        .accessibilityHidden(true)
-                                    Text(LocalizedString.behaviorAutoHideTypingPermissions)
-                                        .font(.caption)
-                                        .foregroundColor(.orange)
-                                }
-                                .padding(.top, 4)
                             }
                         }
 
@@ -978,6 +1048,12 @@ struct BehaviorTab: View {
                             modifiers: $settings.activationModifiers
                         )
                         .frame(height: 36)
+                        .onChange(of: settings.activationKey) { _ in
+                            handleKeyboardShortcutChange()
+                        }
+                        .onChange(of: settings.activationModifiers) { _ in
+                            handleKeyboardShortcutChange()
+                        }
 
                         Divider()
 
@@ -997,9 +1073,101 @@ struct BehaviorTab: View {
                     .cornerRadius(8)
                 }
                 .padding(.horizontal, 24)
+
+                // Language
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(LocalizedString.settingsLanguage)
+                        .font(.headline)
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(LocalizedString.settingsLanguageDescription)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        HStack {
+                            Text(LocalizedString.settingsLanguage + ":")
+                                .frame(width: 80, alignment: .leading)
+
+                            Picker("", selection: $settings.language) {
+                                Text(LocalizedString.languageDanish).tag("da")
+                                Text(LocalizedString.languageEnglish).tag("en")
+                            }
+                            .pickerStyle(.menu)
+                            .labelsHidden()
+                            .frame(width: 150)
+                            .accessibilityLabel(LocalizedString.accessibilityLanguagePickerLabel)
+                            .accessibilityHint(LocalizedString.accessibilityLanguagePickerHint)
+
+                            Spacer()
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 16)
+                    .padding(.horizontal, 24)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                }
+                .padding(.horizontal, 24)
+
+                // Reset Settings (nederst)
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(LocalizedString.aboutReset)
+                        .font(.headline)
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(LocalizedString.aboutResetDescription)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        Button(action: {
+                            showResetConfirmation = true
+                        }) {
+                            HStack {
+                                Image(systemName: "arrow.counterclockwise.circle.fill")
+                                    .accessibilityHidden(true)
+                                Text(LocalizedString.aboutResetButton)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.red)
+                        .accessibilityLabel(LocalizedString.accessibilityResetButtonLabel)
+                        .accessibilityHint(LocalizedString.accessibilityResetButtonHint)
+                        .alert(LocalizedString.aboutResetConfirmTitle, isPresented: $showResetConfirmation) {
+                            Button(LocalizedString.aboutResetConfirmCancel, role: .cancel) {}
+                            Button(LocalizedString.aboutResetConfirmReset, role: .destructive) {
+                                settings.resetToDefaults()
+                            }
+                        } message: {
+                            Text(LocalizedString.aboutResetConfirmMessage)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 16)
+                    .padding(.horizontal, 24)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                }
+                .padding(.horizontal, 24)
             }
             .padding(.vertical, 24)
         }
+    }
+
+    // MARK: - Permission Handlers
+
+    private func handleKeyboardShortcutChange() {
+        // Recreate keyboard monitor with new shortcut settings
+        // Input Monitoring permission is requested at app launch, so this should just work
+        appDelegate?.setupKeyboardMonitor()
+        NSLog("✅ Keyboard shortcut updated")
+    }
+
+    private func handleAutoHideWhileTypingToggle(enable: Bool) {
+        // Just toggle the setting - Input Monitoring permission is requested at app launch
+        settings.autoHideWhileTyping = enable
+        NSLog("✅ Auto-hide while typing: \(enable)")
     }
 }
 
@@ -1330,7 +1498,7 @@ struct LicenseTab: View {
             .padding(.vertical, 24)
         }
         .alert(LocalizedString.licenseActivatedTitle, isPresented: $showPurchaseSuccess) {
-            Button("OK") {}
+            Button(LocalizedString.commonOK) {}
         } message: {
             Text(LocalizedString.licenseActivatedMessage)
         }
@@ -1434,17 +1602,6 @@ struct SettingSlider: View {
 struct AboutTab: View {
     @ObservedObject var settings: CrosshairsSettings
     @ObservedObject var localizationManager = LocalizationManager.shared
-    @ObservedObject var updateChecker = UpdateChecker.shared
-    @State private var showResetConfirmation = false
-    @State private var hasAccessibilityPermission = false
-    @State private var hasScreenRecordingPermission = false
-    @State private var hasInputMonitoringPermission = false
-    @State private var showUpdateAlert = false
-    @State private var updateAlertTitle = ""
-    @State private var updateAlertMessage = ""
-    @State private var updateDownloadURL: String?
-
-    let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
 
     var body: some View {
         ScrollView {
@@ -1459,29 +1616,17 @@ struct AboutTab: View {
                         .font(.title)
                         .fontWeight(.bold)
 
-                    Text("Version \(updateChecker.getCurrentVersion())")
+                    Text("Version \(BuildInfo.shared.version) (Build \(BuildInfo.shared.build))")
                         .foregroundColor(.secondary)
 
-                    // Check for Updates button
-                    Button(action: checkForUpdates) {
-                        HStack {
-                            if updateChecker.isChecking {
-                                ProgressView()
-                                    .controlSize(.small)
-                                Text(LocalizedString.updateChecking)
-                            } else {
-                                Image(systemName: "arrow.down.circle")
-                                    .accessibilityHidden(true)
-                                Text(LocalizedString.updateCheck)
-                            }
-                        }
-                        .frame(minWidth: 200)
-                        .padding(.vertical, 6)
+                    // Show app location
+                    HStack(spacing: 4) {
+                        Text(BuildInfo.shared.buildLocation.emoji)
+                        Text(BuildInfo.shared.buildLocation.description)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                    .buttonStyle(.bordered)
-                    .disabled(updateChecker.isChecking)
-                    .accessibilityLabel(LocalizedString.accessibilityUpdateCheckLabel)
-                    .accessibilityHint(LocalizedString.accessibilityUpdateCheckHint)
+                    .padding(.top, 4)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.top, 40)
@@ -1527,194 +1672,9 @@ struct AboutTab: View {
                 }
                 .padding(.horizontal, 24)
 
-                Divider()
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(LocalizedString.aboutPermissions)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-
-                    Text(LocalizedString.aboutPermissionsDescription)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-
-                    VStack(alignment: .leading, spacing: 12) {
-                        PermissionRow(
-                            icon: "hand.raised.fill",
-                            title: LocalizedString.aboutPermissionAccessibility,
-                            description: LocalizedString.aboutPermissionAccessibilityDescription,
-                            isGranted: hasAccessibilityPermission,
-                            action: {
-                                NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!)
-                            }
-                        )
-
-                        PermissionRow(
-                            icon: "keyboard",
-                            title: LocalizedString.aboutPermissionInputMonitoring,
-                            description: LocalizedString.aboutPermissionInputMonitoringDescription,
-                            isGranted: hasInputMonitoringPermission,
-                            action: {
-                                NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent")!)
-                            }
-                        )
-
-                        PermissionRow(
-                            icon: "record.circle.fill",
-                            title: LocalizedString.aboutPermissionScreenRecording,
-                            description: LocalizedString.aboutPermissionScreenRecordingDescription,
-                            isGranted: hasScreenRecordingPermission,
-                            action: {
-                                // Request screen recording permission
-                                CGRequestScreenCaptureAccess()
-                            }
-                        )
-                    }
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 24)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                }
-                .padding(.horizontal, 24)
-
-                Divider()
-                    .padding(.horizontal, 24)
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(LocalizedString.settingsLanguage)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-
-                    Text(LocalizedString.settingsLanguageDescription)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-
-                    HStack {
-                        Text(LocalizedString.settingsLanguage + ":")
-                            .frame(width: 100, alignment: .leading)
-
-                        Picker("", selection: $settings.language) {
-                            Text(LocalizedString.languageDanish).tag("da")
-                            Text(LocalizedString.languageEnglish).tag("en")
-                        }
-                        .pickerStyle(.menu)
-                        .labelsHidden()
-                        .frame(width: 200)
-                        .accessibilityLabel(LocalizedString.accessibilityLanguagePickerLabel)
-                        .accessibilityHint(LocalizedString.accessibilityLanguagePickerHint)
-
-                        Spacer()
-                    }
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 24)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                }
-                .padding(.horizontal, 24)
-
-                Divider()
-                    .padding(.horizontal, 24)
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(LocalizedString.aboutReset)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-
-                    Text(LocalizedString.aboutResetDescription)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-
-                    Button(action: {
-                        showResetConfirmation = true
-                    }) {
-                        HStack {
-                            Image(systemName: "arrow.counterclockwise.circle.fill")
-                                .accessibilityHidden(true)
-                            Text(LocalizedString.aboutResetButton)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.red)
-                    .accessibilityLabel(LocalizedString.accessibilityResetButtonLabel)
-                    .accessibilityHint(LocalizedString.accessibilityResetButtonHint)
-                    .alert(LocalizedString.aboutResetConfirmTitle, isPresented: $showResetConfirmation) {
-                        Button(LocalizedString.aboutResetConfirmCancel, role: .cancel) {}
-                        Button(LocalizedString.aboutResetConfirmReset, role: .destructive) {
-                            settings.resetToDefaults()
-                        }
-                    } message: {
-                        Text(LocalizedString.aboutResetConfirmMessage)
-                    }
-                }
-                .padding(.horizontal, 24)
-
                 Spacer()
             }
             .padding(.vertical, 24)
-        }
-        .onAppear {
-            checkPermissions()
-        }
-        .onReceive(timer) { _ in
-            checkPermissions()
-        }
-        .alert(updateAlertTitle, isPresented: $showUpdateAlert) {
-            if let downloadURL = updateDownloadURL {
-                Button(LocalizedString.updateDownload) {
-                    updateChecker.openDownloadURL(downloadURL)
-                }
-                Button(LocalizedString.commonClose, role: .cancel) {}
-            } else {
-                Button(LocalizedString.commonOK) {}
-            }
-        } message: {
-            Text(updateAlertMessage)
-        }
-    }
-
-    private func checkPermissions() {
-        // Check Accessibility permission
-        hasAccessibilityPermission = AXIsProcessTrusted()
-
-        // Check Screen Recording permission
-        hasScreenRecordingPermission = CGPreflightScreenCaptureAccess()
-
-        // Check Input Monitoring permission
-        // There's no direct API, so we try to create a test monitor
-        // If it succeeds, we have permission
-        let testMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { _ in }
-        hasInputMonitoringPermission = (testMonitor != nil)
-        if let monitor = testMonitor {
-            NSEvent.removeMonitor(monitor)
-        }
-    }
-
-    private func checkForUpdates() {
-        updateChecker.checkForUpdates { result in
-            switch result {
-            case .success(let updateInfo):
-                if let update = updateInfo {
-                    // Update available
-                    updateAlertTitle = LocalizedString.updateAvailable
-                    updateAlertMessage = String(format: LocalizedString.updateAvailableMessage, update.version, updateChecker.getCurrentVersion())
-                    updateDownloadURL = update.downloadURL
-                    showUpdateAlert = true
-                } else {
-                    // Up to date
-                    updateAlertTitle = LocalizedString.updateUpToDate
-                    updateAlertMessage = LocalizedString.updateUpToDateMessage
-                    updateDownloadURL = nil
-                    showUpdateAlert = true
-                }
-            case .failure(let error):
-                // Error checking
-                updateAlertTitle = LocalizedString.updateError
-                updateAlertMessage = "\(LocalizedString.updateErrorMessage)\n\n\(error.localizedDescription)"
-                updateDownloadURL = nil
-                showUpdateAlert = true
-            }
         }
     }
 }
@@ -1732,65 +1692,6 @@ struct FeatureRow: View {
             Text(text)
                 .font(.body)
         }
-    }
-}
-
-struct PermissionRow: View {
-    let icon: String
-    let title: String
-    let description: String
-    let isGranted: Bool
-    let action: () -> Void
-
-    var body: some View {
-        VStack(spacing: 8) {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.system(size: 24))
-                    .foregroundColor(isGranted ? .green : .orange)
-                    .frame(width: 32)
-                    .accessibilityHidden(true)
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.body)
-                        .fontWeight(.medium)
-                    Text(description)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-
-                Spacer()
-
-                HStack(spacing: 6) {
-                    Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundColor(isGranted ? .green : .orange)
-                        .accessibilityHidden(true)
-                    Text(isGranted ? LocalizedString.aboutPermissionGranted : LocalizedString.aboutPermissionMissing)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundColor(isGranted ? .green : .orange)
-                }
-            }
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel(String(format: LocalizedString.accessibilityPermissionStatusFormat, title, description, isGranted ? LocalizedString.accessibilityStateGranted : LocalizedString.accessibilityStateMissing))
-
-            if !isGranted {
-                Button(action: action) {
-                    HStack {
-                        Image(systemName: "gearshape.fill")
-                            .accessibilityHidden(true)
-                        Text(LocalizedString.aboutPermissionOpenSettings)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 6)
-                }
-                .buttonStyle(.bordered)
-                .accessibilityLabel(String(format: LocalizedString.accessibilityPermissionOpenSettingsLabel, title))
-                .accessibilityHint(String(format: LocalizedString.accessibilityPermissionOpenSettingsHint, title))
-            }
-        }
-        .padding(.vertical, 8)
     }
 }
 

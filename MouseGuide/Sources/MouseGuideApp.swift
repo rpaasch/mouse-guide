@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import IOKit
 
 @main
 struct MouseGuideApp: App {
@@ -15,27 +16,36 @@ struct MouseGuideApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     var crosshairsWindow: CrosshairsWindow?
     var settingsWindow: NSWindow?
-    var onboardingWindow: NSWindow?
     var sharewareWindow: NSWindow?
     var keyboardShortcutMonitor: KeyboardShortcutMonitor?
     var sessionExpiryWindow: NSWindow?
     var menuBarManager: MenuBarManager?
 
+    // Check if global hotkeys work (only requires keyboard monitor to be active)
+    var canShowShortcutInMenu: Bool {
+        // NSEvent-based shortcuts only require Input Monitoring, not Accessibility
+        // Just check if keyboard monitor is actively running
+        return keyboardShortcutMonitor != nil
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
-        print("🚀 App launching...")
+        NSLog("🚀 App launching...")
+
+        // Log build information
+        BuildInfo.shared.logBuildInfo()
 
         // Hide dock icon and make it an accessory app
         NSApp.setActivationPolicy(.accessory)
-        print("✅ Set activation policy to accessory")
+        NSLog("✅ Set activation policy to accessory")
 
         // Initialize settings
         let settings = CrosshairsSettings.shared
-        print("✅ Settings initialized")
+        NSLog("✅ Settings initialized")
 
         // Initialize license manager and check status
         let licenseManager = LicenseManager.shared
         licenseManager.checkLicenseStatus()
-        print("✅ License manager initialized")
+        NSLog("✅ License manager initialized")
 
         // Setup notification observer for free session expiry
         NotificationCenter.default.addObserver(
@@ -44,7 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             name: NSNotification.Name("FreeSessionExpired"),
             object: nil
         )
-        print("✅ Free session expiry observer registered")
+        NSLog("✅ Free session expiry observer registered")
 
         // Setup notification observer for crosshairs visibility changes (for MenuBarManager)
         NotificationCenter.default.addObserver(
@@ -53,51 +63,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             name: NSNotification.Name("CrosshairsVisibilityChanged"),
             object: nil
         )
-        print("✅ Crosshairs visibility observer registered")
+        NSLog("✅ Crosshairs visibility observer registered")
 
         // Setup menu bar with MenuBarManager
         menuBarManager = MenuBarManager(appDelegate: self)
-        print("✅ MenuBarManager initialized")
+        NSLog("✅ MenuBarManager initialized")
 
-        // Setup keyboard shortcut monitor
-        keyboardShortcutMonitor = KeyboardShortcutMonitor(appDelegate: self)
-        print("✅ Keyboard shortcut monitor created")
+        // Proactively request Input Monitoring permission at launch
+        // This ensures keyboard shortcuts work globally from the start
+        requestInputMonitoringPermission()
 
-        // Show onboarding on first launch
-        let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "dk.netdot.mouseguide.hasCompletedOnboarding")
-        print("📝 Has completed onboarding: \(hasCompletedOnboarding)")
+        // Setup keyboard monitor (will work after permission is granted)
+        setupKeyboardMonitor()
+        NSLog("✅ App initialized with keyboard shortcuts")
+    }
 
-        if !hasCompletedOnboarding {
-            print("🎯 First launch - showing onboarding")
-            showOnboarding()
+    private func requestInputMonitoringPermission() {
+        NSLog("🔐 Proactively requesting Input Monitoring permission...")
+
+        // Use IOHIDRequestAccess - the proper API for triggering Input Monitoring dialog
+        let granted = IOHIDRequestAccess(kIOHIDRequestTypeListenEvent)
+
+        if granted {
+            NSLog("✅ Input Monitoring permission is GRANTED")
         } else {
-            print("⚠️ Onboarding already completed - skipping")
+            NSLog("⚠️ Input Monitoring permission NOT granted yet")
+            NSLog("   macOS should have shown a permission dialog")
+            NSLog("   If not visible, check System Settings → Privacy & Security → Input Monitoring")
         }
     }
 
-    func showOnboarding() {
-        let onboardingView = SmartOnboardingView {
-            // Mark onboarding as completed
-            UserDefaults.standard.set(true, forKey: "dk.netdot.mouseguide.hasCompletedOnboarding")
-            UserDefaults.standard.synchronize()
-            print("✅ Onboarding completed and saved")
-
-            self.onboardingWindow?.close()
-            self.onboardingWindow = nil
+    func setupKeyboardMonitor() {
+        // Always recreate monitor to ensure it's fresh
+        // This is important after user grants Input Monitoring permission
+        if keyboardShortcutMonitor != nil {
+            print("⌨️ Recreating keyboard monitor...")
+            keyboardShortcutMonitor = nil
         }
 
-        onboardingWindow = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 600, height: 700),
-            styleMask: [.titled, .closable],
-            backing: .buffered,
-            defer: false
-        )
-        onboardingWindow?.title = "Mouse Guide"
-        onboardingWindow?.contentView = NSHostingView(rootView: onboardingView)
-        onboardingWindow?.center()
-        onboardingWindow?.makeKeyAndOrderFront(nil)
+        keyboardShortcutMonitor = KeyboardShortcutMonitor(appDelegate: self)
+        print("✅ Keyboard shortcut monitor created/refreshed")
 
-        NSApp.activate(ignoringOtherApps: true)
+        // Update menu bar to show shortcut now that monitor is active
+        menuBarManager?.updateToggleState()
     }
 
     @objc func updateMenuBarToggle(_ notification: Notification) {
@@ -161,7 +169,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 backing: .buffered,
                 defer: false
             )
-            settingsWindow?.title = "Mouse Guide - Indstillinger"
+            settingsWindow?.title = LocalizedString.windowSettingsTitle
             settingsWindow?.contentView = NSHostingView(rootView: contentView)
             settingsWindow?.center()
             settingsWindow?.minSize = NSSize(width: 500, height: 600)
@@ -200,11 +208,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         switch response {
         case .alertFirstButtonReturn:
-            // Buy License - open Gumroad
-            if let url = URL(string: "https://gumroad.com/l/mouseguide") {
-                NSWorkspace.shared.open(url)
-            }
-            NSApp.terminate(nil)
+            // Buy License - open Settings to License tab
+            showSettings()
+            // Don't terminate - let user purchase through StoreKit
 
         case .alertSecondButtonReturn:
             // Restart - use a helper script to restart the app

@@ -17,9 +17,11 @@ class CrosshairsWindowManager {
     private var lastMouseMoveTime: TimeInterval = 0
     private var isFirstFrame = true  // Skip gliding delay on first frame
     private var debugFrameCount = 0  // For debug printing
-    private var keyboardEventMonitor: Any?
+    private var keyboardEventMonitor: Any?  // Global monitor - works when app is NOT frontmost
+    private var localKeyboardEventMonitor: Any?  // Local monitor - works when app IS frontmost
     private var isHiddenByTyping = false
     private var unhideTimer: Timer?
+    private var lastAutoHideWhileTypingValue: Bool = false
 
     func show() {
         NSLog("🚀 show() ENTRY - calling hide() first")
@@ -63,7 +65,8 @@ class CrosshairsWindowManager {
         startTracking()
         NSLog("✅ startTracking() completed")
 
-        // Start keyboard monitoring if enabled
+        // Start keyboard monitoring if enabled and track initial value
+        lastAutoHideWhileTypingValue = settings.autoHideWhileTyping
         startKeyboardMonitoring()
 
         // Listen for screen configuration changes
@@ -94,14 +97,23 @@ class CrosshairsWindowManager {
     @objc private func settingsChanged() {
         NSLog("⚙️ Settings changed - updating crosshairs")
 
-        // Restart keyboard monitoring if setting changed
-        if settings.autoHideWhileTyping {
-            startKeyboardMonitoring()
-        } else {
-            stopKeyboardMonitoring()
-            // Show windows if they were hidden
-            if isHiddenByTyping {
-                unhideAfterTyping()
+        // Check if autoHideWhileTyping setting specifically changed
+        let currentAutoHideWhileTyping = settings.autoHideWhileTyping
+        if currentAutoHideWhileTyping != lastAutoHideWhileTypingValue {
+            NSLog("   📍 autoHideWhileTyping changed: \(lastAutoHideWhileTypingValue) → \(currentAutoHideWhileTyping)")
+            lastAutoHideWhileTypingValue = currentAutoHideWhileTyping
+
+            // Start or stop keyboard monitoring based on new value
+            if currentAutoHideWhileTyping {
+                startKeyboardMonitoring()
+                // Permission check is now handled by the toggle in SettingsView
+                // No automatic popups here
+            } else {
+                stopKeyboardMonitoring()
+                // Show windows if they were hidden
+                if isHiddenByTyping {
+                    unhideAfterTyping()
+                }
             }
         }
 
@@ -222,6 +234,11 @@ class CrosshairsWindowManager {
     }
 
     private func updateCursorPosition() {
+        // Don't update position while hidden by typing
+        if isHiddenByTyping {
+            return
+        }
+
         // ALWAYS log first call to verify timer is working
         if debugFrameCount == 0 {
             NSLog("🚨 updateCursorPosition() FIRST CALL - timer IS working!")
@@ -289,32 +306,29 @@ class CrosshairsWindowManager {
             return
         }
 
-        // Check Input Monitoring permission (NOT Accessibility!)
-        // We test this by trying to create a test monitor
-        let testMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { _ in }
-        let hasInputMonitoring = (testMonitor != nil)
-        if let monitor = testMonitor {
-            NSEvent.removeMonitor(monitor)
-        }
-
-        if !hasInputMonitoring {
-            print("⚠️ Input Monitoring permission NOT granted")
-            print("   Please grant permission in System Settings → Privacy & Security → Input Monitoring")
-            print("   This permission is required for 'Hide while typing' feature")
-            return
-        }
-
         stopKeyboardMonitoring()
 
-        print("⌨️ Starting keyboard monitoring...")
+        print("⌨️ Starting keyboard monitoring for hide-while-typing...")
+
+        // Global monitor - works when app is NOT frontmost
         keyboardEventMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
             self?.handleKeyPress(event)
         }
 
+        // Local monitor - works when app IS frontmost
+        localKeyboardEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            self?.handleKeyPress(event)
+            return event  // Pass through - don't consume typing events
+        }
+
         if keyboardEventMonitor != nil {
-            print("✅ Keyboard monitoring started successfully")
+            print("✅ Global keyboard monitoring started")
         } else {
-            print("❌ Failed to start keyboard monitoring")
+            print("⚠️ Global keyboard monitoring failed - Input Monitoring permission may be missing")
+        }
+
+        if localKeyboardEventMonitor != nil {
+            print("✅ Local keyboard monitoring started")
         }
     }
 
@@ -322,6 +336,10 @@ class CrosshairsWindowManager {
         if let monitor = keyboardEventMonitor {
             NSEvent.removeMonitor(monitor)
             keyboardEventMonitor = nil
+        }
+        if let monitor = localKeyboardEventMonitor {
+            NSEvent.removeMonitor(monitor)
+            localKeyboardEventMonitor = nil
         }
     }
 
@@ -350,7 +368,19 @@ class CrosshairsWindowManager {
         guard isHiddenByTyping else { return }
 
         print("👀 Showing crosshairs again after typing stopped")
+
+        // FIRST: Update mouse position IMMEDIATELY before clearing flag
+        // This ensures views have the correct position when they're shown
+        let currentMouseLocation = NSEvent.mouseLocation
+        mouseTracker.position = currentMouseLocation
+        targetPosition = currentMouseLocation
+
+        // Clear flag to allow position updates
         isHiddenByTyping = false
+        isFirstFrame = true  // Skip gliding delay so cursor appears immediately
+        lastUpdateTime = 0  // Reset timing so next frame is treated as first
+
+        // Show windows again
         for window in windows {
             window.orderFrontRegardless()
         }
@@ -534,8 +564,8 @@ class CrosshairsNativeView: NSView {
 
             // Draw circle fill if opacity > 0
             if settings.circleFillOpacity > 0 {
-                let fillColor = crosshairColor.withAlphaComponent(CGFloat(settings.circleFillOpacity))
-                context.setFillColor(fillColor.cgColor)
+                let circleFillColor = NSColor(settings.effectiveCircleFillColor).withAlphaComponent(CGFloat(settings.circleFillOpacity))
+                context.setFillColor(circleFillColor.cgColor)
                 context.addPath(circlePath)
                 context.fillPath()
             }
@@ -558,38 +588,7 @@ class CrosshairsNativeView: NSView {
             return
         }
 
-        // Draw horizontal line for readingLine (unbroken line)
-        if settings.orientation == .readingLine {
-            let leftStart: CGPoint
-            let rightEnd: CGPoint
-
-            if settings.useFixedLength {
-                let halfLength = CGFloat(settings.fixedLength) / 2
-                leftStart = CGPoint(x: max(0, center.x - halfLength), y: center.y)
-                rightEnd = CGPoint(x: min(viewSize.width, center.x + halfLength), y: center.y)
-            } else {
-                leftStart = CGPoint(x: 0, y: center.y)
-                rightEnd = CGPoint(x: viewSize.width, y: center.y)
-            }
-
-            // Draw border
-            if borderSize > 0 {
-                context.setStrokeColor(borderColor.cgColor)
-                context.setLineWidth(thickness + borderSize * 2)
-                context.move(to: leftStart)
-                context.addLine(to: rightEnd)
-                context.strokePath()
-            }
-
-            // Draw main line (continuous, no gap)
-            context.setStrokeColor(crosshairColor.cgColor)
-            context.setLineWidth(thickness)
-            context.move(to: leftStart)
-            context.addLine(to: rightEnd)
-            context.strokePath()
-        }
-
-        // Draw horizontal line for normal crosshairs
+        // Draw horizontal line
         if settings.orientation == .horizontal || settings.orientation == .both {
             let leftStart: CGPoint
             let rightEnd: CGPoint
@@ -603,14 +602,46 @@ class CrosshairsNativeView: NSView {
                 rightEnd = CGPoint(x: viewSize.width, y: center.y)
             }
 
-            // Normal crosshair with center gap
-            let leftEnd = CGPoint(x: center.x - centerRadius, y: center.y)
-            let rightStart = CGPoint(x: center.x + centerRadius, y: center.y)
+            // Check if reading line mode is enabled (only for horizontal orientation)
+            let useReadingLine = (settings.orientation == .horizontal && settings.useReadingLine)
 
-            // Draw borders
-            if borderSize > 0 {
-                context.setStrokeColor(borderColor.cgColor)
-                context.setLineWidth(thickness + borderSize * 2)
+            if useReadingLine {
+                // Reading line mode: draw continuous line with no gap
+                // Draw border
+                if borderSize > 0 {
+                    context.setStrokeColor(borderColor.cgColor)
+                    context.setLineWidth(thickness + borderSize * 2)
+                    context.move(to: leftStart)
+                    context.addLine(to: rightEnd)
+                    context.strokePath()
+                }
+
+                // Draw main line (continuous, no gap)
+                context.setStrokeColor(crosshairColor.cgColor)
+                context.setLineWidth(thickness)
+                context.move(to: leftStart)
+                context.addLine(to: rightEnd)
+                context.strokePath()
+            } else {
+                // Normal crosshair with center gap
+                let leftEnd = CGPoint(x: center.x - centerRadius, y: center.y)
+                let rightStart = CGPoint(x: center.x + centerRadius, y: center.y)
+
+                // Draw borders
+                if borderSize > 0 {
+                    context.setStrokeColor(borderColor.cgColor)
+                    context.setLineWidth(thickness + borderSize * 2)
+                    context.move(to: leftStart)
+                    context.addLine(to: leftEnd)
+                    context.strokePath()
+                    context.move(to: rightStart)
+                    context.addLine(to: rightEnd)
+                    context.strokePath()
+                }
+
+                // Draw main line
+                context.setStrokeColor(crosshairColor.cgColor)
+                context.setLineWidth(thickness)
                 context.move(to: leftStart)
                 context.addLine(to: leftEnd)
                 context.strokePath()
@@ -618,16 +649,6 @@ class CrosshairsNativeView: NSView {
                 context.addLine(to: rightEnd)
                 context.strokePath()
             }
-
-            // Draw main line
-            context.setStrokeColor(crosshairColor.cgColor)
-            context.setLineWidth(thickness)
-            context.move(to: leftStart)
-            context.addLine(to: leftEnd)
-            context.strokePath()
-            context.move(to: rightStart)
-            context.addLine(to: rightEnd)
-            context.strokePath()
         }
         
         // Draw vertical line

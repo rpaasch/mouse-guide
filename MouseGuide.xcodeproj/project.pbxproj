@@ -7,30 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F6FBE499C23C4BAAB975F893 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22E2EFD70144CEB8E174974 /* UpdateChecker.swift */; };
 		A1000001 /* MouseGuideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000011 /* MouseGuideApp.swift */; };
 		A1000002 /* CrosshairsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000012 /* CrosshairsSettings.swift */; };
-		A1000030A /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000028 /* AppState.swift */; };
-		A1000031 /* MenuBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000029 /* MenuBarContentView.swift */; };
 		A1000003 /* CrosshairsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000013 /* CrosshairsWindow.swift */; };
 		A1000004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000014 /* SettingsView.swift */; };
 		A1000005 /* KeyboardShortcutMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000015 /* KeyboardShortcutMonitor.swift */; };
 		A1000006 /* MenuBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000016 /* MenuBarManager.swift */; };
 		A1000007 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000017 /* Localizable.swift */; };
-		A1000008 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000018 /* OnboardingView.swift */; };
 		A1000009 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1000021 /* Localizable.strings */; };
 		A100000A /* KeyboardShortcutRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000019 /* KeyboardShortcutRecorder.swift */; };
 		A100000B /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001A /* LaunchAtLogin.swift */; };
 		A100000C /* DiagnosticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001B /* DiagnosticsManager.swift */; };
-		A100000D /* SmartOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001C /* SmartOnboardingView.swift */; };
 		A100000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A100001D /* Assets.xcassets */; };
-		A100000F /* SharewareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001E /* SharewareView.swift */; };
 		A1000010L /* LicenseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001F /* LicenseManager.swift */; };
 		A1000024 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000025 /* StoreKitManager.swift */; };
 		A1000026 /* MouseGuideProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = A1000027 /* MouseGuideProducts.storekit */; };
+		A5D17AB2080AA27CCCF10139 /* BuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480140FE6BEB58218633508D /* BuildInfo.swift */; };
+		F6FBE499C23C4BAAB975F893 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22E2EFD70144CEB8E174974 /* UpdateChecker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		480140FE6BEB58218633508D /* BuildInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildInfo.swift; sourceTree = "<group>"; };
 		A1000010 /* MouseGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MouseGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1000011 /* MouseGuideApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseGuideApp.swift; sourceTree = "<group>"; };
 		A1000012 /* CrosshairsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrosshairsSettings.swift; sourceTree = "<group>"; };
@@ -39,22 +36,17 @@
 		A1000015 /* KeyboardShortcutMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutMonitor.swift; sourceTree = "<group>"; };
 		A1000016 /* MenuBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarManager.swift; sourceTree = "<group>"; };
 		A1000017 /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
-		A1000018 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		A1000019 /* KeyboardShortcutRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutRecorder.swift; sourceTree = "<group>"; };
 		A100001A /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		A100001B /* DiagnosticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticsManager.swift; sourceTree = "<group>"; };
-		A100001C /* SmartOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartOnboardingView.swift; sourceTree = "<group>"; };
 		A100001D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A100001E /* SharewareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharewareView.swift; sourceTree = "<group>"; };
 		A100001F /* LicenseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseManager.swift; sourceTree = "<group>"; };
-		C22E2EFD70144CEB8E174974 /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
-		A1000025 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
-		A1000027 /* MouseGuideProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = MouseGuideProducts.storekit; sourceTree = "<group>"; };
-		A1000028 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		A1000029 /* MenuBarContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarContentView.swift; sourceTree = "<group>"; };
 		A1000020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1000022 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A1000023 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A1000025 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
+		A1000027 /* MouseGuideProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = MouseGuideProducts.storekit; sourceTree = "<group>"; };
+		C22E2EFD70144CEB8E174974 /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,8 +84,6 @@
 			isa = PBXGroup;
 			children = (
 				A1000011 /* MouseGuideApp.swift */,
-				A1000028 /* AppState.swift */,
-				A1000029 /* MenuBarContentView.swift */,
 				A1000012 /* CrosshairsSettings.swift */,
 				A1000013 /* CrosshairsWindow.swift */,
 				A1000014 /* SettingsView.swift */,
@@ -101,14 +91,12 @@
 				A1000019 /* KeyboardShortcutRecorder.swift */,
 				A1000016 /* MenuBarManager.swift */,
 				A1000017 /* Localizable.swift */,
-				A1000018 /* OnboardingView.swift */,
-				A100001C /* SmartOnboardingView.swift */,
-				A100001E /* SharewareView.swift */,
 				A100001A /* LaunchAtLogin.swift */,
 				A100001B /* DiagnosticsManager.swift */,
 				A100001F /* LicenseManager.swift */,
 				A1000025 /* StoreKitManager.swift */,
 				C22E2EFD70144CEB8E174974 /* UpdateChecker.swift */,
+				480140FE6BEB58218633508D /* BuildInfo.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -202,8 +190,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1000001 /* MouseGuideApp.swift in Sources */,
-				A1000030A /* AppState.swift in Sources */,
-				A1000031 /* MenuBarContentView.swift in Sources */,
 				A1000002 /* CrosshairsSettings.swift in Sources */,
 				A1000003 /* CrosshairsWindow.swift in Sources */,
 				A1000004 /* SettingsView.swift in Sources */,
@@ -211,14 +197,12 @@
 				A100000A /* KeyboardShortcutRecorder.swift in Sources */,
 				A1000006 /* MenuBarManager.swift in Sources */,
 				A1000007 /* Localizable.swift in Sources */,
-				A1000008 /* OnboardingView.swift in Sources */,
-				A100000D /* SmartOnboardingView.swift in Sources */,
-				A100000F /* SharewareView.swift in Sources */,
 				A100000B /* LaunchAtLogin.swift in Sources */,
 				A100000C /* DiagnosticsManager.swift in Sources */,
 				A1000010L /* LicenseManager.swift in Sources */,
 				A1000024 /* StoreKitManager.swift in Sources */,
 				F6FBE499C23C4BAAB975F893 /* UpdateChecker.swift in Sources */,
+				A5D17AB2080AA27CCCF10139 /* BuildInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,10 +347,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = XY6GZ256WA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = MouseGuide/Info.plist;
@@ -391,10 +376,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = XY6GZ256WA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = MouseGuide/Info.plist;

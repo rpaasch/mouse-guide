@@ -91,12 +91,19 @@ class DiagnosticsManager {
     }
 
     private func permissionsStatus() -> String {
-        let accessibilityEnabled = AXIsProcessTrusted()
+        let settings = CrosshairsSettings.shared
+        let inputMonitoringGranted = settings.hasInputMonitoringPermission()
+        let screenRecordingGranted = settings.hasScreenRecordingPermission()
 
-        return """
+        let status = """
         [PERMISSIONS STATUS]
-        Accessibility Access: \(accessibilityEnabled ? "✅ Granted" : "❌ Denied")
+        Input Monitoring: \(inputMonitoringGranted ? "✅ Granted" : "❌ Denied")
+        Screen Recording: \(screenRecordingGranted ? "✅ Granted" : "❌ Denied")
+
+        Build Location: \(BuildInfo.shared.buildLocation.description)
         """
+
+        return status
     }
 
     private func userSettings() -> String {

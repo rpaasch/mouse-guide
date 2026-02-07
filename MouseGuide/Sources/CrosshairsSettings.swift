@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import IOKit
 
 class CrosshairsSettings: ObservableObject {
     static let shared = CrosshairsSettings()
@@ -11,6 +12,10 @@ class CrosshairsSettings: ObservableObject {
 
     @Published var borderColor: Color {
         didSet { saveSetting("borderColor", Self.colorToHex(borderColor)) }
+    }
+
+    @Published var circleFillColor: Color {
+        didSet { saveSetting("circleFillColor", Self.colorToHex(circleFillColor)) }
     }
 
     // Numeric settings
@@ -128,6 +133,7 @@ class CrosshairsSettings: ObservableObject {
         // Load or set defaults
         self.crosshairColor = Self.colorFromHex(UserDefaults.standard.string(forKey: "crosshairColor") ?? "#FF0000") ?? .red
         self.borderColor = Self.colorFromHex(UserDefaults.standard.string(forKey: "borderColor") ?? "#000000") ?? .black
+        self.circleFillColor = Self.colorFromHex(UserDefaults.standard.string(forKey: "circleFillColor") ?? "#FF0000") ?? .red
 
         let opacity = UserDefaults.standard.double(forKey: "opacity")
         self.opacity = opacity == 0 ? 0.75 : opacity
@@ -206,6 +212,7 @@ class CrosshairsSettings: ObservableObject {
         // Reset all settings to their default values
         self.crosshairColor = .red
         self.borderColor = .black
+        self.circleFillColor = .red
         self.opacity = 0.75
         self.centerRadius = 20
         self.thickness = 5
@@ -305,6 +312,10 @@ class CrosshairsSettings: ObservableObject {
         hasFullAccess ? borderColor : .black
     }
 
+    var effectiveCircleFillColor: Color {
+        hasFullAccess ? circleFillColor : .red
+    }
+
     var effectiveThickness: Double {
         hasFullAccess ? thickness : 1.0
     }
@@ -324,13 +335,36 @@ class CrosshairsSettings: ObservableObject {
     var effectiveInvertColors: Bool {
         hasFullAccess ? invertColors : false
     }
+
+    // MARK: - Permission Helpers
+
+    /// Check if Input Monitoring permission is granted
+    func hasInputMonitoringPermission() -> Bool {
+        let status = IOHIDCheckAccess(kIOHIDRequestTypeListenEvent)
+        return status == kIOHIDAccessTypeGranted
+    }
+
+    /// Check if Screen Recording permission is granted
+    func hasScreenRecordingPermission() -> Bool {
+        return CGPreflightScreenCaptureAccess()
+    }
+
+    /// Request Input Monitoring permission - triggers macOS permission dialog
+    func requestInputMonitoringPermission() -> Bool {
+        return IOHIDRequestAccess(kIOHIDRequestTypeListenEvent)
+    }
+
+    /// Request Screen Recording permission
+    func requestScreenRecordingPermission() {
+        // This automatically shows macOS system dialog
+        CGRequestScreenCaptureAccess()
+    }
 }
 
 enum CrosshairOrientation: String, CaseIterable {
     case horizontal = "Horizontal"
     case vertical = "Vertical"
     case both = "Both"
-    case readingLine = "ReadingLine"
     case edgePointers = "EdgePointers"
     case circle = "Circle"
 }
