@@ -1660,6 +1660,12 @@ struct AboutTab: View {
                 Divider()
                     .padding(.horizontal, 24)
 
+                // Permissions Section
+                PermissionsSection(settings: settings)
+
+                Divider()
+                    .padding(.horizontal, 24)
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text(LocalizedString.aboutMadeBy)
                         .font(.body)
@@ -1676,6 +1682,138 @@ struct AboutTab: View {
             }
             .padding(.vertical, 24)
         }
+    }
+}
+
+// MARK: - Permissions Section
+
+struct PermissionsSection: View {
+    @ObservedObject var settings: CrosshairsSettings
+    @State private var inputMonitoringGranted: Bool = false
+    @State private var screenRecordingGranted: Bool = false
+
+    // Timer to refresh permission status (user may grant in System Settings and return)
+    let refreshTimer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(LocalizedString.aboutPermissions)
+                .font(.title3)
+                .fontWeight(.semibold)
+
+            Text(LocalizedString.aboutPermissionsDescription)
+                .font(.body)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            VStack(spacing: 12) {
+                // Input Monitoring Permission
+                PermissionRow(
+                    title: LocalizedString.aboutPermissionInputMonitoring,
+                    description: LocalizedString.aboutPermissionInputMonitoringDescription,
+                    isGranted: inputMonitoringGranted,
+                    onOpenSettings: {
+                        openInputMonitoringSettings()
+                    }
+                )
+
+                Divider()
+
+                // Screen Recording Permission
+                PermissionRow(
+                    title: LocalizedString.aboutPermissionScreenRecording,
+                    description: LocalizedString.aboutPermissionScreenRecordingDescription,
+                    isGranted: screenRecordingGranted,
+                    onOpenSettings: {
+                        openScreenRecordingSettings()
+                    }
+                )
+            }
+            .padding(.vertical, 16)
+            .padding(.horizontal, 20)
+            .background(Color(NSColor.controlBackgroundColor))
+            .cornerRadius(8)
+        }
+        .padding(.horizontal, 24)
+        .onAppear {
+            refreshPermissionStatus()
+        }
+        .onReceive(refreshTimer) { _ in
+            refreshPermissionStatus()
+        }
+    }
+
+    private func refreshPermissionStatus() {
+        inputMonitoringGranted = settings.hasInputMonitoringPermission()
+        screenRecordingGranted = settings.hasScreenRecordingPermission()
+    }
+
+    private func openInputMonitoringSettings() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
+    private func openScreenRecordingSettings() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+}
+
+struct PermissionRow: View {
+    let title: String
+    let description: String
+    let isGranted: Bool
+    let onOpenSettings: () -> Void
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            // Status icon
+            Image(systemName: isGranted ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                .font(.system(size: 20))
+                .foregroundColor(isGranted ? .green : .orange)
+                .frame(width: 24)
+                .accessibilityHidden(true)
+
+            // Title and description
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text(title)
+                        .font(.headline)
+
+                    Text(isGranted ? LocalizedString.aboutPermissionGranted : LocalizedString.aboutPermissionMissing)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 2)
+                        .background(isGranted ? Color.green.opacity(0.2) : Color.orange.opacity(0.2))
+                        .foregroundColor(isGranted ? .green : .orange)
+                        .cornerRadius(4)
+                }
+
+                Text(description)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer()
+
+            // Open Settings button (only show if not granted)
+            if !isGranted {
+                Button(action: onOpenSettings) {
+                    Text(LocalizedString.aboutPermissionOpenSettings)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title), \(isGranted ? LocalizedString.accessibilityStateGranted : LocalizedString.accessibilityStateMissing)")
+        .accessibilityHint(isGranted ? "" : String(format: LocalizedString.accessibilityPermissionOpenSettingsHint, title))
     }
 }
 
