@@ -1,0 +1,170 @@
+═══════════════════════════════════════════════════════════════════════════════
+                        APP STORE CONNECT METADATA
+                              Mouse Guide
+═══════════════════════════════════════════════════════════════════════════════
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                              ENGLISH (en-US)                                  ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+APP NAME:
+Mouse Guide
+
+SUBTITLE (30 chars max) [25 chars]:
+Crosshairs for your cursor
+
+PROMOTIONAL TEXT (170 chars max) [156 chars]:
+Never lose your mouse cursor again! Mouse Guide draws crosshairs on screen that follow your mouse - perfect for large displays and multi-monitor setups.
+
+KEYWORDS (100 chars max) [89 chars]:
+mouse,cursor,crosshair,accessibility,screen,multi-monitor,presentation,reading,pointer
+
+DESCRIPTION:
+Mouse Guide helps you find and track your mouse cursor on screen. The app draws configurable crosshairs that always follow your mouse - no matter how many monitors you use.
+
+PERFECT FOR:
+• Large displays where the cursor easily gets lost
+• Multi-monitor setups
+• Presentations and screen sharing
+• Accessibility and visual impairments
+• Anyone who works with precision on screen
+
+FEATURES:
+
+Appearance
+• 6 different modes: Horizontal, vertical, both, edge pointers, circle, and reading line
+• Choose your own colors for crosshairs and border
+• Adjustable thickness, opacity, and border width
+• Automatic color adaptation based on background
+• Fixed or full screen length
+
+Multi-Monitor
+• Works across all your displays
+• Crosshairs follow the mouse between screens
+• 60 FPS for smooth tracking
+
+Behavior
+• Keyboard shortcut for quick toggle (⌃⇧L)
+• Auto-hide while typing
+• Gliding cursor effect for smoother movement
+• Launch automatically at login
+
+Accessibility
+• Full VoiceOver support
+• Helps track the cursor
+• Reading line mode for on-screen reading
+
+TRIAL PERIOD:
+Try Mouse Guide free for 7 days with all features. After that, continue free with basic features or purchase full access.
+
+PRIVACY:
+Mouse Guide collects no personal data. The app only requires permissions necessary to function (Input Monitoring for keyboard shortcuts, Screen Recording for color adaptation).
+
+Made in Denmark 🇩🇰
+
+WHAT'S NEW (1.0):
+• First release of Mouse Guide
+• 6 different crosshair modes
+• Multi-monitor support
+• Automatic color adaptation
+• Keyboard shortcut for quick toggle
+• Danish and English localization
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                              DANISH (da-DK)                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+APP NAME:
+Mouse Guide
+
+SUBTITLE (30 chars max) [20 chars]:
+Trådkors til din mus
+
+PROMOTIONAL TEXT (170 chars max) [157 chars]:
+Find altid din musemarkør! Mouse Guide tegner et trådkors på skærmen der følger musen - perfekt til store skærme og multi-monitor setups.
+
+KEYWORDS (100 chars max) [89 chars]:
+mus,markør,trådkors,crosshair,tilgængelighed,skærm,multi-monitor,præsentation,læse
+
+DESCRIPTION:
+Mouse Guide hjælper dig med at finde og følge din musemarkør på skærmen. Appen tegner et konfigurerbart trådkors der altid følger din mus - uanset hvor mange skærme du bruger.
+
+PERFEKT TIL:
+• Store skærme hvor markøren nemt forsvinder
+• Multi-monitor setups
+• Præsentationer og skærmdeling
+• Tilgængelighed og synshandicap
+• Alle der arbejder med præcision på skærmen
+
+FUNKTIONER:
+
+Udseende
+• 6 forskellige tilstande: Vandret, lodret, begge, kantpile, cirkel og læselinje
+• Vælg dine egne farver til trådkors og kant
+• Justerbar tykkelse, gennemsigtighed og kantbredde
+• Automatisk farvetilpasning baseret på baggrunden
+• Fast eller fuld skærmlængde
+
+Multi-Monitor
+• Virker på tværs af alle dine skærme
+• Trådkorset følger musen mellem skærme
+• 60 FPS for smooth tracking
+
+Adfærd
+• Tastegenvej til hurtig til/fra (⌃⇧L)
+• Skjul automatisk mens du skriver
+• Gliding cursor-effekt for blødere bevægelser
+• Start automatisk ved login
+
+Tilgængelighed
+• Fuld VoiceOver support
+• Hjælper med at spore markøren
+• Læselinje-tilstand til læsning på skærmen
+
+PRØVEPERIODE:
+Prøv Mouse Guide gratis i 7 dage med alle funktioner. Derefter kan du fortsætte gratis med basisfunktioner eller købe fuld adgang.
+
+PRIVATLIV:
+Mouse Guide indsamler ingen personlige data. Appen kræver kun de tilladelser der er nødvendige for at fungere (Input Monitoring til tastaturgenveje, Screen Recording til farvetilpasning).
+
+Lavet i Danmark 🇩🇰
+
+HVAD ER NYT (1.0):
+• Første udgivelse af Mouse Guide
+• 6 forskellige trådkors-tilstande
+• Multi-monitor support
+• Automatisk farvetilpasning
+• Tastegenvej til hurtig toggle
+• Dansk og engelsk lokalisering
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                              APP INFORMATION                                  ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+CATEGORY:
+Primary: Utilities
+Secondary: Productivity
+
+AGE RATING:
+4+ (No objectionable content)
+
+COPYRIGHT:
+© 2026 Rasmus Paasch
+
+SUPPORT URL:
+https://github.com/rpaasch/mouse-guide/issues
+
+PRIVACY POLICY URL:
+https://github.com/rpaasch/mouse-guide/blob/main/PRIVACY.md
+
+PRICE:
+Free with In-App Purchase (Full Version)
+
+IN-APP PURCHASE:
+- Name: Mouse Guide Pro
+- Price: [TBD]
+- Description: Unlock all features including multi-monitor support, all crosshair modes, and customization options.
+
+═══════════════════════════════════════════════════════════════════════════════
