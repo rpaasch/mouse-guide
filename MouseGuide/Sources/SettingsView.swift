@@ -184,13 +184,6 @@ struct AppearanceTab: View {
         settings.hasFullAccess
     }
 
-    private var isLicensed: Bool {
-        if case .licensed = licenseManager.licenseState {
-            return true
-        }
-        return false
-    }
-
     // Dynamic opacity description based on orientation
     private var opacityDescription: String {
         switch settings.orientation {
@@ -240,7 +233,7 @@ struct AppearanceTab: View {
                     HStack {
                         Text(LocalizedString.settingsOrientation)
                             .font(.headline)
-                        if !isLicensed {
+                        if !hasFullAccess {
                             Text("Pro")
                                 .font(.caption)
                                 .fontWeight(.bold)
@@ -388,7 +381,7 @@ struct AppearanceTab: View {
                     HStack {
                         Text(LocalizedString.appearanceDimensions)
                             .font(.headline)
-                        if !isLicensed {
+                        if !hasFullAccess {
                             Text("Pro")
                                 .font(.caption)
                                 .fontWeight(.bold)
@@ -484,7 +477,7 @@ struct AppearanceTab: View {
                     HStack {
                         Text(LocalizedString.appearanceColors)
                             .font(.headline)
-                        if !isLicensed {
+                        if !hasFullAccess {
                             Text("Pro")
                                 .font(.caption)
                                 .fontWeight(.bold)
@@ -650,7 +643,7 @@ struct AppearanceTab: View {
                         HStack {
                             Text(LocalizedString.settingsLength)
                                 .font(.headline)
-                            if !isLicensed {
+                            if !hasFullAccess {
                                 Text("Pro")
                                     .font(.caption)
                                     .fontWeight(.bold)
@@ -703,7 +696,7 @@ struct AppearanceTab: View {
                     HStack {
                         Text(LocalizedString.settingsLineStyle)
                             .font(.headline)
-                        if !isLicensed {
+                        if !hasFullAccess {
                             Text("Pro")
                                 .font(.caption)
                                 .fontWeight(.bold)
@@ -800,13 +793,6 @@ struct BehaviorTab: View {
         settings.hasFullAccess
     }
 
-    private var isLicensed: Bool {
-        if case .licensed = licenseManager.licenseState {
-            return true
-        }
-        return false
-    }
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
@@ -815,7 +801,7 @@ struct BehaviorTab: View {
                     HStack {
                         Text(LocalizedString.behaviorColorAdaptation)
                             .font(.headline)
-                        if !isLicensed {
+                        if !hasFullAccess {
                             Text("Pro")
                                 .font(.caption)
                                 .fontWeight(.bold)
@@ -966,7 +952,7 @@ struct BehaviorTab: View {
                     HStack {
                         Text(LocalizedString.settingsGliding)
                             .font(.headline)
-                        if !isLicensed {
+                        if !hasFullAccess {
                             Text("Pro")
                                 .font(.caption)
                                 .fontWeight(.bold)
