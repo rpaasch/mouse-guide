@@ -27,6 +27,7 @@ class ShortcutRecorderView: NSView {
 
     private var isRecording = false
     private var localMonitor: Any?
+    private var clickMonitor: Any?
     private let button = NSButton()
 
     override init(frame frameRect: NSRect) {
@@ -96,8 +97,8 @@ class ShortcutRecorderView: NSView {
         }
 
         // Also add a click monitor to cancel recording if clicking elsewhere
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            NSEvent.addLocalMonitorForEvents(matching: .leftMouseDown) { [weak self] event in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.clickMonitor = NSEvent.addLocalMonitorForEvents(matching: .leftMouseDown) { [weak self] event in
                 if event.window != self?.window {
                     self?.stopRecording()
                 }
@@ -145,9 +146,16 @@ class ShortcutRecorderView: NSView {
         // Update accessibility to reflect the new shortcut
         updateAccessibility()
 
+        // Remove keyboard monitor
         if let monitor = localMonitor {
             NSEvent.removeMonitor(monitor)
             localMonitor = nil
+        }
+
+        // Remove click monitor
+        if let monitor = clickMonitor {
+            NSEvent.removeMonitor(monitor)
+            clickMonitor = nil
         }
     }
 

@@ -280,4 +280,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         hideCrosshairs()
         return .terminateNow
     }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        // Clean up notification observers
+        NotificationCenter.default.removeObserver(self)
+    }
 }

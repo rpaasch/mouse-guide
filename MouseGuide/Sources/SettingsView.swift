@@ -1726,9 +1726,7 @@ struct PermissionsSection: View {
     @ObservedObject var settings: CrosshairsSettings
     @State private var inputMonitoringGranted: Bool = false
     @State private var screenRecordingGranted: Bool = false
-
-    // Timer to refresh permission status (user may grant in System Settings and return)
-    let refreshTimer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
+    @State private var refreshTimer: Timer?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -1772,9 +1770,16 @@ struct PermissionsSection: View {
         .padding(.horizontal, 24)
         .onAppear {
             refreshPermissionStatus()
+            // Start timer to refresh permission status (user may grant in System Settings and return)
+            refreshTimer?.invalidate()
+            refreshTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                refreshPermissionStatus()
+            }
         }
-        .onReceive(refreshTimer) { _ in
-            refreshPermissionStatus()
+        .onDisappear {
+            // Clean up timer when view disappears
+            refreshTimer?.invalidate()
+            refreshTimer = nil
         }
     }
 

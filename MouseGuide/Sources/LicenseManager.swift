@@ -116,38 +116,40 @@ class LicenseManager: ObservableObject {
         licenseState = .free(minutesRemaining: 10)
         NSLog("⏰ Starting 10 minute free session")
 
-        // Start countdown timer - runs every second
+        // Start countdown timer - runs every second on main thread
         freeTimer?.invalidate()
 
         var secondsLeft = totalSeconds
         freeTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            // Timer already runs on main thread when scheduled on main RunLoop
-            guard let self = self else { return }
+            // Ensure main thread for @Published property updates
+            DispatchQueue.main.async {
+                guard let self = self else { return }
 
-            secondsLeft -= 1
+                secondsLeft -= 1
 
-            // Update minutes and seconds
-            self.freeMinutesRemaining = secondsLeft / 60
-            self.freeSecondsRemaining = secondsLeft % 60
+                // Update minutes and seconds
+                self.freeMinutesRemaining = secondsLeft / 60
+                self.freeSecondsRemaining = secondsLeft % 60
 
-            if secondsLeft <= 0 {
-                self.freeTimer?.invalidate()
+                if secondsLeft <= 0 {
+                    self.freeTimer?.invalidate()
 
-                // Change state to expired
-                self.licenseState = .freeExpired
-                NSLog("🔒 Free session expired - features locked to basic")
+                    // Change state to expired
+                    self.licenseState = .freeExpired
+                    NSLog("🔒 Free session expired - features locked to basic")
 
-                // Force settings to update
-                let settings = CrosshairsSettings.shared
-                settings.isPurchased = false
+                    // Force settings to update
+                    let settings = CrosshairsSettings.shared
+                    settings.isPurchased = false
 
-                // Post settings changed to force UI update
-                NotificationCenter.default.post(name: .init("CrosshairsSettingsChanged"), object: nil)
+                    // Post settings changed to force UI update
+                    NotificationCenter.default.post(name: .init("CrosshairsSettingsChanged"), object: nil)
 
-                // Post notification to show restart dialog
-                NotificationCenter.default.post(name: .init("FreeSessionExpired"), object: nil)
-            } else {
-                self.licenseState = .free(minutesRemaining: self.freeMinutesRemaining)
+                    // Post notification to show restart dialog
+                    NotificationCenter.default.post(name: .init("FreeSessionExpired"), object: nil)
+                } else {
+                    self.licenseState = .free(minutesRemaining: self.freeMinutesRemaining)
+                }
             }
         }
     }
