@@ -5,7 +5,11 @@ class UpdateChecker: ObservableObject {
     static let shared = UpdateChecker()
 
     private let githubRepo = "rpaasch/mouse-guide"
-    private let currentVersion = "1.0"
+
+    // Read version from bundle instead of hardcoding
+    private var currentVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+    }
 
     @Published var isChecking = false
     @Published var updateAvailable: UpdateInfo?

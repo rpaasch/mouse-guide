@@ -56,11 +56,14 @@ class KeyboardShortcutMonitor {
     }
 
     private func handleKeyEvent(_ event: NSEvent) -> Bool {
-        let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        // Filter to only relevant modifiers (ignore caps lock, function key, etc.)
+        let relevantModifiers: NSEvent.ModifierFlags = [.command, .shift, .control, .option]
+        let modifiers = event.modifierFlags.intersection(relevantModifiers)
+        let expectedModifiers = settings.activationModifiers.intersection(relevantModifiers)
         let key = event.charactersIgnoringModifiers?.uppercased() ?? ""
 
         // Check if this matches the activation shortcut
-        if key == settings.activationKey && modifiers == settings.activationModifiers {
+        if key == settings.activationKey && modifiers == expectedModifiers {
             print("🎯 SHORTCUT MATCHED! Toggling crosshairs...")
             print("   Key: \(key), Modifiers: \(modifiers)")
 

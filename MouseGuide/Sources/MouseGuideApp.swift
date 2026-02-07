@@ -255,11 +255,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func restartApp() {
         // Get the app path
-        guard let appPath = Bundle.main.bundlePath as String? else {
-            print("❌ Could not get app path")
-            NSApp.terminate(nil)
-            return
-        }
+        let appPath = Bundle.main.bundlePath
 
         // Use a simple shell script to wait and reopen the app
         let script = """

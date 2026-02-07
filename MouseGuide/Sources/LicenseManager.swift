@@ -202,7 +202,7 @@ class LicenseManager: ObservableObject {
         // Clear UserDefaults flags
         CrosshairsSettings.shared.isPurchased = false
         UserDefaults.standard.removeObject(forKey: "isPurchased")
-        UserDefaults.standard.synchronize()
+        // Note: synchronize() is deprecated - UserDefaults auto-saves
         NSLog("  ✅ UserDefaults cleared")
 
         // Remove trial file
