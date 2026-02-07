@@ -426,6 +426,10 @@ class CrosshairsNativeView: NSView {
     private var displayLink: CVDisplayLink?
     private var settingsObserver: Any?
 
+    // Hysteresis state for color adaptation - prevents flickering
+    // true = currently using light crosshair, false = currently using dark crosshair
+    private var isUsingLightCrosshair: Bool = true
+
     init(mouseTracker: MouseTracker, settings: CrosshairsSettings, screenFrame: NSRect) {
         self.mouseTracker = mouseTracker
         self.settings = settings
@@ -511,7 +515,7 @@ class CrosshairsNativeView: NSView {
         let thickness = CGFloat(settings.effectiveThickness)
         let edgePointerThickness = CGFloat(settings.edgePointerThickness)
         let centerRadius = CGFloat(settings.effectiveCenterRadius)
-        let borderSize = CGFloat(settings.effectiveBorderSize)
+        let baseBorderSize = CGFloat(settings.effectiveBorderSize)
 
         NSLog("🎨 Drawing with thickness=\(thickness), centerRadius=\(centerRadius), hasFullAccess=\(settings.hasFullAccess)")
 
@@ -519,23 +523,44 @@ class CrosshairsNativeView: NSView {
         let crosshairColor: NSColor
         let borderColor: NSColor
 
+        // Effective border size - enforce minimum 1px when color adaptation is active
+        let effectiveBorderSize: CGFloat
+
         if settings.effectiveInvertColors {
-            // Dynamic color inversion based on background
+            // Dynamic color inversion based on background with hysteresis to prevent flickering
             let backgroundColor = sampleBackgroundColor(at: mouseTracker.position)
             let brightness = backgroundColor.brightnessValue
 
-            if brightness > 0.5 {
-                // Light background → dark crosshair
-                crosshairColor = NSColor.black.withAlphaComponent(settings.effectiveOpacity)
-                borderColor = NSColor.white.withAlphaComponent(settings.effectiveOpacity)
-            } else {
-                // Dark background → light crosshair
+            // Hysteresis thresholds to prevent flickering at boundary
+            let switchToDarkThreshold: CGFloat = 0.6   // Switch to dark crosshair only if clearly light
+            let switchToLightThreshold: CGFloat = 0.4  // Switch to light crosshair only if clearly dark
+
+            // Update color state with hysteresis
+            if brightness > switchToDarkThreshold {
+                // Clearly light background → use dark crosshair
+                isUsingLightCrosshair = false
+            } else if brightness < switchToLightThreshold {
+                // Clearly dark background → use light crosshair
+                isUsingLightCrosshair = true
+            }
+            // If between 0.4-0.6, keep current state (hysteresis zone)
+
+            if isUsingLightCrosshair {
+                // Light crosshair with dark border
                 crosshairColor = NSColor.white.withAlphaComponent(settings.effectiveOpacity)
                 borderColor = NSColor.black.withAlphaComponent(settings.effectiveOpacity)
+            } else {
+                // Dark crosshair with light border
+                crosshairColor = NSColor.black.withAlphaComponent(settings.effectiveOpacity)
+                borderColor = NSColor.white.withAlphaComponent(settings.effectiveOpacity)
             }
+
+            // Enforce minimum 1px border when color adaptation is active for guaranteed contrast
+            effectiveBorderSize = max(baseBorderSize, 1.0)
         } else {
             crosshairColor = NSColor(settings.effectiveCrosshairColor).withAlphaComponent(settings.effectiveOpacity)
             borderColor = NSColor(settings.effectiveBorderColor).withAlphaComponent(settings.effectiveOpacity)
+            effectiveBorderSize = baseBorderSize
         }
         
         context.setLineCap(.round)
@@ -571,9 +596,9 @@ class CrosshairsNativeView: NSView {
             }
 
             // Draw circle border
-            if borderSize > 0 {
+            if effectiveBorderSize > 0 {
                 context.setStrokeColor(borderColor.cgColor)
-                context.setLineWidth(thickness + borderSize * 2)
+                context.setLineWidth(thickness + effectiveBorderSize * 2)
                 context.addPath(circlePath)
                 context.strokePath()
             }
@@ -608,9 +633,9 @@ class CrosshairsNativeView: NSView {
             if useReadingLine {
                 // Reading line mode: draw continuous line with no gap
                 // Draw border
-                if borderSize > 0 {
+                if effectiveBorderSize > 0 {
                     context.setStrokeColor(borderColor.cgColor)
-                    context.setLineWidth(thickness + borderSize * 2)
+                    context.setLineWidth(thickness + effectiveBorderSize * 2)
                     context.move(to: leftStart)
                     context.addLine(to: rightEnd)
                     context.strokePath()
@@ -628,9 +653,9 @@ class CrosshairsNativeView: NSView {
                 let rightStart = CGPoint(x: center.x + centerRadius, y: center.y)
 
                 // Draw borders
-                if borderSize > 0 {
+                if effectiveBorderSize > 0 {
                     context.setStrokeColor(borderColor.cgColor)
-                    context.setLineWidth(thickness + borderSize * 2)
+                    context.setLineWidth(thickness + effectiveBorderSize * 2)
                     context.move(to: leftStart)
                     context.addLine(to: leftEnd)
                     context.strokePath()
@@ -669,9 +694,9 @@ class CrosshairsNativeView: NSView {
             let bottomStart = CGPoint(x: center.x, y: center.y + centerRadius)
             
             // Draw borders
-            if borderSize > 0 {
+            if effectiveBorderSize > 0 {
                 context.setStrokeColor(borderColor.cgColor)
-                context.setLineWidth(thickness + borderSize * 2)
+                context.setLineWidth(thickness + effectiveBorderSize * 2)
                 context.move(to: topStart)
                 context.addLine(to: topEnd)
                 context.strokePath()
@@ -711,7 +736,7 @@ class CrosshairsNativeView: NSView {
                                   color: crosshairColor,
                                   borderColor: borderColor,
                                   thickness: edgePointerThickness,
-                                  borderSize: borderSize)
+                                  effectiveBorderSize: effectiveBorderSize)
             }
 
             // Bottom pointer (pointing up towards mouse)
@@ -726,7 +751,7 @@ class CrosshairsNativeView: NSView {
                                   color: crosshairColor,
                                   borderColor: borderColor,
                                   thickness: edgePointerThickness,
-                                  borderSize: borderSize)
+                                  effectiveBorderSize: effectiveBorderSize)
             }
 
             // Left pointer (pointing right towards mouse)
@@ -741,7 +766,7 @@ class CrosshairsNativeView: NSView {
                                   color: crosshairColor,
                                   borderColor: borderColor,
                                   thickness: edgePointerThickness,
-                                  borderSize: borderSize)
+                                  effectiveBorderSize: effectiveBorderSize)
             }
 
             // Right pointer (pointing left towards mouse)
@@ -756,7 +781,7 @@ class CrosshairsNativeView: NSView {
                                   color: crosshairColor,
                                   borderColor: borderColor,
                                   thickness: edgePointerThickness,
-                                  borderSize: borderSize)
+                                  effectiveBorderSize: effectiveBorderSize)
             }
         }
     }
@@ -772,7 +797,7 @@ class CrosshairsNativeView: NSView {
                                      color: NSColor,
                                      borderColor: NSColor,
                                      thickness: CGFloat,
-                                     borderSize: CGFloat) {
+                                     effectiveBorderSize: CGFloat) {
         let path = CGMutablePath()
 
         // Create triangle based on direction
@@ -807,9 +832,9 @@ class CrosshairsNativeView: NSView {
         }
 
         // Draw border if needed
-        if borderSize > 0 {
+        if effectiveBorderSize > 0 {
             context.setStrokeColor(borderColor.cgColor)
-            context.setLineWidth(borderSize * 2)
+            context.setLineWidth(effectiveBorderSize * 2)
             context.addPath(path)
             context.strokePath()
         }
