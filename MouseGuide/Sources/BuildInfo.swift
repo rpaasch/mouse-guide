@@ -78,7 +78,7 @@ class BuildInfo {
     /// Log build info to console
     func logBuildInfo() {
         NSLog("╔═══════════════════════════════════════════════════════════════")
-        NSLog("║ Mouse Guide - Build Information")
+        NSLog("║ Cursor Sightline - Build Information")
         NSLog("╠═══════════════════════════════════════════════════════════════")
         NSLog("║ Version:      \(version)")
         NSLog("║ Build:        \(build)")

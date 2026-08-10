@@ -8,18 +8,18 @@
       "internalID": "6738494738",
       "localizations": [
         {
-          "description": "Unlock all features of Mouse Guide with a one-time purchase. Full customization, multi-monitor support, and all future updates.",
-          "displayName": "Mouse Guide Full Version",
+          "description": "Unlock all features of Cursor Sightline with a one-time purchase. Full customization, multi-monitor support, and all future updates.",
+          "displayName": "Cursor Sightline Full Version",
           "locale": "en_US"
         },
         {
-          "description": "Lås op for alle funktioner i Mouse Guide med et engangskøb. Fuld tilpasning, multi-skærm support og alle fremtidige opdateringer.",
-          "displayName": "Mouse Guide Fuld Version",
+          "description": "Lås op for alle funktioner i Cursor Sightline med et engangskøb. Fuld tilpasning, multi-skærm support og alle fremtidige opdateringer.",
+          "displayName": "Cursor Sightline Fuld Version",
           "locale": "da"
         }
       ],
-      "productID": "com.mouseguide.fullversion",
-      "referenceName": "Mouse Guide Full Version",
+      "productID": "dk.netdot.sightline.fullversion",
+      "referenceName": "Cursor Sightline Full Version",
       "type": "NonConsumable"
     }
   ],

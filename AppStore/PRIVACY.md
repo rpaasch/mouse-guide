@@ -1,14 +1,14 @@
-# Privacy Policy for Mouse Guide
+# Privacy Policy for Cursor Sightline
 
 **Last updated: February 2026**
 
 ## Overview
 
-Mouse Guide is designed with privacy in mind. We do not collect, store, or transmit any personal data.
+Cursor Sightline is designed with privacy in mind. We do not collect, store, or transmit any personal data.
 
 ## Data Collection
 
-**Mouse Guide does NOT collect:**
+**Cursor Sightline does NOT collect:**
 - Personal information
 - Usage statistics
 - Analytics data
@@ -18,7 +18,7 @@ Mouse Guide is designed with privacy in mind. We do not collect, store, or trans
 
 ## Permissions
 
-Mouse Guide requires the following system permissions to function:
+Cursor Sightline requires the following system permissions to function:
 
 ### Input Monitoring (Optional)
 - **Purpose:** To detect keyboard shortcuts for toggling crosshairs and auto-hiding while typing
@@ -32,7 +32,7 @@ Mouse Guide requires the following system permissions to function:
 
 ## Data Storage
 
-Mouse Guide stores only:
+Cursor Sightline stores only:
 - Your preferences (locally in macOS preferences)
 - Trial period information (locally in Application Support)
 
@@ -40,11 +40,11 @@ No data is ever transmitted to external servers.
 
 ## Third Parties
 
-Mouse Guide does not share any data with third parties because we don't collect any data.
+Cursor Sightline does not share any data with third parties because we don't collect any data.
 
 ## Children's Privacy
 
-Mouse Guide does not collect any personal information from anyone, including children under 13.
+Cursor Sightline does not collect any personal information from anyone, including children under 13.
 
 ## Changes to This Policy
 
@@ -57,4 +57,4 @@ https://github.com/rpaasch/mouse-guide/issues
 
 ---
 
-**Mouse Guide - Made in Denmark 🇩🇰**
+**Cursor Sightline - Made in Denmark 🇩🇰**

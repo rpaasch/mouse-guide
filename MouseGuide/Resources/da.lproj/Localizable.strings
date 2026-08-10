@@ -1,11 +1,11 @@
 /* Danish Localization */
 
 /* App name */
-"app.name" = "Mouse Guide";
+"app.name" = "Cursor Sightline";
 
 /* First run */
-"welcome.title" = "Velkommen til Mouse Guide";
-"welcome.message" = "Mouse Guide tegner et trådkors der følger musemarkøren, så den er nem at få øje på.\n\nAppen bor i menulinjen øverst til højre. Klik på trådkors-ikonet for at slå den til og fra eller åbne indstillingerne — du kan også trykke ⇧⌃L når som helst.\n\nFor at genvejen kan virke, spørger macOS nu om adgang til Indtastningsovervågning. Siger du nej, virker resten stadig; så bruger du bare menulinjen.";
+"welcome.title" = "Velkommen til Cursor Sightline";
+"welcome.message" = "Cursor Sightline tegner et trådkors der følger musemarkøren, så den er nem at få øje på.\n\nAppen bor i menulinjen øverst til højre. Klik på trådkors-ikonet for at slå den til og fra eller åbne indstillingerne — du kan også trykke ⇧⌃L når som helst.\n\nFor at genvejen kan virke, spørger macOS nu om adgang til Indtastningsovervågning. Siger du nej, virker resten stadig; så bruger du bare menulinjen.";
 "welcome.continue" = "Fortsæt";
 
 /* Pro gating */
@@ -14,7 +14,7 @@
 "pro.lockedValue.note" = "Viser gratis-visningen. Køb for at kunne ændre den.";
 
 /* Menu Bar */
-"menu.toggleLabel" = "Vis Mouse Guide";
+"menu.toggleLabel" = "Vis Cursor Sightline";
 "menu.settings" = "Indstillinger...";
 "menu.quit" = "Afslut";
 
@@ -153,7 +153,7 @@
 
 /* About Tab */
 "about.app" = "Om appen";
-"about.description" = "Mouse Guide hjælper dig med at finde og følge din musemarkør med præcise trådkors på tværs af hele din skærm. Særligt nyttig hvis du har svært ved at følge linjen når du læser på skærmen, eller har problemer med at finde musen.";
+"about.description" = "Cursor Sightline hjælper dig med at finde og følge din musemarkør med præcise trådkors på tværs af hele din skærm. Særligt nyttig hvis du har svært ved at følge linjen når du læser på skærmen, eller har problemer med at finde musen.";
 "about.features" = "Funktioner:";
 "about.feature.multimonitor" = "Fuld multi-monitor support";
 "about.feature.colorAdaptation" = "Dynamisk farvetilpasning baseret på baggrund";
@@ -163,7 +163,7 @@
 "about.madeBy" = "Lavet af Rasmus Paasch med ❤️ i Dyssegård, Danmark";
 "about.copyright" = "Copyright © 2025";
 "about.permissions" = "Systemtilladelser";
-"about.permissions.description" = "Mouse Guide har brug for følgende tilladelser for at fungere korrekt.";
+"about.permissions.description" = "Cursor Sightline har brug for følgende tilladelser for at fungere korrekt.";
 "about.permission.inputMonitoring" = "Indtastningsovervågning";
 "about.permission.inputMonitoring.description" = "Påkrævet for 'Skjul mens du skriver' funktion";
 "about.permission.screenRecording" = "Skærmoptagelse";
@@ -188,16 +188,16 @@
 
 /* License Tab */
 "license.status" = "Licensstatus";
-"license.activated" = "Mouse Guide er aktiveret";
+"license.activated" = "Cursor Sightline er aktiveret";
 "license.thankyou" = "Tak for din støtte!";
 "license.free" = "Gratis version";
 "license.freeRestrictions" = "Et fast rødt trådkors på én skærm. Køb for at låse op for alle seks tilstande, egne farver og størrelser, linjestile, farvetilpasning og alle dine skærme.";
 "license.checking" = "Tjekker licensstatus…";
-"license.buyTitle" = "Køb Mouse Guide";
+"license.buyTitle" = "Køb Cursor Sightline";
 "license.buyDescription" = "Få fuld adgang uden begrænsninger";
 "license.buyNow" = "Køb nu";
 "license.activated.title" = "Licens aktiveret!";
-"license.activated.message" = "Mouse Guide er nu fuldt aktiveret. Tak for din støtte!";
+"license.activated.message" = "Cursor Sightline er nu fuldt aktiveret. Tak for din støtte!";
 "license.restorePurchases" = "Gendan køb";
 
 /* Free Session Expiry */
@@ -217,28 +217,28 @@
 "accessibility.navigation.settings.hint" = "Naviger til %@ indstillinger";
 
 /* Accessibility - Main Toggle */
-"accessibility.toggle.main.label" = "Mouse Guide";
-"accessibility.toggle.main.hint" = "Viser eller skjuler Mouse Guide på skærmen";
+"accessibility.toggle.main.label" = "Cursor Sightline";
+"accessibility.toggle.main.hint" = "Viser eller skjuler Cursor Sightline på skærmen";
 
 /* Accessibility - Orientations */
 "accessibility.orientation.horizontal.label" = "Vandret";
 "accessibility.orientation.readingLine.label" = "Læselinje";
 "accessibility.orientation.readingLine.hint" = "Viser en ubrudt vandret linje der følger markøren, til læsning på skærmen";
-"accessibility.orientation.horizontal.hint" = "Indstiller Mouse Guide til kun at vise en vandret linje";
+"accessibility.orientation.horizontal.hint" = "Indstiller Cursor Sightline til kun at vise en vandret linje";
 "accessibility.orientation.vertical.label" = "Lodret";
-"accessibility.orientation.vertical.hint" = "Indstiller Mouse Guide til kun at vise en lodret linje";
+"accessibility.orientation.vertical.hint" = "Indstiller Cursor Sightline til kun at vise en lodret linje";
 "accessibility.orientation.both.label" = "Begge";
-"accessibility.orientation.both.hint" = "Indstiller Mouse Guide til at vise både vandrette og lodrette linjer";
+"accessibility.orientation.both.hint" = "Indstiller Cursor Sightline til at vise både vandrette og lodrette linjer";
 "accessibility.orientation.edgePointers.label" = "Kantpile";
 "accessibility.orientation.edgePointers.hint" = "Viser markører ved skærmkanterne der peger mod markørens placering";
 "accessibility.orientation.circle.label" = "Cirkel";
 "accessibility.orientation.circle.hint" = "Viser en cirkulær markering omkring markøren";
 
 /* Accessibility - Colors */
-"accessibility.color.crosshair.label" = "Mouse Guide farvevælger";
-"accessibility.color.crosshair.hint" = "Vælg farven til Mouse Guide linjerne";
+"accessibility.color.crosshair.label" = "Cursor Sightline farvevælger";
+"accessibility.color.crosshair.hint" = "Vælg farven til Cursor Sightline linjerne";
 "accessibility.color.border.label" = "Kantfarve vælger";
-"accessibility.color.border.hint" = "Vælg farven til Mouse Guide kantomridset";
+"accessibility.color.border.hint" = "Vælg farven til Cursor Sightline kantomridset";
 "accessibility.color.circleFill.label" = "Cirkel fyldfarve";
 "accessibility.color.circleFill.hint" = "Tryk for at ændre cirkel fyldfarve";
 
@@ -248,30 +248,30 @@
 
 /* Accessibility - Line Styles */
 "accessibility.lineStyle.solid.label" = "Hel linjestil";
-"accessibility.lineStyle.solid.hint" = "Indstiller Mouse Guide til at bruge en sammenhængende hel linje";
+"accessibility.lineStyle.solid.hint" = "Indstiller Cursor Sightline til at bruge en sammenhængende hel linje";
 "accessibility.lineStyle.dashed.label" = "Stiplet linjestil";
-"accessibility.lineStyle.dashed.hint" = "Indstiller Mouse Guide til at bruge et stiplet linjemønster";
+"accessibility.lineStyle.dashed.hint" = "Indstiller Cursor Sightline til at bruge et stiplet linjemønster";
 "accessibility.lineStyle.dotted.label" = "Prikket linjestil";
-"accessibility.lineStyle.dotted.hint" = "Indstiller Mouse Guide til at bruge et prikket linjemønster";
+"accessibility.lineStyle.dotted.hint" = "Indstiller Cursor Sightline til at bruge et prikket linjemønster";
 
 /* Accessibility - Behaviors */
 "accessibility.behavior.colorAdaptation.label" = "Tilpas farve automatisk baseret på baggrund";
-"accessibility.behavior.colorAdaptation.hint" = "Tilpasser automatisk Mouse Guide farven baseret på baggrunden for bedre synlighed";
+"accessibility.behavior.colorAdaptation.hint" = "Tilpasser automatisk Cursor Sightline farven baseret på baggrunden for bedre synlighed";
 "accessibility.behavior.autoHideTyping.label" = "Skjul mens du skriver";
-"accessibility.behavior.autoHideTyping.hint" = "Skjuler automatisk Mouse Guide mens du skriver for at undgå at skjule tekst";
+"accessibility.behavior.autoHideTyping.hint" = "Skjuler automatisk Cursor Sightline mens du skriver for at undgå at skjule tekst";
 "accessibility.behavior.launchAtLogin.label" = "Start automatisk ved login";
-"accessibility.behavior.launchAtLogin.hint" = "Starter automatisk Mouse Guide når du logger ind på din Mac";
+"accessibility.behavior.launchAtLogin.hint" = "Starter automatisk Cursor Sightline når du logger ind på din Mac";
 "accessibility.behavior.gliding.label" = "Aktiver glidende markør";
-"accessibility.behavior.gliding.hint" = "Får Mouse Guide til at glide jævnt for at følge markørbevægelser i stedet for at hoppe øjeblikkeligt";
+"accessibility.behavior.gliding.hint" = "Får Cursor Sightline til at glide jævnt for at følge markørbevægelser i stedet for at hoppe øjeblikkeligt";
 
 /* Accessibility - License */
-"accessibility.license.active" = "Licens aktiv. Mouse Guide er fuldt aktiveret. Tak for din støtte";
+"accessibility.license.active" = "Licens aktiv. Cursor Sightline er fuldt aktiveret. Tak for din støtte";
 "accessibility.license.restore.label" = "Gendan køb";
 "accessibility.license.restore.hint" = "Synkroniserer dine køb med Apple";
-"accessibility.license.buy.label" = "Køb Mouse Guide fuld version";
+"accessibility.license.buy.label" = "Køb Cursor Sightline fuld version";
 "accessibility.license.buy.hint" = "Køber livstidsadgang gennem Apple In-App Purchase";
 "accessibility.license.restorePrevious.label" = "Gendan tidligere køb";
-"accessibility.license.restorePrevious.hint" = "Gendanner dit køb hvis du købte Mouse Guide på en anden enhed";
+"accessibility.license.restorePrevious.hint" = "Gendanner dit køb hvis du købte Cursor Sightline på en anden enhed";
 
 /* Accessibility - Updates */
 
@@ -293,7 +293,7 @@
 "accessibility.colorType.border" = "kantfarve";
 
 /* Accessibility - Keyboard Shortcut */
-"accessibility.shortcutRecorder.label" = "Genvejstast til at vise eller skjule Mouse Guide, Nuværende genvej: %@";
+"accessibility.shortcutRecorder.label" = "Genvejstast til at vise eller skjule Cursor Sightline, Nuværende genvej: %@";
 "accessibility.shortcutRecorder.hint" = "Klik for at optage en ny genvejstast";
 "accessibility.shortcutRecorder.recording" = "Tryk en tastekombination for at optage en ny genvej";
 

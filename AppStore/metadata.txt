@@ -1,6 +1,6 @@
 ═══════════════════════════════════════════════════════════════════════════════
                         APP STORE CONNECT METADATA
-                              Mouse Guide
+                              Cursor Sightline
 ═══════════════════════════════════════════════════════════════════════════════
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
@@ -8,19 +8,19 @@
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
 APP NAME:
-Mouse Guide
+Cursor Sightline
 
 SUBTITLE (30 chars max) [25 chars]:
 Crosshairs for your cursor
 
 PROMOTIONAL TEXT (170 chars max) [156 chars]:
-Never lose your mouse cursor again! Mouse Guide draws crosshairs on screen that follow your mouse - perfect for large displays and multi-monitor setups.
+Never lose your mouse cursor again! Cursor Sightline draws crosshairs on screen that follow your mouse - perfect for large displays and multi-monitor setups.
 
 KEYWORDS (100 chars max) [89 chars]:
 mouse,cursor,crosshair,accessibility,screen,multi-monitor,presentation,reading,pointer
 
 DESCRIPTION:
-Mouse Guide helps you find and track your mouse cursor on screen. The app draws configurable crosshairs that always follow your mouse - no matter how many monitors you use.
+Cursor Sightline helps you find and track your mouse cursor on screen. The app draws configurable crosshairs that always follow your mouse - no matter how many monitors you use.
 
 PERFECT FOR:
 • Large displays where the cursor easily gets lost
@@ -55,15 +55,15 @@ Accessibility
 • Reading line mode for on-screen reading
 
 FREE AND FULL VERSION:
-Mouse Guide is free to use and shows a fixed red crosshair on one screen. A single in-app purchase unlocks all six modes, your own colours and sizes, line styles, automatic colour adaptation and all your displays. No subscription, no time limit.
+Cursor Sightline is free to use and shows a fixed red crosshair on one screen. A single in-app purchase unlocks all six modes, your own colours and sizes, line styles, automatic colour adaptation and all your displays. No subscription, no time limit.
 
 PRIVACY:
-Mouse Guide collects no personal data. The app only requires permissions necessary to function (Input Monitoring for keyboard shortcuts, Screen Recording for color adaptation).
+Cursor Sightline collects no personal data. The app only requires permissions necessary to function (Input Monitoring for keyboard shortcuts, Screen Recording for color adaptation).
 
 Made in Denmark 🇩🇰
 
 WHAT'S NEW (1.0):
-• First release of Mouse Guide
+• First release of Cursor Sightline
 • 6 different crosshair modes
 • Multi-monitor support
 • Automatic color adaptation
@@ -76,19 +76,19 @@ WHAT'S NEW (1.0):
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
 APP NAME:
-Mouse Guide
+Cursor Sightline
 
 SUBTITLE (30 chars max) [20 chars]:
 Trådkors til din mus
 
 PROMOTIONAL TEXT (170 chars max) [157 chars]:
-Find altid din musemarkør! Mouse Guide tegner et trådkors på skærmen der følger musen - perfekt til store skærme og multi-monitor setups.
+Find altid din musemarkør! Cursor Sightline tegner et trådkors på skærmen der følger musen - perfekt til store skærme og multi-monitor setups.
 
 KEYWORDS (100 chars max) [89 chars]:
 mus,markør,trådkors,crosshair,tilgængelighed,skærm,multi-monitor,præsentation,læse
 
 DESCRIPTION:
-Mouse Guide hjælper dig med at finde og følge din musemarkør på skærmen. Appen tegner et konfigurerbart trådkors der altid følger din mus - uanset hvor mange skærme du bruger.
+Cursor Sightline hjælper dig med at finde og følge din musemarkør på skærmen. Appen tegner et konfigurerbart trådkors der altid følger din mus - uanset hvor mange skærme du bruger.
 
 PERFEKT TIL:
 • Store skærme hvor markøren nemt forsvinder
@@ -123,15 +123,15 @@ Tilgængelighed
 • Læselinje-tilstand til læsning på skærmen
 
 GRATIS OG FULD VERSION:
-Mouse Guide er gratis at bruge og viser et fast rødt trådkors på én skærm. Et enkelt køb i appen låser op for alle seks tilstande, egne farver og størrelser, linjestile, automatisk farvetilpasning og alle dine skærme. Ingen abonnement, ingen tidsgrænse.
+Cursor Sightline er gratis at bruge og viser et fast rødt trådkors på én skærm. Et enkelt køb i appen låser op for alle seks tilstande, egne farver og størrelser, linjestile, automatisk farvetilpasning og alle dine skærme. Ingen abonnement, ingen tidsgrænse.
 
 PRIVATLIV:
-Mouse Guide indsamler ingen personlige data. Appen kræver kun de tilladelser der er nødvendige for at fungere (Input Monitoring til tastaturgenveje, Screen Recording til farvetilpasning).
+Cursor Sightline indsamler ingen personlige data. Appen kræver kun de tilladelser der er nødvendige for at fungere (Input Monitoring til tastaturgenveje, Screen Recording til farvetilpasning).
 
 Lavet i Danmark 🇩🇰
 
 HVAD ER NYT (1.0):
-• Første udgivelse af Mouse Guide
+• Første udgivelse af Cursor Sightline
 • 6 forskellige trådkors-tilstande
 • Multi-monitor support
 • Automatisk farvetilpasning
@@ -163,7 +163,7 @@ PRICE:
 Free with In-App Purchase (Full Version)
 
 IN-APP PURCHASE:
-- Name: Mouse Guide Pro
+- Name: Cursor Sightline Pro
 - Price: [TBD]
 - Description: Unlock all features including multi-monitor support, all crosshair modes, and customization options.
 

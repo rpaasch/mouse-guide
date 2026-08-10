@@ -1,11 +1,11 @@
 /* English Localization */
 
 /* App name */
-"app.name" = "Mouse Guide";
+"app.name" = "Cursor Sightline";
 
 /* First run */
-"welcome.title" = "Welcome to Mouse Guide";
-"welcome.message" = "Mouse Guide draws a crosshair that follows your mouse pointer, so it is easy to spot.\n\nThe app lives in the menu bar at the top right. Click the crosshair icon to switch it on and off or open the settings — you can also press ⇧⌃L at any time.\n\nFor that shortcut to work, macOS will now ask for Input Monitoring access. If you decline, everything else still works; you just use the menu bar instead.";
+"welcome.title" = "Welcome to Cursor Sightline";
+"welcome.message" = "Cursor Sightline draws a crosshair that follows your mouse pointer, so it is easy to spot.\n\nThe app lives in the menu bar at the top right. Click the crosshair icon to switch it on and off or open the settings — you can also press ⇧⌃L at any time.\n\nFor that shortcut to work, macOS will now ask for Input Monitoring access. If you decline, everything else still works; you just use the menu bar instead.";
 "welcome.continue" = "Continue";
 
 /* Pro gating */
@@ -14,7 +14,7 @@
 "pro.lockedValue.note" = "Showing the free appearance. Buy to change it.";
 
 /* Menu Bar */
-"menu.toggleLabel" = "Show Mouse Guide";
+"menu.toggleLabel" = "Show Cursor Sightline";
 "menu.settings" = "Settings...";
 "menu.quit" = "Quit";
 
@@ -153,7 +153,7 @@
 
 /* About Tab */
 "about.app" = "About the App";
-"about.description" = "Mouse Guide helps you find and follow your mouse cursor with precise crosshairs across your entire screen. Especially useful if you have difficulty following the line when reading on screen, or have trouble finding the mouse.";
+"about.description" = "Cursor Sightline helps you find and follow your mouse cursor with precise crosshairs across your entire screen. Especially useful if you have difficulty following the line when reading on screen, or have trouble finding the mouse.";
 "about.features" = "Features:";
 "about.feature.multimonitor" = "Full multi-monitor support";
 "about.feature.colorAdaptation" = "Dynamic color adaptation based on background";
@@ -163,7 +163,7 @@
 "about.madeBy" = "Made by Rasmus Paasch with ❤️ in Dyssegård, Denmark";
 "about.copyright" = "Copyright © 2025";
 "about.permissions" = "System Permissions";
-"about.permissions.description" = "Mouse Guide needs the following permissions to work correctly.";
+"about.permissions.description" = "Cursor Sightline needs the following permissions to work correctly.";
 "about.permission.inputMonitoring" = "Input Monitoring";
 "about.permission.inputMonitoring.description" = "Required for 'Hide while typing' feature";
 "about.permission.screenRecording" = "Screen Recording";
@@ -188,16 +188,16 @@
 
 /* License Tab */
 "license.status" = "License Status";
-"license.activated" = "Mouse Guide is activated";
+"license.activated" = "Cursor Sightline is activated";
 "license.thankyou" = "Thanks for your support!";
 "license.free" = "Free version";
 "license.freeRestrictions" = "A fixed red crosshair on one screen. Buy to unlock all six modes, your own colours and sizes, line styles, colour adaptation and all your displays.";
 "license.checking" = "Checking license status...";
-"license.buyTitle" = "Buy Mouse Guide";
+"license.buyTitle" = "Buy Cursor Sightline";
 "license.buyDescription" = "Get full access without restrictions";
 "license.buyNow" = "Buy Now";
 "license.activated.title" = "License Activated!";
-"license.activated.message" = "Mouse Guide is now fully activated. Thanks for your support!";
+"license.activated.message" = "Cursor Sightline is now fully activated. Thanks for your support!";
 "license.restorePurchases" = "Restore Purchases";
 
 /* Free Session Expiry */
@@ -217,7 +217,7 @@
 "accessibility.navigation.settings.hint" = "Navigate to %@ settings";
 
 /* Accessibility - Main Toggle */
-"accessibility.toggle.main.label" = "Mouse Guide";
+"accessibility.toggle.main.label" = "Cursor Sightline";
 "accessibility.toggle.main.hint" = "Shows or hides the crosshair on screen";
 
 /* Accessibility - Orientations */
@@ -260,18 +260,18 @@
 "accessibility.behavior.autoHideTyping.label" = "Hide while typing";
 "accessibility.behavior.autoHideTyping.hint" = "Automatically hides the crosshair while you are typing to avoid obscuring text";
 "accessibility.behavior.launchAtLogin.label" = "Launch automatically at login";
-"accessibility.behavior.launchAtLogin.hint" = "Automatically starts Mouse Guide when you log in to your Mac";
+"accessibility.behavior.launchAtLogin.hint" = "Automatically starts Cursor Sightline when you log in to your Mac";
 "accessibility.behavior.gliding.label" = "Enable gliding cursor";
 "accessibility.behavior.gliding.hint" = "Makes the crosshair smoothly glide to follow cursor movements instead of jumping instantly";
 
 /* Accessibility - License */
-"accessibility.license.active" = "License active. Mouse Guide is fully activated. Thank you for your support";
+"accessibility.license.active" = "License active. Cursor Sightline is fully activated. Thank you for your support";
 "accessibility.license.restore.label" = "Restore purchases";
 "accessibility.license.restore.hint" = "Syncs your purchases with Apple";
-"accessibility.license.buy.label" = "Buy Mouse Guide full version";
+"accessibility.license.buy.label" = "Buy Cursor Sightline full version";
 "accessibility.license.buy.hint" = "Purchases lifetime access through Apple In-App Purchase";
 "accessibility.license.restorePrevious.label" = "Restore previous purchases";
-"accessibility.license.restorePrevious.hint" = "Restores your purchase if you bought Mouse Guide on another device";
+"accessibility.license.restorePrevious.hint" = "Restores your purchase if you bought Cursor Sightline on another device";
 
 /* Accessibility - Updates */
 
@@ -293,7 +293,7 @@
 "accessibility.colorType.border" = "border color";
 
 /* Accessibility - Keyboard Shortcut */
-"accessibility.shortcutRecorder.label" = "Keyboard shortcut to show or hide Mouse Guide, Current shortcut: %@";
+"accessibility.shortcutRecorder.label" = "Keyboard shortcut to show or hide Cursor Sightline, Current shortcut: %@";
 "accessibility.shortcutRecorder.hint" = "Click to record a new keyboard shortcut";
 "accessibility.shortcutRecorder.recording" = "Press a key combination to record a new shortcut";
 

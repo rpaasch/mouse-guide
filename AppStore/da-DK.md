@@ -1,16 +1,16 @@
 # App Store Metadata - Dansk (da-DK)
 
 ## App Navn
-Mouse Guide
+Cursor Sightline
 
 ## Undertitel (max 30 tegn)
 Trådkors til din mus
 
 ## Kampagnetekst (max 170 tegn)
-Find altid din musemarkør! Mouse Guide tegner et trådkors på skærmen der følger musen - perfekt til store skærme og multi-monitor setups.
+Find altid din musemarkør! Cursor Sightline tegner et trådkors på skærmen der følger musen - perfekt til store skærme og multi-monitor setups.
 
 ## Beskrivelse (max 4000 tegn)
-Mouse Guide hjælper dig med at finde og følge din musemarkør på skærmen. Appen tegner et konfigurerbart trådkors der altid følger din mus - uanset hvor mange skærme du bruger.
+Cursor Sightline hjælper dig med at finde og følge din musemarkør på skærmen. Appen tegner et konfigurerbart trådkors der altid følger din mus - uanset hvor mange skærme du bruger.
 
 **PERFEKT TIL:**
 • Store skærme hvor markøren nemt forsvinder
@@ -45,10 +45,10 @@ Tilgængelighed
 • Læselinje-tilstand til læsning på skærmen
 
 **GRATIS OG FULD VERSION:**
-Mouse Guide er gratis at bruge og viser et fast rødt trådkors på én skærm. Et enkelt køb i appen låser op for alle seks tilstande, egne farver og størrelser, linjestile, automatisk farvetilpasning og alle dine skærme. Ingen abonnement, ingen tidsgrænse.
+Cursor Sightline er gratis at bruge og viser et fast rødt trådkors på én skærm. Et enkelt køb i appen låser op for alle seks tilstande, egne farver og størrelser, linjestile, automatisk farvetilpasning og alle dine skærme. Ingen abonnement, ingen tidsgrænse.
 
 **PRIVATLIV:**
-Mouse Guide indsamler ingen personlige data. Appen kræver kun de tilladelser der er nødvendige for at fungere (Input Monitoring til tastaturgenveje, Screen Recording til farvetilpasning).
+Cursor Sightline indsamler ingen personlige data. Appen kræver kun de tilladelser der er nødvendige for at fungere (Input Monitoring til tastaturgenveje, Screen Recording til farvetilpasning).
 
 Lavet i Danmark 🇩🇰
 
@@ -56,7 +56,7 @@ Lavet i Danmark 🇩🇰
 mus,markør,trådkors,crosshair,tilgængelighed,skærm,multi-monitor,præsentation,læse
 
 ## Hvad er nyt (version 1.0)
-• Første udgivelse af Mouse Guide
+• Første udgivelse af Cursor Sightline
 • 6 forskellige trådkors-tilstande
 • Multi-monitor support
 • Automatisk farvetilpasning

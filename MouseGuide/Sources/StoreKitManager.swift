@@ -6,7 +6,7 @@ class StoreKitManager: ObservableObject {
     static let shared = StoreKitManager()
 
     // Product ID - must match App Store Connect configuration
-    private let productID = "com.mouseguide.fullversion"
+    private let productID = "dk.netdot.sightline.fullversion"
 
     /// Feature gating reads a cached flag rather than StoreKit itself, so the
     /// overlay does not flash the free rendering during the async entitlement

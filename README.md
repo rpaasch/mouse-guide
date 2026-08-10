@@ -1,4 +1,4 @@
-# Mouse Guide
+# Cursor Sightline
 
 En macOS-app der tegner et trådkors henover skærmen og følger musemarkøren.
 Tænkt som hjælp til at finde markøren på store skærme og som læselineal når man

@@ -1,16 +1,16 @@
 # App Store Metadata - English (en-US)
 
 ## App Name
-Mouse Guide
+Cursor Sightline
 
 ## Subtitle (max 30 characters)
 Crosshairs for your cursor
 
 ## Promotional Text (max 170 characters)
-Never lose your mouse cursor again! Mouse Guide draws crosshairs on screen that follow your mouse - perfect for large displays and multi-monitor setups.
+Never lose your mouse cursor again! Cursor Sightline draws crosshairs on screen that follow your mouse - perfect for large displays and multi-monitor setups.
 
 ## Description (max 4000 characters)
-Mouse Guide helps you find and track your mouse cursor on screen. The app draws configurable crosshairs that always follow your mouse - no matter how many monitors you use.
+Cursor Sightline helps you find and track your mouse cursor on screen. The app draws configurable crosshairs that always follow your mouse - no matter how many monitors you use.
 
 **PERFECT FOR:**
 • Large displays where the cursor easily gets lost
@@ -45,10 +45,10 @@ Accessibility
 • Reading line mode for on-screen reading
 
 **FREE AND FULL VERSION:**
-Mouse Guide is free to use and shows a fixed red crosshair on one screen. A single in-app purchase unlocks all six modes, your own colours and sizes, line styles, automatic colour adaptation and all your displays. No subscription, no time limit.
+Cursor Sightline is free to use and shows a fixed red crosshair on one screen. A single in-app purchase unlocks all six modes, your own colours and sizes, line styles, automatic colour adaptation and all your displays. No subscription, no time limit.
 
 **PRIVACY:**
-Mouse Guide collects no personal data. The app only requires permissions necessary to function (Input Monitoring for keyboard shortcuts, Screen Recording for color adaptation).
+Cursor Sightline collects no personal data. The app only requires permissions necessary to function (Input Monitoring for keyboard shortcuts, Screen Recording for color adaptation).
 
 Made in Denmark 🇩🇰
 
@@ -56,7 +56,7 @@ Made in Denmark 🇩🇰
 mouse,cursor,crosshair,accessibility,screen,multi-monitor,presentation,reading,pointer
 
 ## What's New (version 1.0)
-• First release of Mouse Guide
+• First release of Cursor Sightline
 • 6 different crosshair modes
 • Multi-monitor support
 • Automatic color adaptation
