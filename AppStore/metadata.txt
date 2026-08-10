@@ -54,8 +54,8 @@ Accessibility
 • Helps track the cursor
 • Reading line mode for on-screen reading
 
-TRIAL PERIOD:
-Try Mouse Guide free for 7 days with all features. After that, continue free with basic features or purchase full access.
+FREE AND FULL VERSION:
+Mouse Guide is free to use and shows a fixed red crosshair on one screen. A single in-app purchase unlocks all six modes, your own colours and sizes, line styles, automatic colour adaptation and all your displays. No subscription, no time limit.
 
 PRIVACY:
 Mouse Guide collects no personal data. The app only requires permissions necessary to function (Input Monitoring for keyboard shortcuts, Screen Recording for color adaptation).
@@ -122,8 +122,8 @@ Tilgængelighed
 • Hjælper med at spore markøren
 • Læselinje-tilstand til læsning på skærmen
 
-PRØVEPERIODE:
-Prøv Mouse Guide gratis i 7 dage med alle funktioner. Derefter kan du fortsætte gratis med basisfunktioner eller købe fuld adgang.
+GRATIS OG FULD VERSION:
+Mouse Guide er gratis at bruge og viser et fast rødt trådkors på én skærm. Et enkelt køb i appen låser op for alle seks tilstande, egne farver og størrelser, linjestile, automatisk farvetilpasning og alle dine skærme. Ingen abonnement, ingen tidsgrænse.
 
 PRIVATLIV:
 Mouse Guide indsamler ingen personlige data. Appen kræver kun de tilladelser der er nødvendige for at fungere (Input Monitoring til tastaturgenveje, Screen Recording til farvetilpasning).

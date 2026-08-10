@@ -8,12 +8,30 @@ class StoreKitManager: ObservableObject {
     // Product ID - must match App Store Connect configuration
     private let productID = "com.mouseguide.fullversion"
 
-    @Published var purchaseState: PurchaseState = .notPurchased
+    /// Feature gating reads a cached flag rather than StoreKit itself, so the
+    /// overlay does not flash the free rendering during the async entitlement
+    /// check at launch. This is the only place that writes it.
+    @Published var purchaseState: PurchaseState = .checking {
+        didSet {
+            // Only resolved states update the cache - .checking and .purchasing
+            // are transient, and .failed tells us nothing about entitlement.
+            switch purchaseState {
+            case .purchased:
+                UserDefaults.standard.set(true, forKey: CrosshairsSettings.purchaseCacheKey)
+            case .notPurchased:
+                UserDefaults.standard.set(false, forKey: CrosshairsSettings.purchaseCacheKey)
+            case .checking, .purchasing, .failed:
+                break
+            }
+            NotificationCenter.default.post(name: .init("PurchaseStateChanged"), object: nil)
+        }
+    }
     @Published var product: Product?
 
     private var updateListenerTask: Task<Void, Error>?
 
     enum PurchaseState {
+        case checking
         case notPurchased
         case purchasing
         case purchased

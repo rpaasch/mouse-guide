@@ -87,17 +87,4 @@ class BuildInfo {
         NSLog("║ Full Path:    \(appPath)")
         NSLog("╚═══════════════════════════════════════════════════════════════")
     }
-
-    /// Generate formatted build info string
-    func generateBuildInfoString() -> String {
-        """
-        Mouse Guide
-        Version \(versionAndBuild)
-
-        Bundle ID: \(bundleID)
-        Location: \(buildLocation.emoji) \(buildLocation.description)
-
-        Path: \(appPath)
-        """
-    }
 }

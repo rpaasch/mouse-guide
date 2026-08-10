@@ -64,3 +64,7 @@ Release/
 releases/
 *.dmg
 *.zip
+
+# Python
+__pycache__/
+*.pyc

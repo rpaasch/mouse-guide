@@ -83,31 +83,36 @@ class MenuBarManager {
     }
 
     func updateToggleState() {
-        if let appDelegate = appDelegate {
-            let isVisible = appDelegate.crosshairsWindow != nil
-            toggleMenuItem?.state = isVisible ? .on : .off
+        guard let appDelegate = appDelegate else { return }
+        let isVisible = appDelegate.crosshairsWindow != nil
 
-            // Update title based on state: "Slå Mouse Guide til" / "Slå Mouse Guide fra"
-            toggleMenuItem?.title = isVisible ? LocalizedString.menuToggleHide : LocalizedString.menuToggleShow
+        // The checkmark carries the state, so the title stays a stable noun
+        // phrase. Doing both - a checkmark AND a "turn off" verb - reads as
+        // "the turn-off action is checked", which is nonsense.
+        toggleMenuItem?.state = isVisible ? .on : .off
+        toggleMenuItem?.title = LocalizedString.menuToggleLabel
 
-            // Update accessibility label to include state
-            let statusText = isVisible ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff
-            toggleMenuItem?.setAccessibilityLabel("\(toggleMenuItem?.title ?? ""), \(statusText)")
+        // The icon has to show the state too: it is the only part of this app
+        // visible without opening the menu, and the app is essentially one switch.
+        statusItem?.button?.appearsDisabled = !isVisible
 
-            // Update keyboard shortcut display if hotkeys work
-            updateShortcutDisplay()
-        }
+        let statusText = isVisible ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff
+        toggleMenuItem?.setAccessibilityLabel("\(LocalizedString.menuToggleLabel), \(statusText)")
+
+        updateShortcutDisplay()
     }
 
+    /// Shows the shortcut the user has actually configured, and only when Input
+    /// Monitoring is granted - the global monitor is created regardless of
+    /// permission, so anything based on its existence would advertise a
+    /// shortcut that silently does nothing.
     private func updateShortcutDisplay() {
-        guard let appDelegate = appDelegate else { return }
+        let settings = CrosshairsSettings.shared
 
-        if appDelegate.canShowShortcutInMenu {
-            // Show the actual shortcut: Shift+Ctrl+L
-            toggleMenuItem?.keyEquivalent = "l"
-            toggleMenuItem?.keyEquivalentModifierMask = [.shift, .control]
+        if settings.hasInputMonitoringPermission() {
+            toggleMenuItem?.keyEquivalent = settings.activationKey.lowercased()
+            toggleMenuItem?.keyEquivalentModifierMask = settings.activationModifiers
         } else {
-            // Hide shortcut when it doesn't work
             toggleMenuItem?.keyEquivalent = ""
             toggleMenuItem?.keyEquivalentModifierMask = []
         }
@@ -124,15 +129,6 @@ class MenuBarManager {
     @objc private func languageChanged() {
         // Rebuild the entire menu to update the toggle label
         setupMenu()
-    }
-
-    private func modifierFlagsToString(_ flags: NSEvent.ModifierFlags) -> String {
-        var parts: [String] = []
-        if flags.contains(.command) { parts.append("⌘") }
-        if flags.contains(.shift) { parts.append("⇧") }
-        if flags.contains(.option) { parts.append("⌥") }
-        if flags.contains(.control) { parts.append("⌃") }
-        return parts.joined()
     }
 
     private func createCrosshairIcon() -> NSImage {

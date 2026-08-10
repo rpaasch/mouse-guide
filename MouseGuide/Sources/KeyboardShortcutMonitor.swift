@@ -4,7 +4,6 @@ class KeyboardShortcutMonitor {
     private var globalMonitor: Any?
     private var localMonitor: Any?
     private var settings = CrosshairsSettings.shared
-    private var hasShownPermissionNotification = false
     weak var appDelegate: AppDelegate?
 
     init(appDelegate: AppDelegate) {
@@ -88,24 +87,5 @@ class KeyboardShortcutMonitor {
             localMonitor = nil
         }
         print("✅ Keyboard shortcut monitors cleaned up")
-    }
-
-    private func showPermissionNotification() {
-        DispatchQueue.main.async {
-            let alert = NSAlert()
-            alert.messageText = LocalizedString.shortcutPermissionTitle
-            alert.informativeText = LocalizedString.shortcutPermissionMessage
-            alert.alertStyle = .informational
-            alert.addButton(withTitle: LocalizedString.shortcutPermissionOpenSettings)
-            alert.addButton(withTitle: LocalizedString.shortcutPermissionLater)
-
-            let response = alert.runModal()
-            if response == .alertFirstButtonReturn {
-                // Open System Settings to Input Monitoring
-                if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
-                    NSWorkspace.shared.open(url)
-                }
-            }
-        }
     }
 }

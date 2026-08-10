@@ -17,13 +17,10 @@
 		A1000009 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1000021 /* Localizable.strings */; };
 		A100000A /* KeyboardShortcutRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000019 /* KeyboardShortcutRecorder.swift */; };
 		A100000B /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001A /* LaunchAtLogin.swift */; };
-		A100000C /* DiagnosticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001B /* DiagnosticsManager.swift */; };
 		A100000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A100001D /* Assets.xcassets */; };
-		A1000010L /* LicenseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001F /* LicenseManager.swift */; };
 		A1000024 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000025 /* StoreKitManager.swift */; };
 		A1000026 /* MouseGuideProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = A1000027 /* MouseGuideProducts.storekit */; };
 		A5D17AB2080AA27CCCF10139 /* BuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480140FE6BEB58218633508D /* BuildInfo.swift */; };
-		F6FBE499C23C4BAAB975F893 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22E2EFD70144CEB8E174974 /* UpdateChecker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,15 +35,12 @@
 		A1000017 /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
 		A1000019 /* KeyboardShortcutRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutRecorder.swift; sourceTree = "<group>"; };
 		A100001A /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
-		A100001B /* DiagnosticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticsManager.swift; sourceTree = "<group>"; };
 		A100001D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A100001F /* LicenseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseManager.swift; sourceTree = "<group>"; };
 		A1000020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1000022 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A1000023 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A1000025 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		A1000027 /* MouseGuideProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = MouseGuideProducts.storekit; sourceTree = "<group>"; };
-		C22E2EFD70144CEB8E174974 /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,10 +86,7 @@
 				A1000016 /* MenuBarManager.swift */,
 				A1000017 /* Localizable.swift */,
 				A100001A /* LaunchAtLogin.swift */,
-				A100001B /* DiagnosticsManager.swift */,
-				A100001F /* LicenseManager.swift */,
 				A1000025 /* StoreKitManager.swift */,
-				C22E2EFD70144CEB8E174974 /* UpdateChecker.swift */,
 				480140FE6BEB58218633508D /* BuildInfo.swift */,
 			);
 			path = Sources;
@@ -198,10 +189,7 @@
 				A1000006 /* MenuBarManager.swift in Sources */,
 				A1000007 /* Localizable.swift in Sources */,
 				A100000B /* LaunchAtLogin.swift in Sources */,
-				A100000C /* DiagnosticsManager.swift in Sources */,
-				A1000010L /* LicenseManager.swift in Sources */,
 				A1000024 /* StoreKitManager.swift in Sources */,
-				F6FBE499C23C4BAAB975F893 /* UpdateChecker.swift in Sources */,
 				A5D17AB2080AA27CCCF10139 /* BuildInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

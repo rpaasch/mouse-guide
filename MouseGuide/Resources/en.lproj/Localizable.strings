@@ -3,46 +3,28 @@
 /* App name */
 "app.name" = "Mouse Guide";
 
+/* First run */
+"welcome.title" = "Welcome to Mouse Guide";
+"welcome.message" = "Mouse Guide draws a crosshair that follows your mouse pointer, so it is easy to spot.\n\nThe app lives in the menu bar at the top right. Click the crosshair icon to switch it on and off or open the settings — you can also press ⇧⌃L at any time.\n\nFor that shortcut to work, macOS will now ask for Input Monitoring access. If you decline, everything else still works; you just use the menu bar instead.";
+"welcome.continue" = "Continue";
+
+/* Pro gating */
+"pro.badge" = "Pro";
+"pro.badge.accessibility" = "requires the full version";
+"pro.lockedValue.note" = "Showing the free appearance. Buy to change it.";
+
 /* Menu Bar */
-"menu.toggle" = "Toggle Crosshairs";
-"menu.toggleLabel" = "Show/Hide Mouse Guide";
+"menu.toggleLabel" = "Show Mouse Guide";
 "menu.settings" = "Settings...";
-"menu.about" = "About Mouse Guide";
 "menu.quit" = "Quit";
-"menu.toggleOn" = "Turn on";
-"menu.toggleOff" = "Turn off";
-"menu.gettingStarted" = "📖 Getting Started...";
-"menu.support" = "❤️ Support Development...";
-"menu.thankyou" = "💚 Thanks for your support!";
-"menu.toggle.show" = "Show Mouse Guide";
-"menu.toggle.hide" = "Hide Mouse Guide";
 
 /* Onboarding */
-"onboarding.title" = "Welcome to Mouse Guide";
-"onboarding.welcome" = "A visible crosshair and reading ruler for your screen.\n\nMouse Guide helps you see where your cursor is and follow text on the screen. Perfect if you have difficulty seeing the cursor, or if you need a reading ruler when reading on the screen.";
-"onboarding.step1.title" = "1. Toggle Crosshairs";
-"onboarding.step1.description" = "Press ⇧⌃L (Shift + Control + L) to toggle crosshairs on and off at any time.";
-"onboarding.step2.title" = "2. Menu Bar Access";
-"onboarding.step2.description" = "Find the crosshair icon in your menu bar for quick access to settings and controls.";
-"onboarding.step3.title" = "3. Customize Appearance";
-"onboarding.step3.description" = "Choose colors, thickness, opacity, and orientation to match your preferences.";
-"onboarding.step4.title" = "4. Multi-Monitor Support";
-"onboarding.step4.description" = "Crosshairs work seamlessly across all your displays and adapt to screen changes.";
-"onboarding.permission.title" = "Accessibility Permission Required";
-"onboarding.permission.description" = "To enable global keyboard shortcuts, Mouse Guide needs Accessibility permission.\n\nPlease go to System Settings → Privacy & Security → Accessibility and enable Mouse Guide.";
-"onboarding.button.openSettings" = "Open System Settings";
-"onboarding.button.getStarted" = "Get Started";
-"onboarding.button.continue" = "Continue";
 
 /* Settings */
-"settings.title" = "Mouse Guide Settings";
 "settings.activation" = "Activation";
 "settings.keyboardShortcut" = "Keyboard Shortcut";
-"settings.current" = "Current:";
-"settings.change" = "Change...";
 "settings.shortcutHelp" = "Press the keyboard shortcut to toggle on/off";
 
-"settings.appearance" = "Appearance";
 "settings.crosshairColor" = "Color:";
 "settings.borderColor" = "Border Color:";
 "settings.invertColors" = "Adapt color automatically based on background";
@@ -53,7 +35,6 @@
 "settings.borderSize" = "Border Size:";
 
 "settings.orientation" = "Orientation";
-"settings.orientationLabel" = "Orientation:";
 "settings.orientation.horizontal" = "Horizontal";
 "settings.orientation.vertical" = "Vertical";
 "settings.orientation.both" = "Both";
@@ -65,8 +46,6 @@
 "settings.fixLength" = "Fix length";
 "settings.fixedLength" = "Fixed Length:";
 
-"settings.circle" = "Circle";
-"settings.showCircle" = "Show circle around cursor";
 "settings.circleRadius" = "Circle radius:";
 "settings.circleFillOpacity" = "Fill Opacity";
 "settings.circleFillOpacity.description" = "Opacity of the circle fill (0% = no fill)";
@@ -77,16 +56,13 @@
 "settings.lineStyle.dashed" = "Dashed";
 "settings.lineStyle.dotted" = "Dotted";
 
-"settings.behavior" = "Behavior";
 "settings.autoHide" = "Automatically hide when mouse pointer is hidden";
 "settings.launchAtLogin" = "Launch automatically at login";
 
 "settings.gliding" = "Gliding Cursor";
 "settings.glidingEnable" = "Enable gliding cursor";
 "settings.glidingSpeed" = "Travel Speed:";
-"settings.glidingSpeedHelp" = "Controls how fast the cursor glides";
 "settings.glidingDelay" = "Delay:";
-"settings.glidingDelayHelp" = "Delay before gliding starts";
 "settings.glidingNote" = "Note: Gliding cursor feature is currently experimental";
 
 /* Settings Categories */
@@ -102,15 +78,8 @@
 "language.english" = "English";
 
 /* Alerts */
-"alert.shortcut.title" = "Keyboard Shortcut";
-"alert.shortcut.message" = "To change the keyboard shortcut, you need to modify the settings. The default is ⇧⌃L (Shift + Control + L).\n\nYou can customize this in the app preferences.";
-"alert.ok" = "OK";
 
 /* Alerts - Accessibility */
-"alert.accessibility.message" = "Mouse Guide needs Accessibility permission to:";
-"alert.accessibility.feature1" = "• Use global keyboard shortcuts (⇧⌃L)";
-"alert.accessibility.feature2" = "• Show/hide crosshair with the keyboard";
-"alert.accessibility.instruction" = "Click \"Open Settings\" to grant permission.";
 
 /* Alerts - Input Monitoring */
 "alert.inputMonitoring.title" = "Input Monitoring Permission Missing";
@@ -121,29 +90,17 @@
 "alert.inputMonitoring.instruction" = "Click \"Open Settings\" to grant permission.";
 
 /* Alerts - Development */
-"alert.development.warning" = "⚠️ IMPORTANT: You're running from a development folder:";
-"alert.development.instruction" = "For best results, copy the app to /Applications first.";
-"alert.development.permissionNote" = "Permissions are granted per app path. If you move the app later, you'll need to grant permissions again.";
 
 /* Alerts - About */
-"alert.about.title" = "About Mouse Guide";
-"alert.copied.title" = "✅ Copied to clipboard";
 
 /* Permissions */
-"permission.accessibility.required" = "Accessibility Permission Required";
-"permission.accessibility.title" = "Accessibility";
-"permission.accessibility.description" = "Required for global keyboard shortcuts";
 "permission.button.openSettings" = "Open System Settings";
 
 /* Common */
 "common.ok" = "OK";
-"common.cancel" = "Cancel";
-"common.close" = "Close";
 
 /* Common Buttons */
 "common.button.later" = "Later";
-"common.button.disable" = "Disable Feature";
-"common.button.copyInfo" = "Copy Info";
 
 /* Appearance Tab */
 "appearance.colors" = "Colors";
@@ -154,7 +111,6 @@
 "appearance.colors.circleFill" = "Circle Fill";
 "appearance.colors.circleFill.description" = "Color of the circle fill";
 "appearance.dimensions" = "Dimensions";
-"appearance.opacity.description" = "Opacity (higher = more visible)";
 "appearance.opacity.description.lines" = "Opacity of the lines (higher = more visible)";
 "appearance.opacity.description.circle" = "Opacity of the circle edge (higher = more visible)";
 "appearance.opacity.description.edgePointers" = "Opacity of the pointers (higher = more visible)";
@@ -164,7 +120,6 @@
 "appearance.edgePointerThickness.description" = "Thickness of the edge pointers";
 "appearance.borderSize.description" = "Border thickness";
 "appearance.orientation.description" = "Choose horizontal, vertical or both directions. Reading line shows an unbroken horizontal line.";
-"appearance.readingLine" = "Reading line (unbroken line)";
 "appearance.length.description" = "Limit to a fixed length instead of the full screen";
 "appearance.fixedLength.description" = "Length of each line";
 
@@ -178,13 +133,10 @@
 "behavior.autoHideTyping.description" = "Automatically hide when you start typing on the keyboard";
 "behavior.autoHideTyping.delay" = "Show again after";
 "behavior.autoHideTyping.delay.description" = "How long to wait after the last keystroke before showing again";
-"behavior.autoHideTyping.permissions" = "Requires Accessibility and Input Monitoring permissions. See the About tab for help.";
 "behavior.launchAtLogin.description" = "Start the app automatically when you log in to your Mac";
 "behavior.gliding.description" = "Follow the mouse with a smooth, gliding motion";
 "behavior.gliding.speed.description" = "Controls how fast it glides towards the mouse";
 "behavior.gliding.delay.description" = "Delay before gliding starts after mouse movement";
-"behavior.gliding.note" = "Note: The gliding cursor feature is currently experimental";
-"behavior.shortcut.description" = "Press the keyboard shortcut to toggle on/off";
 
 /* Color Names */
 "color.red" = "Red";
@@ -210,8 +162,6 @@
 "about.copyright" = "Copyright © 2025";
 "about.permissions" = "System Permissions";
 "about.permissions.description" = "Mouse Guide needs the following permissions to work correctly.";
-"about.permission.accessibility" = "Accessibility";
-"about.permission.accessibility.description" = "Required for global keyboard shortcuts";
 "about.permission.inputMonitoring" = "Input Monitoring";
 "about.permission.inputMonitoring.description" = "Required for 'Hide while typing' feature";
 "about.permission.screenRecording" = "Screen Recording";
@@ -233,60 +183,26 @@
 "format.seconds" = "%.1f sec";
 "format.speed" = "%.2f";
 "format.delay" = "%.2f s";
-"format.minute.singular" = "minute";
-"format.minute.plural" = "minutes";
 
 /* License Tab */
 "license.status" = "License Status";
 "license.activated" = "Mouse Guide is activated";
 "license.thankyou" = "Thanks for your support!";
-"license.email" = "Licensed to:";
-"license.product" = "Product:";
-"license.activatedDate" = "Activated:";
-"license.key" = "License key:";
-"license.trial" = "Trial period";
-"license.trialDays" = "days remaining with full access";
 "license.free" = "Free version";
-"license.freeMinutes" = "until restart recommended";
-"license.freeRestrictions" = "Red crosshair only, 1px, one screen. Restart recommended every 10 minutes for best experience.";
-"license.freeRestart" = "Restart for new session";
+"license.freeRestrictions" = "A fixed red crosshair on one screen. Buy to unlock all six modes, your own colours and sizes, line styles, colour adaptation and all your displays.";
 "license.checking" = "Checking license status...";
 "license.buyTitle" = "Buy Mouse Guide";
 "license.buyDescription" = "Get full access without restrictions";
 "license.buyNow" = "Buy Now";
-"license.alreadyBought" = "Already purchased?";
-"license.enterKey" = "Enter the license key you received from Gumroad";
-"license.placeholder" = "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX";
-"license.activate" = "Activate License";
-"license.activating" = "Activating...";
 "license.activated.title" = "License Activated!";
 "license.activated.message" = "Mouse Guide is now fully activated. Thanks for your support!";
 "license.restorePurchases" = "Restore Purchases";
-"license.developerTesting" = "🧪 Developer Testing";
-"license.simulateExpiredTrial" = "Simulate expired trial (free mode)";
-"license.resetTrial" = "Reset trial (7 days full trial)";
 
 /* Free Session Expiry */
-"freeSession.expired.title" = "Restart Recommended";
-"freeSession.expired.message" = "Your 10 minutes are up.\n\nYou can continue working with the simple red crosshair, or:\n• Restart the app for a new session\n• Buy a license for full access without limitations";
-"freeSession.buyLicense" = "Buy License";
-"freeSession.restart" = "Restart App";
 
 /* Updates */
-"update.check" = "Check for updates";
-"update.checking" = "Checking...";
-"update.upToDate" = "You're up to date";
-"update.upToDateMessage" = "You have the latest version of Mouse Guide.";
-"update.available" = "Update available";
-"update.availableMessage" = "Version %@ is available. You have version %@.";
-"update.download" = "Download Update";
-"update.error" = "Could not check for updates";
-"update.errorMessage" = "Please check your internet connection and try again.";
-"update.currentVersion" = "Current version:";
 
 /* Accessibility */
-"accessibility.menubar.toggle.label" = "Toggle crosshair visibility";
-"accessibility.menubar.toggle.help" = "Turns the crosshair on or off";
 "accessibility.state.on" = "On";
 "accessibility.state.off" = "Off";
 "accessibility.state.selected" = "Selected";
@@ -304,13 +220,13 @@
 
 /* Accessibility - Orientations */
 "accessibility.orientation.horizontal.label" = "Horizontal";
+"accessibility.orientation.readingLine.label" = "Reading line";
+"accessibility.orientation.readingLine.hint" = "Shows an unbroken horizontal line that follows the pointer, for reading on screen";
 "accessibility.orientation.horizontal.hint" = "Sets the crosshair to display only a horizontal line";
 "accessibility.orientation.vertical.label" = "Vertical";
 "accessibility.orientation.vertical.hint" = "Sets the crosshair to display only a vertical line";
 "accessibility.orientation.both.label" = "Both";
 "accessibility.orientation.both.hint" = "Sets the crosshair to display both horizontal and vertical lines";
-"accessibility.orientation.readingLine.label" = "Reading Line";
-"accessibility.orientation.readingLine.hint" = "Displays a reading guide line that follows the cursor";
 "accessibility.orientation.edgePointers.label" = "Edge Pointers";
 "accessibility.orientation.edgePointers.hint" = "Displays pointer indicators at screen edges pointing to cursor location";
 "accessibility.orientation.circle.label" = "Circle";
@@ -350,7 +266,6 @@
 
 /* Accessibility - License */
 "accessibility.license.active" = "License active. Mouse Guide is fully activated. Thank you for your support";
-"accessibility.license.trial" = "Trial period. %d days remaining with full access";
 "accessibility.license.restore.label" = "Restore purchases";
 "accessibility.license.restore.hint" = "Syncs your purchases with Apple";
 "accessibility.license.buy.label" = "Buy Mouse Guide full version";
@@ -359,8 +274,6 @@
 "accessibility.license.restorePrevious.hint" = "Restores your purchase if you bought Mouse Guide on another device";
 
 /* Accessibility - Updates */
-"accessibility.update.check.label" = "Check for updates";
-"accessibility.update.check.hint" = "Checks if a newer version of Mouse Guide is available for download";
 
 /* Accessibility - Language */
 "accessibility.language.picker.label" = "Application language";
@@ -371,8 +284,6 @@
 "accessibility.reset.button.hint" = "This will restore all settings to their original defaults. This action requires confirmation";
 
 /* Accessibility - Permissions */
-"accessibility.permission.status.format" = "%@. %@. Status: %@";
-"accessibility.permission.openSettings.label" = "Open System Settings for %@";
 "accessibility.permission.openSettings.hint" = "Opens macOS System Settings to grant %@ permission";
 
 /* Accessibility - Color Presets */
@@ -387,15 +298,11 @@
 "accessibility.shortcutRecorder.recording" = "Press a key combination to record a new shortcut";
 
 /* Keyboard Shortcut Recorder */
+"shortcut.permission.missing" = "The shortcut does not work right now because Input Monitoring is missing.";
 "shortcut.recorder.placeholder" = "Click to record...";
 "shortcut.recorder.recording" = "⌨️ Press key combination...";
 
 /* Keyboard Shortcut Permission Alert */
-"shortcut.permission.title" = "Enable Keyboard Shortcut";
-"shortcut.permission.message" = "To use the keyboard shortcut ⇧⌃L, Mouse Guide needs Input Monitoring permission.\n\nYou can still use the menu bar to toggle on/off without this permission.";
-"shortcut.permission.openSettings" = "Open System Settings";
-"shortcut.permission.later" = "Later";
 
 /* Window Titles */
-"window.settings.title" = "Mouse Guide - Settings";
-"window.gettingStarted.title" = "Getting Started with Mouse Guide";
+"window.settings.title" = "Settings";

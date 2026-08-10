@@ -23,8 +23,6 @@ class LaunchAtLogin {
     }
 
     private func addToLoginItems() {
-        guard let bundleID = Bundle.main.bundleIdentifier else { return }
-
         if #available(macOS 13.0, *) {
             // Modern API for macOS 13+
             do {

@@ -5,6 +5,57 @@ import IOKit
 class CrosshairsSettings: ObservableObject {
     static let shared = CrosshairsSettings()
 
+    /// Key for the cached purchase flag in UserDefaults. StoreKitManager writes
+    /// it; everything else reads it. Declared here rather than on
+    /// StoreKitManager so non-main-actor code can reach it.
+    static let purchaseCacheKey = "isPurchased"
+
+    /// Single source of truth for default values. Both `init` and
+    /// `resetToDefaults()` read from here, so the two cannot drift apart -
+    /// which is how reset previously ended up missing seven settings.
+    enum Defaults {
+        static let crosshairColor = Color.red
+        static let borderColor = Color.black
+        static let circleFillColor = Color.red
+        static let opacity = 0.75
+        static let centerRadius = 20.0
+        static let thickness = 5.0
+        static let edgePointerThickness = 1.0
+        static let borderSize = 1.0
+        static let fixedLength = 200.0
+        static let useFixedLength = false
+        static let useReadingLine = false
+        static let autoHideWhenPointerHidden = false
+        static let autoHideWhileTyping = false
+        static let autoHideTypingDelay = 1.5
+        static let invertColors = false
+        static let orientation = CrosshairOrientation.both
+        static let activationKey = "L"
+        static let activationModifiers: NSEvent.ModifierFlags = [.shift, .control]
+        static let glidingEnabled = false
+        static let glidingSpeed = 0.5
+        static let glidingDelay = 0.2
+        static let circleRadius = 50.0
+        static let circleFillOpacity = 0.0
+        static let lineStyle = LineStyle.solid
+    }
+
+    /// Appearance used when the full version has not been purchased.
+    /// Deliberately sparse - one fixed look, no customisation - but legible.
+    /// The 1px border is not a feature; it is what keeps a red line visible
+    /// against a red or dark background, and the whole point of the app is
+    /// being seen.
+    enum FreeTier {
+        static let crosshairColor = Color.red
+        static let borderColor = Color.black
+        static let thickness = 2.0
+        static let borderSize = 1.0
+        static let centerRadius = 10.0
+        static let opacity = 1.0
+        static let orientation = CrosshairOrientation.both
+        static let lineStyle = LineStyle.solid
+    }
+
     // Color settings
     @Published var crosshairColor: Color {
         didSet { saveSetting("crosshairColor", Self.colorToHex(crosshairColor)) }
@@ -118,88 +169,72 @@ class CrosshairsSettings: ObservableObject {
         }
     }
 
-    // Shareware tracking
-    var hasSeenSharewareReminder: Bool {
-        get { UserDefaults.standard.bool(forKey: "hasSeenSharewareReminder") }
-        set { UserDefaults.standard.set(newValue, forKey: "hasSeenSharewareReminder") }
-    }
-
-    var isPurchased: Bool {
-        get { UserDefaults.standard.bool(forKey: "isPurchased") }
-        set { UserDefaults.standard.set(newValue, forKey: "isPurchased") }
-    }
-
     private init() {
-        // Load or set defaults
-        self.crosshairColor = Self.colorFromHex(UserDefaults.standard.string(forKey: "crosshairColor") ?? "#FF0000") ?? .red
-        self.borderColor = Self.colorFromHex(UserDefaults.standard.string(forKey: "borderColor") ?? "#000000") ?? .black
-        self.circleFillColor = Self.colorFromHex(UserDefaults.standard.string(forKey: "circleFillColor") ?? "#FF0000") ?? .red
+        let defaults = UserDefaults.standard
 
-        let opacity = UserDefaults.standard.double(forKey: "opacity")
-        self.opacity = opacity == 0 ? 0.75 : opacity
+        self.crosshairColor = Self.colorFromHex(defaults.string(forKey: "crosshairColor") ?? "") ?? Defaults.crosshairColor
+        self.borderColor = Self.colorFromHex(defaults.string(forKey: "borderColor") ?? "") ?? Defaults.borderColor
+        self.circleFillColor = Self.colorFromHex(defaults.string(forKey: "circleFillColor") ?? "") ?? Defaults.circleFillColor
 
-        let centerRadius = UserDefaults.standard.double(forKey: "centerRadius")
-        self.centerRadius = centerRadius == 0 ? 20 : centerRadius
+        // Read through `object(forKey:)` rather than `double(forKey:)`: the
+        // latter returns 0 for a missing key, which made a genuine stored 0
+        // (border size, center radius) indistinguishable from "unset" and
+        // silently reverted it to the default on next launch.
+        self.opacity = Self.storedDouble("opacity", default: Defaults.opacity)
+        self.centerRadius = Self.storedDouble("centerRadius", default: Defaults.centerRadius)
+        self.thickness = Self.storedDouble("thickness", default: Defaults.thickness)
+        self.edgePointerThickness = Self.storedDouble("edgePointerThickness", default: Defaults.edgePointerThickness)
+        self.borderSize = Self.storedDouble("borderSize", default: Defaults.borderSize)
+        self.fixedLength = Self.storedDouble("fixedLength", default: Defaults.fixedLength)
+        self.autoHideTypingDelay = Self.storedDouble("autoHideTypingDelay", default: Defaults.autoHideTypingDelay)
+        self.glidingSpeed = Self.storedDouble("glidingSpeed", default: Defaults.glidingSpeed)
+        self.glidingDelay = Self.storedDouble("glidingDelay", default: Defaults.glidingDelay)
+        self.circleRadius = Self.storedDouble("circleRadius", default: Defaults.circleRadius)
+        self.circleFillOpacity = Self.storedDouble("circleFillOpacity", default: Defaults.circleFillOpacity)
 
-        let thickness = UserDefaults.standard.double(forKey: "thickness")
-        self.thickness = thickness == 0 ? 5 : thickness
+        self.useFixedLength = Self.storedBool("useFixedLength", default: Defaults.useFixedLength)
+        self.useReadingLine = Self.storedBool("useReadingLine", default: Defaults.useReadingLine)
+        self.autoHideWhenPointerHidden = Self.storedBool("autoHideWhenPointerHidden", default: Defaults.autoHideWhenPointerHidden)
+        self.autoHideWhileTyping = Self.storedBool("autoHideWhileTyping", default: Defaults.autoHideWhileTyping)
+        self.invertColors = Self.storedBool("invertColors", default: Defaults.invertColors)
+        self.glidingEnabled = Self.storedBool("glidingEnabled", default: Defaults.glidingEnabled)
 
-        let edgePointerThickness = UserDefaults.standard.double(forKey: "edgePointerThickness")
-        self.edgePointerThickness = edgePointerThickness == 0 ? 1 : edgePointerThickness
+        let orientationRaw = defaults.string(forKey: "orientation") ?? Defaults.orientation.rawValue
+        self.orientation = CrosshairOrientation(rawValue: orientationRaw) ?? Defaults.orientation
 
-        let borderSize = UserDefaults.standard.double(forKey: "borderSize")
-        self.borderSize = borderSize == 0 ? 1 : borderSize
+        let lineStyleRaw = defaults.string(forKey: "lineStyle") ?? Defaults.lineStyle.rawValue
+        self.lineStyle = LineStyle(rawValue: lineStyleRaw) ?? Defaults.lineStyle
 
-        let fixedLength = UserDefaults.standard.double(forKey: "fixedLength")
-        self.fixedLength = fixedLength == 0 ? 200 : fixedLength
-
-        self.useFixedLength = UserDefaults.standard.bool(forKey: "useFixedLength")
-        self.useReadingLine = UserDefaults.standard.bool(forKey: "useReadingLine")
-        self.autoHideWhenPointerHidden = UserDefaults.standard.bool(forKey: "autoHideWhenPointerHidden")
-        self.autoHideWhileTyping = UserDefaults.standard.bool(forKey: "autoHideWhileTyping")
-
-        let autoHideTypingDelay = UserDefaults.standard.double(forKey: "autoHideTypingDelay")
-        self.autoHideTypingDelay = autoHideTypingDelay == 0 ? 1.5 : autoHideTypingDelay
-
-        self.invertColors = UserDefaults.standard.bool(forKey: "invertColors")
-        self.glidingEnabled = UserDefaults.standard.bool(forKey: "glidingEnabled")
-
-        let orientationRaw = UserDefaults.standard.string(forKey: "orientation") ?? CrosshairOrientation.both.rawValue
-        self.orientation = CrosshairOrientation(rawValue: orientationRaw) ?? .both
-
-        self.activationKey = UserDefaults.standard.string(forKey: "activationKey") ?? "L"
-        let modifiersRaw = UserDefaults.standard.integer(forKey: "activationModifiers")
-        self.activationModifiers = modifiersRaw == 0 ? [.shift, .control] : NSEvent.ModifierFlags(rawValue: UInt(modifiersRaw))
-
-        let glidingSpeed = UserDefaults.standard.double(forKey: "glidingSpeed")
-        self.glidingSpeed = glidingSpeed == 0 ? 0.5 : glidingSpeed
-
-        let glidingDelay = UserDefaults.standard.double(forKey: "glidingDelay")
-        self.glidingDelay = glidingDelay == 0 ? 0.2 : glidingDelay
-
-        // Circle radius
-        let circleRadius = UserDefaults.standard.double(forKey: "circleRadius")
-        self.circleRadius = circleRadius == 0 ? 50 : circleRadius
-
-        // Circle fill opacity
-        self.circleFillOpacity = UserDefaults.standard.double(forKey: "circleFillOpacity")
-
-        // Line style
-        let lineStyleRaw = UserDefaults.standard.string(forKey: "lineStyle") ?? LineStyle.solid.rawValue
-        self.lineStyle = LineStyle(rawValue: lineStyleRaw) ?? .solid
+        self.activationKey = defaults.string(forKey: "activationKey") ?? Defaults.activationKey
+        let modifiersRaw = defaults.integer(forKey: "activationModifiers")
+        self.activationModifiers = modifiersRaw == 0 ? Defaults.activationModifiers : NSEvent.ModifierFlags(rawValue: UInt(modifiersRaw))
 
         // Language - default to system language if available, otherwise English
-        let savedLanguage = UserDefaults.standard.string(forKey: "language")
-        if let savedLanguage = savedLanguage {
+        if let savedLanguage = defaults.string(forKey: "language") {
             self.language = savedLanguage
         } else {
-            // Detect system language
             let systemLanguage = Locale.preferredLanguages.first ?? "en"
             self.language = systemLanguage.hasPrefix("da") ? "da" : "en"
         }
 
-        // Set initial language
         LocalizationManager.shared.setLanguage(self.language)
+
+        self.hasFullAccess = defaults.bool(forKey: Self.purchaseCacheKey)
+        NotificationCenter.default.addObserver(
+            forName: .init("PurchaseStateChanged"),
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.refreshPurchaseState()
+        }
+    }
+
+    private static func storedDouble(_ key: String, default fallback: Double) -> Double {
+        (UserDefaults.standard.object(forKey: key) as? Double) ?? fallback
+    }
+
+    private static func storedBool(_ key: String, default fallback: Bool) -> Bool {
+        (UserDefaults.standard.object(forKey: key) as? Bool) ?? fallback
     }
 
     private func saveSetting<T>(_ key: String, _ value: T) {
@@ -208,52 +243,35 @@ class CrosshairsSettings: ObservableObject {
         NotificationCenter.default.post(name: .init("CrosshairsSettingsChanged"), object: nil)
     }
 
+    /// Restores every crosshair setting to its default. Each assignment persists
+    /// itself through the property's `didSet`, so there is no separate save
+    /// list to keep in sync. `language` is deliberately excluded - it is a user
+    /// preference, not a crosshair setting.
     func resetToDefaults() {
-        // Reset all settings to their default values
-        self.crosshairColor = .red
-        self.borderColor = .black
-        self.circleFillColor = .red
-        self.opacity = 0.75
-        self.centerRadius = 20
-        self.thickness = 5
-        self.edgePointerThickness = 1
-        self.borderSize = 1
-        self.fixedLength = 200
-        self.useFixedLength = false
-        self.useReadingLine = false
-        self.autoHideWhenPointerHidden = false
-        self.autoHideWhileTyping = false
-        self.autoHideTypingDelay = 1.5
-        self.invertColors = false
-        self.glidingEnabled = false
-        self.orientation = .both
-        self.activationKey = "L"
-        self.activationModifiers = [.shift, .control]
-        self.glidingSpeed = 0.5
-        self.glidingDelay = 0.2
-
-        // Save to UserDefaults
-        saveSetting("crosshairColor", Self.colorToHex(.red))
-        saveSetting("borderColor", Self.colorToHex(.black))
-        saveSetting("opacity", 0.75)
-        saveSetting("centerRadius", 20.0)
-        saveSetting("thickness", 5.0)
-        saveSetting("borderSize", 1.0)
-        saveSetting("fixedLength", 200.0)
-        saveSetting("useFixedLength", false)
-        saveSetting("autoHideWhenPointerHidden", false)
-        saveSetting("autoHideWhileTyping", false)
-        saveSetting("autoHideTypingDelay", 1.5)
-        saveSetting("invertColors", false)
-        saveSetting("glidingEnabled", false)
-        saveSetting("orientation", CrosshairOrientation.both.rawValue)
-        saveSetting("activationKey", "L")
-        saveSetting("activationModifiers", NSEvent.ModifierFlags([.shift, .control]).rawValue)
-        saveSetting("glidingSpeed", 0.5)
-        saveSetting("glidingDelay", 0.2)
-
-        // Notify that settings have been reset
-        NotificationCenter.default.post(name: .init("CrosshairsSettingsChanged"), object: nil)
+        crosshairColor = Defaults.crosshairColor
+        borderColor = Defaults.borderColor
+        circleFillColor = Defaults.circleFillColor
+        opacity = Defaults.opacity
+        centerRadius = Defaults.centerRadius
+        thickness = Defaults.thickness
+        edgePointerThickness = Defaults.edgePointerThickness
+        borderSize = Defaults.borderSize
+        fixedLength = Defaults.fixedLength
+        useFixedLength = Defaults.useFixedLength
+        useReadingLine = Defaults.useReadingLine
+        autoHideWhenPointerHidden = Defaults.autoHideWhenPointerHidden
+        autoHideWhileTyping = Defaults.autoHideWhileTyping
+        autoHideTypingDelay = Defaults.autoHideTypingDelay
+        invertColors = Defaults.invertColors
+        orientation = Defaults.orientation
+        activationKey = Defaults.activationKey
+        activationModifiers = Defaults.activationModifiers
+        glidingEnabled = Defaults.glidingEnabled
+        glidingSpeed = Defaults.glidingSpeed
+        glidingDelay = Defaults.glidingDelay
+        circleRadius = Defaults.circleRadius
+        circleFillOpacity = Defaults.circleFillOpacity
+        lineStyle = Defaults.lineStyle
     }
 
     // Helper functions for color conversion
@@ -283,57 +301,76 @@ class CrosshairsSettings: ObservableObject {
         return Color(red: r, green: g, blue: b)
     }
 
-    // MARK: - License-based Feature Availability
+    // MARK: - Purchase-based Feature Availability
 
-    var hasFullAccess: Bool {
-        // Full access during trial or with license
-        if isPurchased {
-            NSLog("🔓 hasFullAccess = true (isPurchased)")
-            return true
-        }
+    /// True when the full version has been purchased.
+    ///
+    /// Held in memory rather than read on demand: every `effective*` property
+    /// consults it, and the draw path touches roughly ten of them per frame per
+    /// screen. It is refreshed from the cache StoreKitManager writes, whenever
+    /// `PurchaseStateChanged` fires.
+    ///
+    /// Known trade-off: the underlying flag can be forged with `defaults write`,
+    /// so gating is not tamper-proof. Accepted deliberately for a low-priced
+    /// utility - the alternative costs a visible flash at launch.
+    @Published private(set) var hasFullAccess: Bool = false
 
-        let licenseState = LicenseManager.shared.licenseState
-        NSLog("🔐 Checking hasFullAccess, licenseState = \(licenseState)")
-        switch licenseState {
-        case .fullTrial, .licensed:
-            NSLog("🔓 hasFullAccess = true (trial/licensed)")
-            return true
-        case .free, .freeExpired, .checking:
-            NSLog("🔒 hasFullAccess = false (free/freeExpired/checking)")
-            return false
-        }
+    private func refreshPurchaseState() {
+        let latest = UserDefaults.standard.bool(forKey: Self.purchaseCacheKey)
+        guard latest != hasFullAccess else { return }
+        hasFullAccess = latest
+        NotificationCenter.default.post(name: .init("CrosshairsSettingsChanged"), object: nil)
     }
 
     var effectiveCrosshairColor: Color {
-        hasFullAccess ? crosshairColor : .red
+        hasFullAccess ? crosshairColor : FreeTier.crosshairColor
     }
 
     var effectiveBorderColor: Color {
-        hasFullAccess ? borderColor : .black
+        hasFullAccess ? borderColor : FreeTier.borderColor
     }
 
     var effectiveCircleFillColor: Color {
-        hasFullAccess ? circleFillColor : .red
+        hasFullAccess ? circleFillColor : FreeTier.crosshairColor
     }
 
     var effectiveThickness: Double {
-        hasFullAccess ? thickness : 1.0
+        hasFullAccess ? thickness : FreeTier.thickness
     }
 
     var effectiveOpacity: Double {
-        hasFullAccess ? opacity : 1.0
+        hasFullAccess ? opacity : FreeTier.opacity
     }
 
     var effectiveCenterRadius: Double {
-        hasFullAccess ? centerRadius : 5.0
+        hasFullAccess ? centerRadius : FreeTier.centerRadius
     }
 
     var effectiveBorderSize: Double {
-        hasFullAccess ? borderSize : 0.0
+        hasFullAccess ? borderSize : FreeTier.borderSize
     }
 
     var effectiveInvertColors: Bool {
         hasFullAccess ? invertColors : false
+    }
+
+    /// Locked to a fixed value for free users rather than "whatever was last
+    /// selected", so nobody is stranded in e.g. circle mode after buying and
+    /// refunding, or after upgrading from an older build.
+    var effectiveOrientation: CrosshairOrientation {
+        hasFullAccess ? orientation : FreeTier.orientation
+    }
+
+    var effectiveLineStyle: LineStyle {
+        hasFullAccess ? lineStyle : FreeTier.lineStyle
+    }
+
+    var effectiveUseFixedLength: Bool {
+        hasFullAccess ? useFixedLength : false
+    }
+
+    var effectiveUseReadingLine: Bool {
+        hasFullAccess ? useReadingLine : false
     }
 
     // MARK: - Permission Helpers

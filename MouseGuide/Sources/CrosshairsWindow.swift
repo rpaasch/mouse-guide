@@ -19,9 +19,44 @@ class CrosshairsWindowManager {
     private var debugFrameCount = 0  // For debug printing
     private var keyboardEventMonitor: Any?  // Global monitor - works when app is NOT frontmost
     private var localKeyboardEventMonitor: Any?  // Local monitor - works when app IS frontmost
-    private var isHiddenByTyping = false
     private var unhideTimer: Timer?
     private var lastAutoHideWhileTypingValue: Bool = false
+
+    // Visibility is driven by two independent reasons to hide. Neither may
+    // touch the windows directly - see applyVisibility().
+    private var hiddenByTyping = false
+    private var hiddenByPointerHidden = false
+    private var windowsVisible = true
+
+    private var shouldBeVisible: Bool { !hiddenByTyping && !hiddenByPointerHidden }
+
+    /// The only place that orders the overlay windows on or off screen.
+    ///
+    /// Both hide reasons funnel through here so they cannot un-hide each
+    /// other: if typing hid the overlay and the pointer then reappears, the
+    /// overlay must stay hidden until typing stops too. Re-seating the mouse
+    /// tracker on the way back in also lives here, because position updates
+    /// are paused while hidden and the crosshair would otherwise flash at a
+    /// stale location before catching up.
+    private func applyVisibility() {
+        guard windowsVisible != shouldBeVisible else { return }
+        windowsVisible = shouldBeVisible
+
+        if windowsVisible {
+            let currentMouseLocation = NSEvent.mouseLocation
+            mouseTracker.position = currentMouseLocation
+            targetPosition = currentMouseLocation
+            isFirstFrame = true   // skip gliding delay so it appears immediately
+            lastUpdateTime = 0    // treat next frame as the first
+            for window in windows {
+                window.orderFrontRegardless()
+            }
+        } else {
+            for window in windows {
+                window.orderOut(nil)
+            }
+        }
+    }
 
     func show() {
         NSLog("🚀 show() ENTRY - calling hide() first")
@@ -29,9 +64,7 @@ class CrosshairsWindowManager {
         NSLog("✅ hide() completed successfully")
 
         let settings = CrosshairsSettings.shared
-        let licenseState = LicenseManager.shared.licenseState
-
-        NSLog("🚀 show() called - licenseState = \(licenseState), hasFullAccess = \(settings.hasFullAccess)")
+        NSLog("🚀 show() called - hasFullAccess = \(settings.hasFullAccess)")
 
         // In free version, only show on main screen
         let screensToUse: [NSScreen]
@@ -85,11 +118,11 @@ class CrosshairsWindowManager {
             object: nil
         )
 
-        // Listen for license state changes
+        // Listen for purchase state changes
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(licenseStateChanged),
-            name: NSNotification.Name("LicenseStateChanged"),
+            selector: #selector(purchaseStateChanged),
+            name: NSNotification.Name("PurchaseStateChanged"),
             object: nil
         )
     }
@@ -111,9 +144,7 @@ class CrosshairsWindowManager {
             } else {
                 stopKeyboardMonitoring()
                 // Show windows if they were hidden
-                if isHiddenByTyping {
-                    unhideAfterTyping()
-                }
+                unhideAfterTyping()
             }
         }
 
@@ -131,8 +162,8 @@ class CrosshairsWindowManager {
         }
     }
 
-    @objc private func licenseStateChanged() {
-        NSLog("📢 License state changed - updating crosshairs")
+    @objc private func purchaseStateChanged() {
+        NSLog("📢 Purchase state changed - updating crosshairs")
 
         // Check if we need to recreate windows (e.g., multi-monitor restriction)
         let currentWindowCount = windows.count
@@ -161,6 +192,11 @@ class CrosshairsWindowManager {
         stopKeyboardMonitoring()
         unhideTimer?.invalidate()
         unhideTimer = nil
+
+        // Reset visibility state so the next show() starts from a clean slate
+        hiddenByTyping = false
+        hiddenByPointerHidden = false
+        windowsVisible = true
 
         // Stop display links on all views BEFORE removing windows
         for window in windows {
@@ -243,10 +279,15 @@ class CrosshairsWindowManager {
     }
 
     private func updateCursorPosition() {
-        // Don't update position while hidden by typing
-        if isHiddenByTyping {
-            return
-        }
+        // Auto-hide when the system pointer is hidden (fullscreen video,
+        // presentations). NSCursor.currentSystem going nil is a heuristic for
+        // that state, not a documented API - if it proves unreliable in
+        // practice this feature is the thing to re-examine first.
+        hiddenByPointerHidden = settings.autoHideWhenPointerHidden && NSCursor.currentSystem == nil
+        applyVisibility()
+
+        // Don't update position while hidden - applyVisibility() re-seats it
+        guard windowsVisible else { return }
 
         // ALWAYS log first call to verify timer is working
         if debugFrameCount == 0 {
@@ -361,13 +402,10 @@ class CrosshairsWindowManager {
 
             print("⌨️ Key pressed: \(event.charactersIgnoringModifiers ?? "unknown")")
 
-            // Hide windows
-            if !self.isHiddenByTyping {
+            if !self.hiddenByTyping {
                 print("🙈 Hiding crosshairs due to typing")
-                self.isHiddenByTyping = true
-                for window in self.windows {
-                    window.orderOut(nil)
-                }
+                self.hiddenByTyping = true
+                self.applyVisibility()
             }
 
             // Reset unhide timer
@@ -379,25 +417,11 @@ class CrosshairsWindowManager {
     }
 
     private func unhideAfterTyping() {
-        guard isHiddenByTyping else { return }
+        guard hiddenByTyping else { return }
 
         print("👀 Showing crosshairs again after typing stopped")
-
-        // FIRST: Update mouse position IMMEDIATELY before clearing flag
-        // This ensures views have the correct position when they're shown
-        let currentMouseLocation = NSEvent.mouseLocation
-        mouseTracker.position = currentMouseLocation
-        targetPosition = currentMouseLocation
-
-        // Clear flag to allow position updates
-        isHiddenByTyping = false
-        isFirstFrame = true  // Skip gliding delay so cursor appears immediately
-        lastUpdateTime = 0  // Reset timing so next frame is treated as first
-
-        // Show windows again
-        for window in windows {
-            window.orderFrontRegardless()
-        }
+        hiddenByTyping = false
+        applyVisibility()
     }
 
     deinit {
@@ -545,11 +569,6 @@ class CrosshairsNativeView: NSView {
             y: screenFrame.maxY - mouseLocation.y  // Flip Y coordinate
         )
 
-        // Debug
-        if Int.random(in: 0...60) == 0 {
-            print("🎨 Screen \(screenFrame): mouse=\(mouseLocation), center=\(center), bounds=\(bounds.size)")
-        }
-
         // Draw crosshairs
         drawCrosshairs(in: context, center: center, viewSize: bounds.size)
     }
@@ -560,7 +579,9 @@ class CrosshairsNativeView: NSView {
         let centerRadius = CGFloat(settings.effectiveCenterRadius)
         let baseBorderSize = CGFloat(settings.effectiveBorderSize)
 
-        NSLog("🎨 Drawing with thickness=\(thickness), centerRadius=\(centerRadius), hasFullAccess=\(settings.hasFullAccess)")
+        // No logging in here: this runs on every display-link tick, on every
+        // screen. NSLog serialises a string and hits the unified log each time,
+        // which at 120 Hz across two displays is hundreds of writes a second.
 
         // Get colors
         let crosshairColor: NSColor
@@ -609,7 +630,7 @@ class CrosshairsNativeView: NSView {
         context.setLineCap(.round)
 
         // Set line style (solid, dashed, dotted)
-        switch settings.lineStyle {
+        switch settings.effectiveLineStyle {
         case .solid:
             context.setLineDash(phase: 0, lengths: [])
         case .dashed:
@@ -621,7 +642,7 @@ class CrosshairsNativeView: NSView {
         }
 
         // Draw circle orientation mode
-        if settings.orientation == .circle {
+        if settings.effectiveOrientation == .circle {
             let circleRadius = CGFloat(settings.circleRadius)
             let circlePath = CGPath(ellipseIn: CGRect(
                 x: center.x - circleRadius,
@@ -657,11 +678,11 @@ class CrosshairsNativeView: NSView {
         }
 
         // Draw horizontal line
-        if settings.orientation == .horizontal || settings.orientation == .both {
+        if settings.effectiveOrientation == .horizontal || settings.effectiveOrientation == .both {
             let leftStart: CGPoint
             let rightEnd: CGPoint
 
-            if settings.useFixedLength {
+            if settings.effectiveUseFixedLength {
                 let halfLength = CGFloat(settings.fixedLength) / 2
                 leftStart = CGPoint(x: max(0, center.x - halfLength), y: center.y)
                 rightEnd = CGPoint(x: min(viewSize.width, center.x + halfLength), y: center.y)
@@ -671,7 +692,7 @@ class CrosshairsNativeView: NSView {
             }
 
             // Check if reading line mode is enabled (only for horizontal orientation)
-            let useReadingLine = (settings.orientation == .horizontal && settings.useReadingLine)
+            let useReadingLine = (settings.effectiveOrientation == .horizontal && settings.effectiveUseReadingLine)
 
             if useReadingLine {
                 // Reading line mode: draw continuous line with no gap
@@ -720,11 +741,11 @@ class CrosshairsNativeView: NSView {
         }
         
         // Draw vertical line
-        if settings.orientation == .vertical || settings.orientation == .both {
+        if settings.effectiveOrientation == .vertical || settings.effectiveOrientation == .both {
             let topStart: CGPoint
             let bottomEnd: CGPoint
             
-            if settings.useFixedLength {
+            if settings.effectiveUseFixedLength {
                 let halfLength = CGFloat(settings.fixedLength) / 2
                 topStart = CGPoint(x: center.x, y: max(0, center.y - halfLength))
                 bottomEnd = CGPoint(x: center.x, y: min(viewSize.height, center.y + halfLength))
@@ -760,7 +781,7 @@ class CrosshairsNativeView: NSView {
         }
 
         // Draw edge pointers
-        if settings.orientation == .edgePointers {
+        if settings.effectiveOrientation == .edgePointers {
             // Pointer size controlled by edgePointerThickness
             let pointerSize = (edgePointerThickness * 4) + centerRadius / 4
 

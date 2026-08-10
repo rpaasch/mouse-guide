@@ -44,8 +44,8 @@ Tilgængelighed
 • Hjælper med at spore markøren
 • Læselinje-tilstand til læsning på skærmen
 
-**PRØVEPERIODE:**
-Prøv Mouse Guide gratis i 7 dage med alle funktioner. Derefter kan du fortsætte gratis med basisfunktioner eller købe fuld adgang.
+**GRATIS OG FULD VERSION:**
+Mouse Guide er gratis at bruge og viser et fast rødt trådkors på én skærm. Et enkelt køb i appen låser op for alle seks tilstande, egne farver og størrelser, linjestile, automatisk farvetilpasning og alle dine skærme. Ingen abonnement, ingen tidsgrænse.
 
 **PRIVATLIV:**
 Mouse Guide indsamler ingen personlige data. Appen kræver kun de tilladelser der er nødvendige for at fungere (Input Monitoring til tastaturgenveje, Screen Recording til farvetilpasning).

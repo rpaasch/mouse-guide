@@ -16,17 +16,8 @@ struct MouseGuideApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     var crosshairsWindow: CrosshairsWindow?
     var settingsWindow: NSWindow?
-    var sharewareWindow: NSWindow?
     var keyboardShortcutMonitor: KeyboardShortcutMonitor?
-    var sessionExpiryWindow: NSWindow?
     var menuBarManager: MenuBarManager?
-
-    // Check if global hotkeys work (only requires keyboard monitor to be active)
-    var canShowShortcutInMenu: Bool {
-        // NSEvent-based shortcuts only require Input Monitoring, not Accessibility
-        // Just check if keyboard monitor is actively running
-        return keyboardShortcutMonitor != nil
-    }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSLog("🚀 App launching...")
@@ -39,22 +30,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSLog("✅ Set activation policy to accessory")
 
         // Initialize settings
-        let settings = CrosshairsSettings.shared
+        _ = CrosshairsSettings.shared
         NSLog("✅ Settings initialized")
 
-        // Initialize license manager and check status
-        let licenseManager = LicenseManager.shared
-        licenseManager.checkLicenseStatus()
-        NSLog("✅ License manager initialized")
-
-        // Setup notification observer for free session expiry
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleFreeSessionExpiry),
-            name: NSNotification.Name("FreeSessionExpired"),
-            object: nil
-        )
-        NSLog("✅ Free session expiry observer registered")
+        // Resolve purchase status; StoreKitManager caches the result and posts
+        // PurchaseStateChanged when it lands, which triggers a redraw.
+        _ = StoreKitManager.shared
+        NSLog("✅ StoreKit manager initialized")
 
         // Setup notification observer for crosshairs visibility changes (for MenuBarManager)
         NotificationCenter.default.addObserver(
@@ -69,6 +51,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menuBarManager = MenuBarManager(appDelegate: self)
         NSLog("✅ MenuBarManager initialized")
 
+        // Explain the app before macOS asks for anything. A permission prompt
+        // is the first thing a new user would otherwise see, from an app with
+        // no Dock icon and no window - which reads as a failed install.
+        showFirstRunIntroductionIfNeeded()
+
         // Proactively request Input Monitoring permission at launch
         // This ensures keyboard shortcuts work globally from the start
         requestInputMonitoringPermission()
@@ -76,6 +63,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Setup keyboard monitor (will work after permission is granted)
         setupKeyboardMonitor()
         NSLog("✅ App initialized with keyboard shortcuts")
+    }
+
+    private static let firstRunKey = "hasCompletedFirstRun"
+
+    private func showFirstRunIntroductionIfNeeded() {
+        guard !UserDefaults.standard.bool(forKey: Self.firstRunKey) else { return }
+        UserDefaults.standard.set(true, forKey: Self.firstRunKey)
+
+        let alert = NSAlert()
+        alert.messageText = LocalizedString.welcomeTitle
+        alert.informativeText = LocalizedString.welcomeMessage
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: LocalizedString.welcomeContinue)
+        alert.runModal()
     }
 
     private func requestInputMonitoringPermission() {
@@ -210,66 +211,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         print("  ✅ Settings window shown")
-    }
-
-    @objc func handleFreeSessionExpiry() {
-        print("⏰ Free session expired - 10 minutes up")
-
-        // DON'T hide crosshairs - user can continue working
-        // hideCrosshairs()
-
-        // Show restart recommendation dialog
-        showFreeSessionExpiryDialog()
-    }
-
-    func showFreeSessionExpiryDialog() {
-        let alert = NSAlert()
-        alert.messageText = LocalizedString.freeSessionExpiredTitle
-        alert.informativeText = LocalizedString.freeSessionExpiredMessage
-        alert.alertStyle = .informational
-        alert.addButton(withTitle: LocalizedString.freeSessionBuyLicense)
-        alert.addButton(withTitle: LocalizedString.freeSessionRestart)
-        alert.addButton(withTitle: LocalizedString.commonClose)
-
-        let response = alert.runModal()
-
-        switch response {
-        case .alertFirstButtonReturn:
-            // Buy License - open Settings to License tab
-            showSettings()
-            // Don't terminate - let user purchase through StoreKit
-
-        case .alertSecondButtonReturn:
-            // Restart - use a helper script to restart the app
-            restartApp()
-
-        case .alertThirdButtonReturn:
-            // Close - do nothing, user can continue with 1px crosshair
-            print("✅ User chose to continue with free version")
-
-        default:
-            // Close button or ESC
-            print("✅ User closed dialog")
-        }
-    }
-
-    private func restartApp() {
-        // Get the app path
-        let appPath = Bundle.main.bundlePath
-
-        // Use a simple shell script to wait and reopen the app
-        let script = """
-        sleep 0.5
-        open "\(appPath)"
-        """
-
-        let task = Process()
-        task.launchPath = "/bin/sh"
-        task.arguments = ["-c", script]
-        task.launch()
-
-        // Terminate this instance
-        NSApp.terminate(nil)
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
