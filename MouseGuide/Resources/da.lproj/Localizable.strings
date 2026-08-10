@@ -56,7 +56,6 @@
 "settings.lineStyle.dashed" = "Stribled";
 "settings.lineStyle.dotted" = "Prikket";
 
-"settings.autoHide" = "Skjul automatisk når musemarkøren er skjult";
 "settings.launchAtLogin" = "Start automatisk ved login";
 
 "settings.gliding" = "Glidende markør";
@@ -128,7 +127,10 @@
 "behavior.colorAdaptation.description" = "Vælg automatisk sort eller hvid farve baseret på baggrunden under markøren";
 "behavior.colorAdaptation.info" = "Når denne er slået til, ignoreres dine valgte farver i Udseende-fanen";
 "behavior.general" = "Generelt";
-"behavior.autoHide.description" = "Skjul automatisk når systemets musemarkør bliver skjult";
+"settings.autoHideFullscreen" = "Skjul i fuldskærm når musen står stille";
+"behavior.autoHideFullscreen.description" = "Skjul trådkorset når et program fylder hele skærmen og musen ikke har bevæget sig i et par sekunder — typisk mens du ser video";
+"accessibility.behavior.autoHideFullscreen.label" = "Skjul i fuldskærm når musen står stille";
+"accessibility.behavior.autoHideFullscreen.hint" = "Skjuler trådkorset mens et program fylder hele skærmen og musen ligger stille, så det ikke ligger hen over en video";
 "behavior.autoHideTyping" = "Skjul mens du skriver";
 "behavior.autoHideTyping.description" = "Skjul automatisk når du begynder at skrive på tastaturet";
 "behavior.autoHideTyping.delay" = "Vis igen efter";
@@ -255,8 +257,6 @@
 /* Accessibility - Behaviors */
 "accessibility.behavior.colorAdaptation.label" = "Tilpas farve automatisk baseret på baggrund";
 "accessibility.behavior.colorAdaptation.hint" = "Tilpasser automatisk Mouse Guide farven baseret på baggrunden for bedre synlighed";
-"accessibility.behavior.autoHidePointer.label" = "Skjul automatisk når musemarkøren er skjult";
-"accessibility.behavior.autoHidePointer.hint" = "Skjuler automatisk Mouse Guide under videoafspilning eller når systemmarkøren forsvinder";
 "accessibility.behavior.autoHideTyping.label" = "Skjul mens du skriver";
 "accessibility.behavior.autoHideTyping.hint" = "Skjuler automatisk Mouse Guide mens du skriver for at undgå at skjule tekst";
 "accessibility.behavior.launchAtLogin.label" = "Start automatisk ved login";

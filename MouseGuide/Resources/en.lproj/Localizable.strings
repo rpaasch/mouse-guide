@@ -56,7 +56,6 @@
 "settings.lineStyle.dashed" = "Dashed";
 "settings.lineStyle.dotted" = "Dotted";
 
-"settings.autoHide" = "Automatically hide when mouse pointer is hidden";
 "settings.launchAtLogin" = "Launch automatically at login";
 
 "settings.gliding" = "Gliding Cursor";
@@ -128,7 +127,10 @@
 "behavior.colorAdaptation.description" = "Automatically choose black or white color based on the background under the cursor";
 "behavior.colorAdaptation.info" = "When this is enabled, your selected colors in the Appearance tab are ignored";
 "behavior.general" = "General";
-"behavior.autoHide.description" = "Automatically hide when the system mouse cursor is hidden";
+"settings.autoHideFullscreen" = "Hide in fullscreen while the mouse is still";
+"behavior.autoHideFullscreen.description" = "Hide the crosshair when an app fills the whole screen and the mouse has not moved for a few seconds — typically while watching video";
+"accessibility.behavior.autoHideFullscreen.label" = "Hide in fullscreen while the mouse is still";
+"accessibility.behavior.autoHideFullscreen.hint" = "Hides the crosshair while an app fills the whole screen and the mouse is idle, so it does not sit on top of a video";
 "behavior.autoHideTyping" = "Hide while typing";
 "behavior.autoHideTyping.description" = "Automatically hide when you start typing on the keyboard";
 "behavior.autoHideTyping.delay" = "Show again after";
@@ -255,8 +257,6 @@
 /* Accessibility - Behaviors */
 "accessibility.behavior.colorAdaptation.label" = "Adapt color automatically based on background";
 "accessibility.behavior.colorAdaptation.hint" = "Automatically adapts crosshair color based on background for better visibility";
-"accessibility.behavior.autoHidePointer.label" = "Automatically hide when mouse pointer is hidden";
-"accessibility.behavior.autoHidePointer.hint" = "Automatically hides the crosshair during video playback or when the system pointer disappears";
 "accessibility.behavior.autoHideTyping.label" = "Hide while typing";
 "accessibility.behavior.autoHideTyping.hint" = "Automatically hides the crosshair while you are typing to avoid obscuring text";
 "accessibility.behavior.launchAtLogin.label" = "Launch automatically at login";

@@ -103,7 +103,10 @@ enum LocalizedString {
     static var settingsLineStyleDashed: String { "settings.lineStyle.dashed".localized() }
     static var settingsLineStyleDotted: String { "settings.lineStyle.dotted".localized() }
 
-    static var settingsAutoHide: String { "settings.autoHide".localized() }
+    static var settingsAutoHideFullscreen: String { "settings.autoHideFullscreen".localized() }
+    static var behaviorAutoHideFullscreenDescription: String { "behavior.autoHideFullscreen.description".localized() }
+    static var accessibilityBehaviorAutoHideFullscreenLabel: String { "accessibility.behavior.autoHideFullscreen.label".localized() }
+    static var accessibilityBehaviorAutoHideFullscreenHint: String { "accessibility.behavior.autoHideFullscreen.hint".localized() }
     static var settingsLaunchAtLogin: String { "settings.launchAtLogin".localized() }
 
     static var settingsGliding: String { "settings.gliding".localized() }
@@ -166,7 +169,6 @@ enum LocalizedString {
     static var behaviorColorAdaptationDescription: String { "behavior.colorAdaptation.description".localized() }
     static var behaviorColorAdaptationInfo: String { "behavior.colorAdaptation.info".localized() }
     static var behaviorGeneral: String { "behavior.general".localized() }
-    static var behaviorAutoHideDescription: String { "behavior.autoHide.description".localized() }
     static var behaviorAutoHideTyping: String { "behavior.autoHideTyping".localized() }
     static var behaviorAutoHideTypingDescription: String { "behavior.autoHideTyping.description".localized() }
     static var behaviorAutoHideTypingDelay: String { "behavior.autoHideTyping.delay".localized() }
@@ -306,8 +308,6 @@ enum LocalizedString {
     // Accessibility - Behaviors
     static var accessibilityBehaviorColorAdaptationLabel: String { "accessibility.behavior.colorAdaptation.label".localized() }
     static var accessibilityBehaviorColorAdaptationHint: String { "accessibility.behavior.colorAdaptation.hint".localized() }
-    static var accessibilityBehaviorAutoHidePointerLabel: String { "accessibility.behavior.autoHidePointer.label".localized() }
-    static var accessibilityBehaviorAutoHidePointerHint: String { "accessibility.behavior.autoHidePointer.hint".localized() }
     static var accessibilityBehaviorAutoHideTypingLabel: String { "accessibility.behavior.autoHideTyping.label".localized() }
     static var accessibilityBehaviorAutoHideTypingHint: String { "accessibility.behavior.autoHideTyping.hint".localized() }
     static var accessibilityBehaviorLaunchAtLoginLabel: String { "accessibility.behavior.launchAtLogin.label".localized() }

@@ -860,17 +860,18 @@ struct BehaviorTab: View {
                         .font(.headline)
 
                     VStack(alignment: .leading, spacing: 16) {
+
                         VStack(alignment: .leading, spacing: 6) {
                             HStack {
-                                Text(LocalizedString.settingsAutoHide)
+                                Text(LocalizedString.settingsAutoHideFullscreen)
                                 Spacer()
-                                Toggle("", isOn: $settings.autoHideWhenPointerHidden)
+                                Toggle("", isOn: $settings.autoHideInFullscreen)
                                     .labelsHidden()
                                     .toggleStyle(.switch)
-                                    .accessibilityLabel("\(LocalizedString.accessibilityBehaviorAutoHidePointerLabel), \(settings.autoHideWhenPointerHidden ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
-                                    .accessibilityHint(LocalizedString.accessibilityBehaviorAutoHidePointerHint)
+                                    .accessibilityLabel("\(LocalizedString.accessibilityBehaviorAutoHideFullscreenLabel), \(settings.autoHideInFullscreen ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
+                                    .accessibilityHint(LocalizedString.accessibilityBehaviorAutoHideFullscreenHint)
                             }
-                            Text(LocalizedString.behaviorAutoHideDescription)
+                            Text(LocalizedString.behaviorAutoHideFullscreenDescription)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }

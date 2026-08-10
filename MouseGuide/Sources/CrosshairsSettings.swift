@@ -25,7 +25,7 @@ class CrosshairsSettings: ObservableObject {
         static let fixedLength = 200.0
         static let useFixedLength = false
         static let useReadingLine = false
-        static let autoHideWhenPointerHidden = false
+        static let autoHideInFullscreen = false
         static let autoHideWhileTyping = false
         static let autoHideTypingDelay = 1.5
         static let invertColors = false
@@ -103,8 +103,8 @@ class CrosshairsSettings: ObservableObject {
         didSet { saveSetting("useReadingLine", useReadingLine) }
     }
 
-    @Published var autoHideWhenPointerHidden: Bool {
-        didSet { saveSetting("autoHideWhenPointerHidden", autoHideWhenPointerHidden) }
+    @Published var autoHideInFullscreen: Bool {
+        didSet { saveSetting("autoHideInFullscreen", autoHideInFullscreen) }
     }
 
     @Published var autoHideWhileTyping: Bool {
@@ -194,7 +194,7 @@ class CrosshairsSettings: ObservableObject {
 
         self.useFixedLength = Self.storedBool("useFixedLength", default: Defaults.useFixedLength)
         self.useReadingLine = Self.storedBool("useReadingLine", default: Defaults.useReadingLine)
-        self.autoHideWhenPointerHidden = Self.storedBool("autoHideWhenPointerHidden", default: Defaults.autoHideWhenPointerHidden)
+        self.autoHideInFullscreen = Self.storedBool("autoHideInFullscreen", default: Defaults.autoHideInFullscreen)
         self.autoHideWhileTyping = Self.storedBool("autoHideWhileTyping", default: Defaults.autoHideWhileTyping)
         self.invertColors = Self.storedBool("invertColors", default: Defaults.invertColors)
         self.glidingEnabled = Self.storedBool("glidingEnabled", default: Defaults.glidingEnabled)
@@ -259,7 +259,7 @@ class CrosshairsSettings: ObservableObject {
         fixedLength = Defaults.fixedLength
         useFixedLength = Defaults.useFixedLength
         useReadingLine = Defaults.useReadingLine
-        autoHideWhenPointerHidden = Defaults.autoHideWhenPointerHidden
+        autoHideInFullscreen = Defaults.autoHideInFullscreen
         autoHideWhileTyping = Defaults.autoHideWhileTyping
         autoHideTypingDelay = Defaults.autoHideTypingDelay
         invertColors = Defaults.invertColors

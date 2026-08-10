@@ -27,7 +27,6 @@ fast længde.
 - Automatisk farvetilpasning: sampler baggrunden under markøren og skifter
   mellem lys og mørk streg (kræver Skærmoptagelse)
 - Skjul mens du skriver, med justerbar forsinkelse
-- Skjul når systemets musemarkør skjules, f.eks. under fuldskærmsvideo
 - Glidende markør (eksperimentel)
 - Start ved login
 - Multi-monitor: ét overlay pr. skærm, følger med når skærme tilsluttes

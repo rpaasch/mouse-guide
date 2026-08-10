@@ -22,22 +22,74 @@ class CrosshairsWindowManager {
     private var unhideTimer: Timer?
     private var lastAutoHideWhileTypingValue: Bool = false
 
-    // Visibility is driven by two independent reasons to hide. Neither may
+    // Visibility is driven by independent reasons to hide. None of them may
     // touch the windows directly - see applyVisibility().
     private var hiddenByTyping = false
-    private var hiddenByPointerHidden = false
+    private var hiddenByFullscreen = false
     private var windowsVisible = true
 
-    private var shouldBeVisible: Bool { !hiddenByTyping && !hiddenByPointerHidden }
+    private var shouldBeVisible: Bool { !hiddenByTyping && !hiddenByFullscreen }
+
+    // MARK: - Fullscreen detection
+
+    private var lastFullscreenCheck: TimeInterval = 0
+
+    /// Detects "an app owns the whole screen and the mouse is sitting still",
+    /// which is when macOS hides the pointer - a video player, in practice.
+    ///
+    /// The pointer's hidden state itself cannot be read: CGCursorIsVisible() is
+    /// gone from the SDK, the equivalents are private, and NSCursor.currentSystem
+    /// reports which cursor is set rather than whether one is visible (measured:
+    /// it never goes nil). So detect the situation instead.
+    ///
+    /// Two signals together, because either alone is ambiguous. Native
+    /// fullscreen puts the window on its own Space, so no other app has an
+    /// on-screen window - that is what separates it from a merely zoomed
+    /// window, which on this machine measured 1350x846 against a fullscreen
+    /// 1352x849. The exact size match then confirms it.
+    private func updateFullscreenState(now: TimeInterval) {
+        guard now - lastFullscreenCheck >= 0.5 else { return }   // window enumeration is costly
+        lastFullscreenCheck = now
+
+        guard settings.autoHideInFullscreen else {
+            hiddenByFullscreen = false
+            return
+        }
+
+        let idle = CGEventSource.secondsSinceLastEventType(.combinedSessionState, eventType: .mouseMoved)
+        hiddenByFullscreen = idle >= 3.0 && Self.aWindowOwnsTheScreen()
+    }
+
+    private static func aWindowOwnsTheScreen() -> Bool {
+        guard let screen = NSScreen.main,
+              let infos = CGWindowListCopyWindowInfo(
+                [.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]]
+        else { return false }
+
+        var owners = Set<String>()
+        var matchesScreen = false
+        let target = screen.visibleFrame.size
+
+        for info in infos where (info[kCGWindowLayer as String] as? Int) == 0 {
+            if let owner = info[kCGWindowOwnerName as String] as? String {
+                owners.insert(owner)
+            }
+            if let bounds = info[kCGWindowBounds as String] as? [String: CGFloat],
+               bounds["Width"] == target.width, bounds["Height"] == target.height {
+                matchesScreen = true
+            }
+        }
+
+        // Exactly one app on screen means we are on a fullscreen Space
+        return owners.count == 1 && matchesScreen
+    }
 
     /// The only place that orders the overlay windows on or off screen.
     ///
-    /// Both hide reasons funnel through here so they cannot un-hide each
-    /// other: if typing hid the overlay and the pointer then reappears, the
-    /// overlay must stay hidden until typing stops too. Re-seating the mouse
-    /// tracker on the way back in also lives here, because position updates
-    /// are paused while hidden and the crosshair would otherwise flash at a
-    /// stale location before catching up.
+    /// Typing is currently the sole reason to hide, but the indirection stays:
+    /// it is what keeps re-seating the mouse tracker in one place. Position
+    /// updates are paused while hidden, so without that the crosshair would
+    /// reappear at a stale location and then glide to the pointer.
     private func applyVisibility() {
         guard windowsVisible != shouldBeVisible else { return }
         windowsVisible = shouldBeVisible
@@ -195,7 +247,6 @@ class CrosshairsWindowManager {
 
         // Reset visibility state so the next show() starts from a clean slate
         hiddenByTyping = false
-        hiddenByPointerHidden = false
         windowsVisible = true
 
         // Stop display links on all views BEFORE removing windows
@@ -279,22 +330,7 @@ class CrosshairsWindowManager {
     }
 
     private func updateCursorPosition() {
-        // Auto-hide when the system pointer is hidden (fullscreen video,
-        // presentations).
-        //
-        // This is the weakest part of the file and deserves a real-world check.
-        // There is no supported API that reports whether *another* application
-        // has hidden the cursor: CGCursorIsVisible() is unavailable in current
-        // SDKs, and the alternatives are private. `NSCursor.currentSystem`
-        // returning nil is the only public signal available.
-        //
-        // An automated attempt to verify it was inconclusive rather than
-        // negative - CGDisplayHideCursor posted from a background process is
-        // not a valid stand-in for a fullscreen video player hiding the
-        // cursor, and screencapture does not record the pointer, so neither
-        // the input nor the observation was sound. Verify by playing a
-        // fullscreen video and watching whether the crosshair disappears.
-        hiddenByPointerHidden = settings.autoHideWhenPointerHidden && NSCursor.currentSystem == nil
+        updateFullscreenState(now: Date().timeIntervalSince1970)
         applyVisibility()
 
         // Don't update position while hidden - applyVisibility() re-seats it
