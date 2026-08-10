@@ -280,9 +280,20 @@ class CrosshairsWindowManager {
 
     private func updateCursorPosition() {
         // Auto-hide when the system pointer is hidden (fullscreen video,
-        // presentations). NSCursor.currentSystem going nil is a heuristic for
-        // that state, not a documented API - if it proves unreliable in
-        // practice this feature is the thing to re-examine first.
+        // presentations).
+        //
+        // This is the weakest part of the file and deserves a real-world check.
+        // There is no supported API that reports whether *another* application
+        // has hidden the cursor: CGCursorIsVisible() is unavailable in current
+        // SDKs, and the alternatives are private. `NSCursor.currentSystem`
+        // returning nil is the only public signal available.
+        //
+        // An automated attempt to verify it was inconclusive rather than
+        // negative - CGDisplayHideCursor posted from a background process is
+        // not a valid stand-in for a fullscreen video player hiding the
+        // cursor, and screencapture does not record the pointer, so neither
+        // the input nor the observation was sound. Verify by playing a
+        // fullscreen video and watching whether the crosshair disappears.
         hiddenByPointerHidden = settings.autoHideWhenPointerHidden && NSCursor.currentSystem == nil
         applyVisibility()
 
