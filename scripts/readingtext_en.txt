@@ -1,0 +1,21 @@
+
+                    On finding the pointer
+
+    Once a screen gets large enough, the mouse pointer stops
+    being a reliable landmark. It disappears between windows,
+    it hides in a corner, and the eye has to go looking for it
+    instead of getting on with the work. For some people that
+    is a minor irritation. For others - anyone with reduced
+    vision, or who struggles to hold the line while reading -
+    it is the difference between using the machine and not.
+
+    A crosshair solves it by making the pointer impossible to
+    lose. Two lines across the whole screen, with a gap around
+    the pointer itself, so it is never hidden by its own mark.
+
+                    On following a line
+
+    The reading line is the same idea turned toward text. One
+    unbroken horizontal rule that follows the mouse down the
+    page, like the ruler you used to lay under a sentence at
+    school. You read faster, and you never skip a line.

@@ -68,3 +68,9 @@ releases/
 # Python
 __pycache__/
 *.pyc
+
+# Screenshot pipeline build products (sources are the .swift files beside them)
+scripts/setmode
+scripts/pngtool
+scripts/warpmouse
+scripts/shots/

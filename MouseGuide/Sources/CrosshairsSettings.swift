@@ -219,7 +219,7 @@ class CrosshairsSettings: ObservableObject {
 
         LocalizationManager.shared.setLanguage(self.language)
 
-        self.hasFullAccess = defaults.bool(forKey: Self.purchaseCacheKey)
+        self.hasFullAccess = defaults.bool(forKey: Self.purchaseCacheKey) || Self.screenshotOverride
         NotificationCenter.default.addObserver(
             forName: .init("PurchaseStateChanged"),
             object: nil,
@@ -315,8 +315,19 @@ class CrosshairsSettings: ObservableObject {
     /// utility - the alternative costs a visible flash at launch.
     @Published private(set) var hasFullAccess: Bool = false
 
+    /// Lets a Debug build present the full-version appearance without a real
+    /// purchase, so App Store screenshots can show what is actually being sold.
+    /// Compiled out of Release entirely - it cannot ship.
+    private static var screenshotOverride: Bool {
+        #if DEBUG
+        return ProcessInfo.processInfo.arguments.contains("-fullAccessForScreenshots")
+        #else
+        return false
+        #endif
+    }
+
     private func refreshPurchaseState() {
-        let latest = UserDefaults.standard.bool(forKey: Self.purchaseCacheKey)
+        let latest = UserDefaults.standard.bool(forKey: Self.purchaseCacheKey) || Self.screenshotOverride
         guard latest != hasFullAccess else { return }
         hasFullAccess = latest
         NotificationCenter.default.post(name: .init("CrosshairsSettingsChanged"), object: nil)

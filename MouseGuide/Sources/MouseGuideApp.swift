@@ -51,6 +51,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menuBarManager = MenuBarManager(appDelegate: self)
         NSLog("✅ MenuBarManager initialized")
 
+        // App Store screenshots need an empty screen and the crosshair already
+        // drawn. Both alerts below would land on top of the shot, and the
+        // crosshair is runtime-only state that no preference can preset.
+        if Self.screenshotMode {
+            NSLog("📸 Screenshot mode - skipping permission prompts")
+            showCrosshairs()
+            if ProcessInfo.processInfo.arguments.contains("-showSettingsForScreenshots") {
+                NSApp.activate(ignoringOtherApps: true)
+                showSettings()
+            }
+            return
+        }
+
         // Explain the app before macOS asks for anything. A permission prompt
         // is the first thing a new user would otherwise see, from an app with
         // no Dock icon and no window - which reads as a failed install.
@@ -63,6 +76,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Setup keyboard monitor (will work after permission is granted)
         setupKeyboardMonitor()
         NSLog("✅ App initialized with keyboard shortcuts")
+    }
+
+    /// The same DEBUG-only launch argument that unlocks the full-version
+    /// appearance in CrosshairsSettings. One flag drives the whole screenshot
+    /// setup, and none of it can reach a Release build.
+    private static var screenshotMode: Bool {
+        #if DEBUG
+        return ProcessInfo.processInfo.arguments.contains("-fullAccessForScreenshots")
+        #else
+        return false
+        #endif
     }
 
     private static let firstRunKey = "hasCompletedFirstRun"
