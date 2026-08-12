@@ -20,6 +20,17 @@ SHOT_H=1600
 BG=/tmp/sightline_shoot_bg.png
 OLD_BG="$(osascript -e 'tell application "System Events" to get picture of current desktop' 2>/dev/null)"
 
+# If a previous run died before restoring, the "current" wallpaper is this
+# script's own temp file - recording that as the original would make the loss
+# permanent, and macOS keeps no recoverable history. Refuse to touch the
+# wallpaper at all rather than destroy it; the menu bar streak is cosmetic.
+SWAP_BG=1
+if [ -z "$OLD_BG" ] || [ "$OLD_BG" = "$BG" ]; then
+    SWAP_BG=0
+    echo "warning: cannot read a real desktop picture (got '${OLD_BG:-none}')."
+    echo "         leaving the wallpaper alone; expect a faint streak in the menu bar."
+fi
+
 OLD_LOCALE="$(defaults read -g AppleLocale 2>/dev/null)"
 OLD_SHOWDATE="$(defaults read com.apple.menuextra.clock ShowDate 2>/dev/null)"
 OLD_SHOWDOW="$(defaults read com.apple.menuextra.clock ShowDayOfWeek 2>/dev/null)"
@@ -39,7 +50,7 @@ done
 restore() {
     pkill -x "Cursor Sightline" 2>/dev/null
     "$HERE/setmode" "$NATIVE_W" "$NATIVE_H" >/dev/null 2>&1
-    [ -n "$OLD_BG" ] && osascript -e "tell application \"System Events\" to set picture of every desktop to \"$OLD_BG\"" 2>/dev/null
+    [ "$SWAP_BG" = "1" ] && osascript -e "tell application \"System Events\" to set picture of every desktop to \"$OLD_BG\"" 2>/dev/null
     osascript -e 'tell application "System Events" to set visible of process "Terminal" to true' 2>/dev/null
     defaults delete com.apple.TextEdit NSFixedPitchFontSize 2>/dev/null
     defaults delete com.apple.TextEdit AppleLanguages 2>/dev/null
@@ -69,8 +80,10 @@ defaults write com.apple.TextEdit NSFixedPitchFontSize -int 22
 # TextEdit covers everything below the menu bar, so the only thing that can
 # bleed into a shot is the wallpaper behind the translucent menu bar - which
 # on a photo wallpaper shows up as a smear across the top right.
-"$HERE/pngtool" solid "$SHOT_W" "$SHOT_H" 14141C "$BG"
-osascript -e "tell application \"System Events\" to set picture of every desktop to \"$BG\"" 2>/dev/null
+if [ "$SWAP_BG" = "1" ]; then
+    "$HERE/pngtool" solid "$SHOT_W" "$SHOT_H" 14141C "$BG"
+    osascript -e "tell application \"System Events\" to set picture of every desktop to \"$BG\"" 2>/dev/null
+fi
 
 pkill -x "Cursor Sightline" 2>/dev/null
 sleep 1
