@@ -25,7 +25,7 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2025. All rights reserved.</string>
+	<string>Copyright © 2026 Rasmus Paasch. All rights reserved.</string>
 	<key>NSInputMonitoringUsageDescription</key>
 	<string>Cursor Sightline needs access to keyboard input to toggle the crosshair with a keyboard shortcut and automatically hide it while you type.</string>
 	<key>NSPrincipalClass</key>

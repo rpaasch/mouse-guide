@@ -161,7 +161,7 @@
 "about.feature.gliding" = "Gliding cursor for smooth movement";
 "about.feature.shortcut" = "Global keyboard shortcut";
 "about.madeBy" = "Made by Rasmus Paasch with ❤️ in Dyssegård, Denmark";
-"about.copyright" = "Copyright © 2025";
+"about.copyright" = "Copyright © 2026 Rasmus Paasch";
 "about.permissions" = "System Permissions";
 "about.permissions.description" = "Cursor Sightline needs the following permissions to work correctly.";
 "about.permission.inputMonitoring" = "Input Monitoring";
