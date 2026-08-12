@@ -199,7 +199,11 @@
       "Bash(cp /tmp/makeicon.swift scripts/make_icon.swift)",
       "Bash(./makeicon2 /tmp/icons3)",
       "Bash(./sheet)",
-      "Bash(./makeicon2 /tmp/icons4)"
+      "Bash(./makeicon2 /tmp/icons4)",
+      "Bash(./variants)",
+      "Bash(./lighticon)",
+      "Bash(./purpleicon)",
+      "Bash(./finalicon /tmp/final)"
     ],
     "deny": [],
     "ask": []

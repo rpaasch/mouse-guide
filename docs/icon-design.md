@@ -1,55 +1,36 @@
-# Full Bleed
+# Icon design
 
-*A design philosophy for the Cursor Sightline icon*
+The mark is a reticle: a thin ring, four ticks crossing it, and a void at the
+centre. The void is the whole idea — it is where the pointer sits, and it is
+what separates a sight from a plus sign.
 
-## The movement
+## How it got here
 
-Most utility icons shrink their subject to a polite emblem floating in the
-middle of a tile, ringed by safe margin. **Full Bleed rejects the margin.** The
-mark runs the entire width and height of its field and continues past the edge,
-so the eye completes the line beyond the frame. What the tile shows is not a
-picture of a crosshair — it is a fragment of one that is larger than the tile.
+Three versions were built and two were thrown away, which is worth recording so
+the same ground is not covered twice.
 
-This is not decoration chosen for effect. It is the literal truth of the
-product: lines that span an entire display, edge to edge, interrupted only
-where the pointer sits. The icon does not illustrate the app. It *is* one
-square inch of the app, cut out and mounted.
+**The original** was a thick yellow plus with no centre gap. It read as "add" —
+the wrong verb for an app about finding things — and yellow had no relationship
+to anything the product draws.
 
-## Form and space
+**The second** was the sight rendered as a physical instrument: machined rim,
+glass, specular highlight, its own shadow. It followed the reference style
+Rasmus pointed at, and it was rejected as too heavy and too clumsy. The lesson
+is that material simulation adds weight faster than it adds meaning, and at
+32pt none of that detail survives anyway.
 
-Two axes, four bars, one void. The void at the centre is the whole idea — it is
-where the pointer lives, and it is what separates a sight from a plus sign. The
-gap must be unmistakable at every size or the mark collapses into arithmetic.
+**What shipped** is drawn with strokes rather than modelled as an object. One
+accent, one ground, no shadows, no gloss. Deep violet, white mark.
 
-Nothing else enters the field. No ring, no shadow beneath the mark, no second
-colour, no gloss. The composition is four rectangles and a subtraction. What
-makes it hold the eye is not complexity but exactness: the bars must be
-identical to the pixel, the gap perfectly square, the intersection implied
-rather than drawn. Master-level execution here means restraint that survives
-scrutiny — enlarge it tenfold and every edge should still be true.
+## Rules the drawing follows
 
-## Colour and material
+Every size is drawn natively rather than downsampled. Below 64pt the stroke
+thickens, the centre void tightens, and the ticks stop overshooting the ring —
+because a naive resize loses all three long before 16pt. Verified legible at
+16, 32, 64 and 128.
 
-A single saturated red on near-black. Red because it is the colour the product
-actually draws, and because red on dark reads as instrument, as alignment, as
-attention — never as ornament. The dark is not flat black but a charcoal with
-the faintest vertical lift, the way a machined surface catches light. One hue,
-one ground, nothing else. The discipline of a limited palette is what allows
-the form to carry all the meaning.
+The ring sits at 30% of the tile, inside Apple's macOS icon grid (824 of 1024,
+corner radius 185.4). Nothing bleeds past the tile.
 
-## Scale and rhythm
-
-An icon is not one image but ten, from 1024 pixels to 16. At the largest it
-must reward inspection; at the smallest it must survive as a silhouette. This
-demands optical correction rather than mathematical scaling — the bars thicken
-proportionally as the canvas shrinks, the gap tightens, so that the mark reads
-the same at every rung of the ladder. Naive downsampling is the amateur's
-tell. Each size is drawn, not resized, and each is tuned by eye.
-
-## The standard
-
-This should look like it took far longer than it did — the product of patient
-iteration, painstaking attention to the geometry, and the judgement of someone
-who has drawn this kind of mark many times before. Nothing arbitrary survives.
-Every proportion is a decision that can be defended, and the whole is quiet
-enough that no one notices the effort, which is exactly the point.
+`scripts/make_icon.swift` regenerates the whole set. Colour, stroke weight,
+ring radius and the centre gap are all constants at the top of `draw`.
