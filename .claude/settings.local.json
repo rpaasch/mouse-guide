@@ -182,7 +182,14 @@
       "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 GET \"/v1/apps?fields[apps]=name,bundleId,sku&limit=50\")",
       "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 GET \"/v1/bundleIds?filter[identifier]=dk.netdot.mouseguide.app&fields[bundleIds]=identifier,name,platform\")",
       "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 GET \"/v1/bundleIds?fields[bundleIds]=identifier,name,platform&limit=200\")",
-      "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 POST /v1/bundleIds '{ *)"
+      "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 POST /v1/bundleIds '{ *)",
+      "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 POST /v2/inAppPurchases '{ *)",
+      "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 GET \"/v2/inAppPurchases/6800107968/pricePoints?filter[territory]=DNK&limit=200&include=territory\")",
+      "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 POST /v1/inAppPurchasePriceSchedules '{ *)",
+      "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 GET \"/v2/inAppPurchases/6800107968\")",
+      "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 GET \"/v1/inAppPurchasePriceSchedules/6800107968/manualPrices?include=inAppPurchasePricePoint,territory&limit=10\")",
+      "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 GET \"/v1/apps/6795039886/inAppPurchasesV2?limit=5\")",
+      "Bash(./asc 69a6de73-6795-47e3-e053-5b8c7c11a4d1 Y55Q877P98 GET \"/v2/inAppPurchases/6800107968/inAppPurchaseLocalizations?limit=1\")"
     ],
     "deny": [],
     "ask": []
