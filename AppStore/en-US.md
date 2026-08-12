@@ -50,7 +50,7 @@ Cursor Sightline is free to use and shows a fixed red crosshair on one screen. A
 **PRIVACY:**
 Cursor Sightline collects no personal data. The app only requires permissions necessary to function (Input Monitoring for keyboard shortcuts, Screen Recording for color adaptation).
 
-Made in Denmark 🇩🇰
+Made in Denmark
 
 ## Keywords (max 100 characters)
 mouse,cursor,crosshair,accessibility,screen,multi-monitor,presentation,reading,pointer

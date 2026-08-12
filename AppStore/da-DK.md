@@ -50,7 +50,7 @@ Cursor Sightline er gratis at bruge og viser et fast rødt trådkors på én sk�
 **PRIVATLIV:**
 Cursor Sightline indsamler ingen personlige data. Appen kræver kun de tilladelser der er nødvendige for at fungere (Input Monitoring til tastaturgenveje, Screen Recording til farvetilpasning).
 
-Lavet i Danmark 🇩🇰
+Lavet i Danmark
 
 ## Nøgleord (max 100 tegn)
 mus,markør,trådkors,crosshair,tilgængelighed,skærm,multi-monitor,præsentation,læse

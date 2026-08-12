@@ -29,6 +29,23 @@ case "solid":
     ctx.fill(CGRect(x: 0, y: 0, width: w, height: h))
     guard let img = ctx.makeImage(), write(img, to: args[5]) else { exit(1) }
 
+case "frame":
+    // App Store Connect rejects review screenshots whose aspect ratio is not one
+    // it recognises (IMAGE_BAD_ASPECT_RATIO), so a cropped window has to be
+    // centred on a correctly proportioned canvas rather than sent as-is.
+    guard args.count == 7, let w = Int(args[3]), let h = Int(args[4]),
+          let rgb = Int(args[5], radix: 16),
+          let src = NSImage(contentsOfFile: args[2])?.cgImage(forProposedRect: nil, context: nil, hints: nil),
+          let ctx = opaqueContext(width: w, height: h) else { exit(2) }
+    ctx.setFillColor(red: CGFloat((rgb >> 16) & 0xFF) / 255,
+                     green: CGFloat((rgb >> 8) & 0xFF) / 255,
+                     blue: CGFloat(rgb & 0xFF) / 255, alpha: 1)
+    ctx.fill(CGRect(x: 0, y: 0, width: w, height: h))
+    let scale = min(Double(w) * 0.86 / Double(src.width), Double(h) * 0.86 / Double(src.height))
+    let dw = Double(src.width) * scale, dh = Double(src.height) * scale
+    ctx.draw(src, in: CGRect(x: (Double(w) - dw) / 2, y: (Double(h) - dh) / 2, width: dw, height: dh))
+    guard let img = ctx.makeImage(), write(img, to: args[6]) else { exit(1) }
+
 case "flatten":
     guard args.count == 4,
           let src = NSImage(contentsOfFile: args[2])?.cgImage(forProposedRect: nil, context: nil, hints: nil),
