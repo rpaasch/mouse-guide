@@ -71,6 +71,25 @@ only the first step needs a human:
 Cursor Sightline → grant access to the `rpaasch/mouse-guide` repository →
 Archive action for macOS → deploy to App Store Connect.
 
+Use **Xcode 27 Beta 4** for this, which is already installed. The App Store
+refuses to install Xcode 26.6 on a macOS 27 seed ("this version of Xcode is not
+supported in this version of macOS"), but the local Xcode version is irrelevant
+to Xcode Cloud — the workflow decides what Apple's builders use.
+
+Set the workflow to:
+
+| Setting | Value | Why |
+|---|---|---|
+| macOS | **Latest Release** (25G82, Tahoe 26.6.2) | Released, so `BuildMachineOSBuild` is clean |
+| Xcode | **Latest Release** (17F113) | Identical to the toolchain build 9 used |
+
+Do *not* pick "Latest Beta or Release" for macOS. It resolves to the same 25G82
+today, but will drift onto a seed later and reintroduce ITMS-90301.
+
+Apple's own image catalogue corroborates the diagnosis, incidentally:
+`/v1/ciMacOsVersions` lists `26A5388g` — this Mac's OS — as
+"macOS Golden Gate 27 beta 4".
+
 Note that the GitHub connection already exists as an SCM provider, but it is
 currently scoped to the `netdotrss` repository only — `mouse-guide` has to be
 granted during the wizard.
