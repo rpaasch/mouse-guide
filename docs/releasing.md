@@ -90,5 +90,34 @@ slots, which is why `--smoke-test` deliberately stops before export.
 ## After a build processes cleanly
 
 1. Link build to version 1.0 in App Store Connect.
-2. Complete the App Privacy questionnaire — "Data Not Collected".
+2. Complete the App Privacy questionnaire (see below).
 3. Submit for review.
+
+## App Privacy — has to be done by hand
+
+There is no API for this. The public App Store Connect API exposes no
+privacy-related resource on the `apps` endpoint, and the internal route the web
+UI uses (`appstoreconnect.apple.com/iris/v1/appDataUsages`) answers an API-key
+JWT with `401 No valid credentials` — it accepts only an interactive login
+session. It must be clicked through in the browser:
+
+> App Store Connect → Apps → Cursor Sightline → **App Privacy** (left sidebar)
+> → Data Collection → Edit → **"No, we do not collect data from this app"**
+> → Save → **Publish**
+
+The declaration does not go live until Publish is pressed, and version 1.0
+cannot be submitted for review until it has.
+
+"Data not collected" is accurate for this app, verified against the source:
+
+- No networking, analytics or tracking code of any kind. The only
+  `com.apple.security.network.client` use is StoreKit product lookup and
+  purchase; `StoreKitManager.swift` makes no calls of its own.
+- Input monitoring and screen capture are processed locally and never stored or
+  transmitted — they read keystroke events and sample pixel brightness under
+  the cursor.
+- Preferences and the trial flag are stored locally (UserDefaults /
+  Application Support).
+- Purchase data is collected by Apple, not by us, so it is not declarable here.
+
+This matches `PRIVACY.md`.
