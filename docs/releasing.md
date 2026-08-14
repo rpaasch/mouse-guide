@@ -52,6 +52,38 @@ App Store Connect credentials default to key `Y55Q877P98` / issuer
 `69a6de73-…`, read from `~/.appstoreconnect/private_keys/`. Override with
 `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_PATH`.
 
+## Xcode Cloud — the way out without hardware
+
+Xcode Cloud builds on Apple-managed images running *released* macOS, so the
+seed-OS problem disappears entirely: no external SSD, no second Mac, no disk
+space. This is the recommended route.
+
+Onboarding cannot be scripted. `POST /v1/ciProducts` answers:
+
+> 403 — The resource 'ciProducts' does not allow 'CREATE'.
+> Allowed operations are: DELETE, GET_COLLECTION, GET_INSTANCE
+
+`ciWorkflows` and `ciBuildRuns` *do* allow creation (they fail with
+`ENTITY_ERROR.*` for missing fields, not with a forbidden-operation error), so
+only the first step needs a human:
+
+**One-time, in Xcode:** Product → Xcode Cloud → Create Workflow → select
+Cursor Sightline → grant access to the `rpaasch/mouse-guide` repository →
+Archive action for macOS → deploy to App Store Connect.
+
+Note that the GitHub connection already exists as an SCM provider, but it is
+currently scoped to the `netdotrss` repository only — `mouse-guide` has to be
+granted during the wizard.
+
+**Prerequisite, already done:** Xcode Cloud only builds *shared* schemes. This
+project had none at all — `xcodebuild` was synthesising one from the target,
+which works locally but leaves nothing in the repo for Apple's builders.
+`MouseGuide.xcscheme` is now committed under
+`MouseGuide.xcodeproj/xcshareddata/xcschemes/`.
+
+After the product exists, workflows and build runs can be driven entirely
+through the API.
+
 ## Getting a released-macOS machine
 
 The dev Mac runs macOS 27.0 seed and has no second system volume. Options:
