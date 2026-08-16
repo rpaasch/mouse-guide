@@ -103,6 +103,41 @@ which works locally but leaves nothing in the repo for Apple's builders.
 After the product exists, workflows and build runs can be driven entirely
 through the API.
 
+## Standing decisions — do not "fix" these
+
+**Territory availability: Belarus and Russia are excluded on purpose.** App
+Availability reads "173 Available, 2 Not Available", and those two are a
+deliberate choice, not an oversight and not an Apple restriction. The App Store
+still operates in both, so both remain selectable — Apple's 2022 withdrawal from
+Russia covered hardware sales and Apple Pay, not App Store distribution. Leave
+the exclusion alone unless the decision is revisited.
+
+(The purchase, by contrast, is set to all 175 territories. The app's narrower
+list is what governs where it can actually be bought.)
+
+## Submitting an in-app purchase for review
+
+The first in-app purchase must be reviewed together with an app version —
+App Store Connect says so on the version page, and `POST
+/v1/inAppPurchaseSubmissions` refuses a standalone first purchase with
+`STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID`.
+
+The API can do it, but the relationship is easy to get wrong. On
+`reviewSubmissionItems` it is **`inAppPurchaseVersion`**, pointing at the record
+under `/v2/inAppPurchases/{id}/versions` — *not* at the purchase itself.
+`inAppPurchase`, `inAppPurchaseV2` and `inAppPurchases` are all rejected as
+unknown relationships. So:
+
+1. `POST /v1/reviewSubmissions` — app relationship, `platform: MAC_OS`
+2. `POST /v1/reviewSubmissionItems` — `appStoreVersion` → the version
+3. `POST /v1/reviewSubmissionItems` — `inAppPurchaseVersion` → the purchase's
+   version record
+4. Check the submission has **2 items**, then `PATCH … {"submitted": true}`
+
+Items cannot be added once submitted; the only way back is Cancel Submission,
+which puts the version into `DEVELOPER_REJECTED` (a normal state, not an error)
+and costs the place in the review queue.
+
 ## Getting a released-macOS machine
 
 The dev Mac runs macOS 27.0 seed and has no second system volume. Options:
