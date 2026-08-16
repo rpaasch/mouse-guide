@@ -101,7 +101,26 @@ which works locally but leaves nothing in the repo for Apple's builders.
 `MouseGuide.xcodeproj/xcshareddata/xcschemes/`.
 
 After the product exists, workflows and build runs can be driven entirely
-through the API.
+through the API. The handles, so a release does not mean rediscovering them:
+
+| | |
+|---|---|
+| App | `6800107419` (`dk.netdot.sightline.app`) |
+| Xcode Cloud product | `575adf31-8e83-4d65-9aca-b271ba9eed33` |
+| Workflow "Release - App Store" | `19e35c04-5386-447e-a5c9-76f6dbec54b6` |
+| Workflow "Default" (build only) | `3293325C-FD58-4D29-A045-1D57BF010BA0` |
+| Repository `mouse-guide` | `090247ff-4d8c-4149-bec3-f1f264b9b785` |
+| Branch `main` | `6309026e-8aa5-41b0-b177-0c79a8b9f65a` |
+
+Start a release with `POST /v1/ciBuildRuns`, relating the release workflow and
+that branch reference.
+
+**The build number comes from Xcode Cloud, not from `Info.plist`.** It is the
+product's run counter, assigned at delivery, and a `ci_scripts` hook cannot
+change it (that was tried and reverted). The counter is *shared across the
+product's workflows*, so a run of the build-only workflow advances it without
+delivering anything — which is how build 10 was lifted clear of the already-used
+8 and 9. Build runs cannot be cancelled through the API (403).
 
 ## Standing decisions — do not "fix" these
 
