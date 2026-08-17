@@ -1,0 +1,142 @@
+#!/bin/bash
+#
+# Records the screen demo App Review asked for under Guideline 2.1: launching
+# the app, the menu bar icon, the crosshair following the pointer, Settings,
+# and where the in-app purchase is offered.
+#
+# Records the WHOLE screen on purpose -- Apple wants to see the app launch and
+# the menu bar, which a window-only capture cannot show. Other apps are hidden
+# first and restored afterwards, but the desktop background stays visible, so
+# WATCH THE RECORDING BEFORE SENDING IT. Anything on the desktop goes to Apple.
+#
+# Two things this deliberately does NOT do:
+#
+#   * It never clicks Buy Now. A script must not be able to start a purchase.
+#     To get the payment sheet on camera, click it yourself while recording.
+#   * It does not reset the permission prompts. Those are granted already, so
+#     they will not reappear. If you want them in the recording, revoke them
+#     first in System Settings > Privacy & Security (Input Monitoring and
+#     Screen Recording), then run this.
+#
+# Usage: scripts/record_demo.sh [en|da] [output.mov]
+#
+set -u
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+LOCALE="${1:-en}"
+OUT="${2:-$HERE/shots/cursor-sightline-demo-$LOCALE.mov}"
+DURATION=70
+
+APP="${DEMO_APP:-/Users/rp/Library/Developer/Xcode/DerivedData/MouseGuide-bwfkadnrzkysetaxyhrbffjaqryn/Build/Products/Debug/Cursor Sightline.app}"
+[ -d "$APP" ] || APP="/Applications/Cursor Sightline.app"
+PREFS="$HOME/Library/Containers/dk.netdot.sightline.app/Data/Library/Preferences/dk.netdot.sightline.app"
+
+if [ ! -d "$APP" ]; then
+	echo "No app bundle found. Build it, or set DEMO_APP=/path/to/Cursor Sightline.app" >&2
+	exit 1
+fi
+
+if [ "$LOCALE" = "da" ]; then
+	SHOW="Vis Cursor Sightline"; SETTINGS="Indstillinger..."; TITLE="Indstillinger"
+else
+	SHOW="Show Cursor Sightline"; SETTINGS="Settings..."; TITLE="Settings"
+fi
+
+mkdir -p "$(dirname "$OUT")"
+for tool in setmode warpmouse; do
+	[ -x "$HERE/$tool" ] || swiftc -O "$HERE/$tool.swift" -o "$HERE/$tool" || exit 1
+done
+
+restore() {
+	pkill -x "Cursor Sightline" 2>/dev/null
+	"$HERE/setmode" 2704 1756 >/dev/null 2>&1
+	osascript -e 'tell application "System Events" to set visible of process "Terminal" to true' 2>/dev/null
+}
+trap restore EXIT
+
+# --- menu helpers -----------------------------------------------------------
+# The app is an accessory (LSUIElement) with no Dock icon, so its menu is only
+# reachable through the status bar (menu bar 2).
+open_menu_item() {
+	osascript <<-EOF 2>/dev/null
+	tell application "System Events"
+		tell process "Cursor Sightline"
+			click menu bar item 1 of menu bar 2
+			delay 0.8
+			click menu item "$1" of menu 1 of menu bar item 1 of menu bar 2
+		end tell
+	end tell
+	EOF
+}
+
+# --- stage ------------------------------------------------------------------
+pkill -x "Cursor Sightline" 2>/dev/null
+"$HERE/setmode" 2560 1600 || exit 1
+sleep 2
+
+defaults write "$PREFS" hasCompletedFirstRun -bool true
+defaults write "$PREFS" language -string "$LOCALE"
+
+# Hide everything else so the recording shows the app, not the desktop clutter.
+osascript <<-'EOF' 2>/dev/null
+tell application "System Events"
+	set targets to name of every process whose visible is true
+end tell
+repeat with n in targets
+	try
+		tell application "System Events" to set visible of process (n as text) to false
+	end try
+end repeat
+EOF
+sleep 2
+"$HERE/warpmouse" 1280 800
+
+echo "Recording ${DURATION}s to $OUT"
+screencapture -v -V "$DURATION" -k -C -x "$OUT" &
+REC=$!
+sleep 4   # let the recording settle on a clean desktop before anything happens
+
+# 1. Launch. The menu bar icon appearing is the first thing Apple should see.
+open -a "$APP" --args -fullAccessForScreenshots
+sleep 6
+
+# 2. Turn the crosshair on from the menu.
+open_menu_item "$SHOW"
+sleep 3
+
+# 3. The core feature: the crosshair tracking the pointer. Slow, deliberate
+#    moves -- a reviewer has to be able to follow what is happening.
+for point in "600 400" "1900 500" "1500 1100" "700 1000" "2100 300" "1280 800"; do
+	"$HERE/warpmouse" $point
+	sleep 2.5
+done
+
+# 4. Settings, landing on the Appearance pane with the display modes.
+open_menu_item "$SETTINGS"
+sleep 3
+osascript <<-EOF 2>/dev/null
+tell application "System Events"
+	tell process "Cursor Sightline"
+		set frontmost to true
+		set w to first window whose title is "$TITLE"
+		set position of w to {215, 45}
+		set size of w to {850, 700}
+		perform action "AXRaise" of w
+	end tell
+end tell
+EOF
+sleep 3
+"$HERE/warpmouse" 700 400
+sleep 4
+
+# 5. The purchase location. Sidebar rows sit 32 points apart from Appearance at
+#    y=123, so License -- the third -- is at 187. Stop here: showing where the
+#    purchase lives is the point, and clicking Buy Now is not this script's job.
+"$HERE/warpmouse" 300 187 click
+sleep 3
+"$HERE/warpmouse" 700 500
+sleep 6
+
+wait $REC
+echo "Done: $OUT"
+echo "Watch it before sending -- the desktop background is in frame."
