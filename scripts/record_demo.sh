@@ -26,7 +26,7 @@ set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 LOCALE="${1:-en}"
 OUT="${2:-$HERE/shots/cursor-sightline-demo-$LOCALE.mov}"
-DURATION=70
+DURATION=78   # the sequence runs ~62s; the rest is headroom so nothing is cut off
 
 APP="${DEMO_APP:-/Users/rp/Library/Developer/Xcode/DerivedData/MouseGuide-bwfkadnrzkysetaxyhrbffjaqryn/Build/Products/Debug/Cursor Sightline.app}"
 [ -d "$APP" ] || APP="/Applications/Cursor Sightline.app"
@@ -60,12 +60,16 @@ trap restore EXIT
 # --- menu helpers -----------------------------------------------------------
 # The app is an accessory (LSUIElement) with no Dock icon, so its menu is only
 # reachable through the status bar (menu bar 2).
+# The menu is left open for a beat before the item is chosen. At the AppleScript
+# default it opened and closed inside a single second -- present in the
+# recording, but far too quick for a reviewer to notice, and this menu is the
+# app's entire interface.
 open_menu_item() {
 	osascript <<-EOF 2>/dev/null
 	tell application "System Events"
 		tell process "Cursor Sightline"
 			click menu bar item 1 of menu bar 2
-			delay 0.8
+			delay 2.5
 			click menu item "$1" of menu 1 of menu bar item 1 of menu bar 2
 		end tell
 	end tell
@@ -86,7 +90,7 @@ defaults write "$PREFS" language -string "$LOCALE"
 "$HERE/backdrop" 1d2433 &
 BACKDROP=$!
 sleep 2
-"$HERE/warpmouse" 1280 800
+"$HERE/warpmouse" 640 400
 
 echo "Recording ${DURATION}s to $OUT"
 screencapture -v -V "$DURATION" -k -C -x "$OUT" &
@@ -108,7 +112,10 @@ sleep 3
 
 # 3. The core feature: the crosshair tracking the pointer. Slow, deliberate
 #    moves -- a reviewer has to be able to follow what is happening.
-for point in "600 400" "1900 500" "1500 1100" "700 1000" "2100 300" "1280 800"; do
+# Points, not pixels. The display is 1280x800 points (2560x1600 pixels), and
+# anything beyond that gets clamped to the edge -- which silently reduced the
+# crosshair to a single line hard against the border on the previous take.
+for point in "320 220" "960 260" "1080 620" "420 640" "760 380" "640 400"; do
 	"$HERE/warpmouse" $point
 	sleep 2.5
 done
