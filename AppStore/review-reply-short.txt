@@ -1,0 +1,59 @@
+Hello,
+
+Answers to all eight points follow, and a screen recording is attached. The same information is now in the App Review Information notes.
+
+1. Screen recording
+
+Attached, captured on a MacBook Pro (Mac15,6, Apple M3 Pro). It shows, in order: launching the app, the crosshair icon appearing in the menu bar, opening the app's menu, turning the crosshair on, the crosshair following the pointer around the screen, opening Settings, the Appearance pane listing all six display modes, and the License pane where the purchase is offered.
+
+Two items from your list are not in it. The permission prompts appear only on first run and are already granted on the machine used, so they cannot recur; both are described in point 4. The recording shows where the purchase is offered but does not complete one. We can record either on request.
+
+The plain dark backdrop only keeps unrelated windows out of frame; it is not part of the app.
+
+2. Devices and operating systems tested
+
+MacBook Pro 14-inch (Mac15,6, Apple M3 Pro) running macOS 27.0. Deployment target macOS 13.0.
+
+3. What the app does, and for whom
+
+Cursor Sightline draws a crosshair that follows the mouse pointer so it can be located at a glance. It is a menu bar utility with no Dock icon and no window at launch.
+
+It is for people who lose track of the pointer: users with reduced vision, anyone on a large or multi-monitor setup, and people presenting or teaching. On a large screen a small arrow is easy to lose, and hunting for it interrupts the user.
+
+Six display modes: horizontal line, vertical line, full crosshair, reading line (an unbroken horizontal line for following text), edge pointers, and a circle. Colour, thickness, border, centre gap, opacity, line style and length are adjustable. It can hide itself while typing and adapt its colour to the background.
+
+4. Setting up and reaching the main features
+
+No account, login or sample files are required.
+
+1) Launch the app; a crosshair icon appears in the menu bar. 2) Click it and choose "Show Cursor Sightline", or press Control-Shift-L. 3) Choose "Settings" in the same menu to change mode, colour, size and behaviour.
+
+Two optional permissions are requested, and the app is fully usable if both are declined:
+
+- Input Monitoring, so Control-Shift-L works globally and the crosshair can hide while typing. Declined, the shortcut does not work; the menu item still does.
+- Screen Recording, used only to sample the brightness under the pointer so the crosshair can switch between a light and a dark line. Nothing is recorded, stored or transmitted.
+
+5. External services, tools and platforms
+
+None. Apple frameworks only: SwiftUI, AppKit, Core Graphics and StoreKit. No server, analytics, tracking, authentication service, AI service, or payment processor other than Apple's. The app makes no network connections of its own; the network client entitlement exists solely because StoreKit requires it.
+
+6. Regional differences
+
+None. The app behaves identically in every region. The interface is available in English and Danish and follows the system language.
+
+7. Regulated industries or third-party material
+
+Not applicable. A cursor visibility utility in no regulated industry; all code, graphics and text are our own.
+
+8. What the in-app purchase provides, and how to reach it
+
+One non-consumable purchase, "Full Version" (dk.netdot.sightline.fullversion). No subscription, no time limit.
+
+The app is free and usable without it, showing a fixed red crosshair with a thin black border on the main screen. The purchase unlocks customisation: all six display modes, custom colours, adjustable thickness, border, centre gap, opacity and length, solid/dashed/dotted styles, automatic colour adaptation, and all connected displays instead of the main one only.
+
+To reach it: menu bar icon > Settings > License > Buy Now. Locked settings elsewhere link to the same place.
+
+Please let us know if anything else would help.
+
+Best regards,
+Rasmus Paasch
