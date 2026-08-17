@@ -5,9 +5,10 @@
 # and where the in-app purchase is offered.
 #
 # Records the WHOLE screen on purpose -- Apple wants to see the app launch and
-# the menu bar, which a window-only capture cannot show. Other apps are hidden
-# first and restored afterwards, but the desktop background stays visible, so
-# WATCH THE RECORDING BEFORE SENDING IT. Anything on the desktop goes to Apple.
+# the menu bar, which a window-only capture cannot show. A backdrop window
+# covers everything else; hiding the other apps was tried first and let a whole
+# chat window, project names and all, into the frame. WATCH THE RECORDING
+# BEFORE SENDING IT anyway -- whatever is on screen goes to Apple.
 #
 # Two things this deliberately does NOT do:
 #
@@ -43,11 +44,13 @@ else
 fi
 
 mkdir -p "$(dirname "$OUT")"
-for tool in setmode warpmouse; do
+for tool in setmode warpmouse backdrop; do
 	[ -x "$HERE/$tool" ] || swiftc -O "$HERE/$tool.swift" -o "$HERE/$tool" || exit 1
 done
 
+BACKDROP=""
 restore() {
+	[ -n "$BACKDROP" ] && kill "$BACKDROP" 2>/dev/null
 	pkill -x "Cursor Sightline" 2>/dev/null
 	"$HERE/setmode" 2704 1756 >/dev/null 2>&1
 	osascript -e 'tell application "System Events" to set visible of process "Terminal" to true' 2>/dev/null
@@ -77,17 +80,11 @@ sleep 2
 defaults write "$PREFS" hasCompletedFirstRun -bool true
 defaults write "$PREFS" language -string "$LOCALE"
 
-# Hide everything else so the recording shows the app, not the desktop clutter.
-osascript <<-'EOF' 2>/dev/null
-tell application "System Events"
-	set targets to name of every process whose visible is true
-end tell
-repeat with n in targets
-	try
-		tell application "System Events" to set visible of process (n as text) to false
-	end try
-end repeat
-EOF
+# Cover the screen. Hiding the other apps was tried and is not reliable -- an
+# Electron app ignored it and its whole window, project names and all, ended up
+# in the first recording. A backdrop window cannot fail that way.
+"$HERE/backdrop" 1d2433 &
+BACKDROP=$!
 sleep 2
 "$HERE/warpmouse" 1280 800
 
@@ -97,7 +94,12 @@ REC=$!
 sleep 4   # let the recording settle on a clean desktop before anything happens
 
 # 1. Launch. The menu bar icon appearing is the first thing Apple should see.
-open -a "$APP" --args -fullAccessForScreenshots
+#    Deliberately WITHOUT -fullAccessForScreenshots: that flag calls
+#    showCrosshairs() itself at launch, so the menu click below would toggle the
+#    crosshair straight back off -- which is exactly what ruined the first take.
+#    Without it the app behaves as it does for a real user, which is what a
+#    reviewer should be watching anyway.
+open -a "$APP"
 sleep 6
 
 # 2. Turn the crosshair on from the menu.
