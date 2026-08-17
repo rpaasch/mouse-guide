@@ -19,11 +19,26 @@ is attached.
 
 **1. Screen recording**
 
-Attached. It was captured on a MacBook Pro (Mac15,6, Apple M3 Pro) and shows,
-in order: launching the app, the menu bar icon appearing, turning the crosshair
-on, the crosshair following the pointer, opening Settings, switching display
-modes and colours, the two permission prompts, and the in-app purchase flow
-including the App Store payment sheet.
+Attached, captured on a MacBook Pro (Mac15,6, Apple M3 Pro). It shows, in
+order: launching the app, the crosshair icon appearing in the menu bar, opening
+the app's menu, turning the crosshair on, the crosshair following the pointer
+around the screen, opening Settings, the Appearance pane listing all six
+display modes and the customisation options, and the License pane where the
+in-app purchase is offered.
+
+Two things App Review's list mentions are deliberately not in it, and we would
+rather say so than leave you to find out:
+
+- **The permission prompts.** Input Monitoring and Screen Recording are
+  requested only the first time, and both are already granted on the machine
+  the recording was made on, so they do not appear again. Both are described in
+  point 4 below. We can revoke them and record the prompts if that would help.
+- **The App Store payment sheet.** The recording shows where the purchase is
+  offered and the Buy Now button, but does not complete a purchase. We can
+  provide a recording of the full purchase flow on request.
+
+The screen is covered with a plain backdrop during the recording; that is only
+to keep unrelated windows out of frame and is not part of the app.
 
 **2. Devices and operating systems tested**
 
