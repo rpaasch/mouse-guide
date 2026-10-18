@@ -48,7 +48,7 @@ Accessibility
 Cursor Sightline is free to use and shows a fixed red crosshair on one screen. A single in-app purchase unlocks all six modes, your own colours and sizes, line styles, automatic colour adaptation and all your displays. No subscription, no time limit.
 
 **PRIVACY:**
-Cursor Sightline collects no personal data. The app only requires permissions necessary to function (Input Monitoring for keyboard shortcuts, Screen Recording for color adaptation).
+Cursor Sightline collects no personal data. The only permission it asks for is Screen Recording – and only if you turn on automatic color adaptation. The keyboard shortcut works without any permissions.
 
 Made in Denmark
 

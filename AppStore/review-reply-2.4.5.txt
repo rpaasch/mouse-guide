@@ -1,0 +1,25 @@
+Hello,
+
+Thank you for the review. All three issues are addressed in build [BUILD], which is attached to version 1.0.
+
+1. Guideline 2.4.5(v) - Input Monitoring
+
+The app no longer requests Input Monitoring. The request at launch, the dialog that followed it and the usage description have been removed.
+
+2. Guideline 2.4.5 - Accessibility used for keystrokes
+
+The app no longer monitors keystrokes and does not request Accessibility access.
+
+- The show/hide shortcut (Control-Shift-L) is registered as a system hot key with RegisterEventHotKey. The app is told only when that one combination is pressed, and no permission is needed.
+- The optional "Hide while typing" setting now only asks macOS how long ago a key was last pressed (CGEventSourceSecondsSinceLastEventType). It never learns which key.
+
+We tested a Release build with the app's Input Monitoring and Accessibility permissions reset: no permission prompt appears, and the shortcut and "Hide while typing" both work.
+
+3. Guideline 2.1(b) - Buy Now button greyed out
+
+The button was disabled because the In-App Purchase product could not be loaded: our Paid Apps Agreement was not yet in effect. It is now active. [CHECK: Paid Apps Agreement shows Active in App Store Connect before sending] We have also changed the app so this cannot go unexplained again: it reloads the product whenever the License pane opens, and if the App Store cannot be reached it says so next to the button and offers to try again.
+
+The only permission the app can request is Screen Recording, and only when the user turns on automatic color adaptation in Settings. It samples the brightness under the pointer locally; nothing is recorded, stored or transmitted.
+
+Best regards,
+Rasmus Paasch
