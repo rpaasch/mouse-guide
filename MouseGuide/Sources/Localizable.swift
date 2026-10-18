@@ -58,7 +58,7 @@ enum LocalizedString {
     static var proLockedValueNote: String { "pro.lockedValue.note".localized() }
 
     // Permissions
-    static var shortcutPermissionMissing: String { "shortcut.permission.missing".localized() }
+    static var shortcutUnavailable: String { "shortcut.unavailable".localized() }
 
     // Menu Bar
     static var menuToggleLabel: String { "menu.toggleLabel".localized() }
@@ -118,24 +118,16 @@ enum LocalizedString {
     // Alerts
 
     // Permissions
-    static var permissionButtonOpenSettings: String { "permission.button.openSettings".localized() }
 
     // Alerts - Accessibility
 
     // Alerts - Input Monitoring
-    static var alertInputMonitoringTitle: String { "alert.inputMonitoring.title".localized() }
-    static var alertInputMonitoringMessage: String { "alert.inputMonitoring.message".localized() }
-    static var alertInputMonitoringExplanation: String { "alert.inputMonitoring.explanation".localized() }
-    static var alertInputMonitoringFeature1: String { "alert.inputMonitoring.feature1".localized() }
-    static var alertInputMonitoringFeature2: String { "alert.inputMonitoring.feature2".localized() }
-    static var alertInputMonitoringInstruction: String { "alert.inputMonitoring.instruction".localized() }
 
     // Alerts - Development
 
     // Alerts - About
 
     // Common Buttons
-    static var commonButtonLater: String { "common.button.later".localized() }
 
     // Language
     static var settingsLanguage: String { "settings.language".localized() }
@@ -202,8 +194,6 @@ enum LocalizedString {
     static var aboutCopyright: String { "about.copyright".localized() }
     static var aboutPermissions: String { "about.permissions".localized() }
     static var aboutPermissionsDescription: String { "about.permissions.description".localized() }
-    static var aboutPermissionInputMonitoring: String { "about.permission.inputMonitoring".localized() }
-    static var aboutPermissionInputMonitoringDescription: String { "about.permission.inputMonitoring.description".localized() }
     static var aboutPermissionScreenRecording: String { "about.permission.screenRecording".localized() }
     static var aboutPermissionScreenRecordingDescription: String { "about.permission.screenRecording.description".localized() }
     static var aboutPermissionGranted: String { "about.permission.granted".localized() }
@@ -250,6 +240,8 @@ enum LocalizedString {
     static var licenseActivatedTitle: String { "license.activated.title".localized() }
     static var licenseActivatedMessage: String { "license.activated.message".localized() }
     static var licenseRestorePurchases: String { "license.restorePurchases".localized() }
+    static var licenseStoreUnavailable: String { "license.storeUnavailable".localized() }
+    static var licenseRetry: String { "license.retry".localized() }
 
     // Free Session Expiry
 
@@ -349,8 +341,8 @@ enum LocalizedString {
     static var accessibilityShortcutRecorderRecording: String { "accessibility.shortcutRecorder.recording".localized() }
 
     // Keyboard Shortcut Recorder
-    static var shortcutRecorderPlaceholder: String { "shortcut.recorder.placeholder".localized() }
     static var shortcutRecorderRecording: String { "shortcut.recorder.recording".localized() }
+    static var shortcutRecorderNeedsModifier: String { "shortcut.recorder.needsModifier".localized() }
 
     // Keyboard Shortcut Permission Alert
 

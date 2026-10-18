@@ -28,6 +28,12 @@ class StoreKitManager: ObservableObject {
     }
     @Published var product: Product?
 
+    /// True when the last attempt to load the product came back empty or failed.
+    /// The purchase button is disabled without a product, and App Review rejected
+    /// a disabled button with no explanation (guideline 2.1(b), August 2026).
+    @Published private(set) var productUnavailable = false
+    private var isLoadingProducts = false
+
     private var updateListenerTask: Task<Void, Error>?
 
     enum PurchaseState {
@@ -54,16 +60,26 @@ class StoreKitManager: ObservableObject {
 
     // MARK: - Load Products
 
+    /// Runs at launch and again whenever the License pane opens without a
+    /// product, so a launch before the network was up does not leave the
+    /// purchase button disabled for the rest of the session.
     func loadProducts() async {
+        guard !isLoadingProducts else { return }
+        isLoadingProducts = true
+        defer { isLoadingProducts = false }
+
         do {
             let products = try await Product.products(for: [productID])
             if let product = products.first {
                 self.product = product
+                productUnavailable = false
                 NSLog("✅ Loaded product: \(product.displayName) - \(product.displayPrice)")
             } else {
+                productUnavailable = true
                 NSLog("❌ No products found for ID: \(productID)")
             }
         } catch {
+            productUnavailable = true
             NSLog("❌ Failed to load products: \(error.localizedDescription)")
         }
     }

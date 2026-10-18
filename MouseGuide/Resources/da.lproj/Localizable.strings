@@ -5,7 +5,7 @@
 
 /* First run */
 "welcome.title" = "Velkommen til Cursor Sightline";
-"welcome.message" = "Cursor Sightline tegner et trådkors der følger musemarkøren, så den er nem at få øje på.\n\nAppen bor i menulinjen øverst til højre. Klik på trådkors-ikonet for at slå den til og fra eller åbne indstillingerne — du kan også trykke ⇧⌃L når som helst.\n\nFor at genvejen kan virke, spørger macOS nu om adgang til Indtastningsovervågning. Siger du nej, virker resten stadig; så bruger du bare menulinjen.";
+"welcome.message" = "Cursor Sightline tegner et trådkors der følger musemarkøren, så den er nem at få øje på.\n\nAppen bor i menulinjen øverst til højre. Klik på trådkors-ikonet for at slå den til og fra eller åbne indstillingerne — du kan også trykke ⌃⇧L når som helst, uanset hvilket program du er i.";
 "welcome.continue" = "Fortsæt";
 
 /* Pro gating */
@@ -23,7 +23,7 @@
 /* Settings */
 "settings.activation" = "Aktivering";
 "settings.keyboardShortcut" = "Tastaturgenvej";
-"settings.shortcutHelp" = "Tryk på tastaturgenvejen for at slå til/fra";
+"settings.shortcutHelp" = "Tryk på genvejen i et hvilket som helst program for at slå trådkorset til og fra. Den skal indeholde ⌘ eller ⌃.";
 
 "settings.crosshairColor" = "Farve:";
 "settings.borderColor" = "Kantfarve:";
@@ -80,26 +80,16 @@
 
 /* Alerts - Accessibility */
 
-/* Alerts - Input Monitoring */
-"alert.inputMonitoring.title" = "Input Monitoring-tilladelse mangler";
-"alert.inputMonitoring.message" = "Du har aktiveret \"Skjul mens du skriver\", men appen har ikke Input Monitoring-tilladelse.";
-"alert.inputMonitoring.explanation" = "Denne tilladelse er nødvendig for at:";
-"alert.inputMonitoring.feature1" = "• Registrere når du skriver";
-"alert.inputMonitoring.feature2" = "• Automatisk skjule trådkorset mens du skriver";
-"alert.inputMonitoring.instruction" = "Klik \"Åbn Indstillinger\" for at give tilladelse.";
-
 /* Alerts - Development */
 
 /* Alerts - About */
 
 /* Permissions */
-"permission.button.openSettings" = "Åbn Systemindstillinger";
 
 /* Common */
 "common.ok" = "OK";
 
 /* Common Buttons */
-"common.button.later" = "Senere";
 
 /* Appearance Tab */
 "appearance.colors" = "Farver";
@@ -163,9 +153,7 @@
 "about.madeBy" = "Lavet af Rasmus Paasch med ❤️ i Dyssegård, Danmark";
 "about.copyright" = "Copyright © 2026 Rasmus Paasch";
 "about.permissions" = "Systemtilladelser";
-"about.permissions.description" = "Cursor Sightline har brug for følgende tilladelser for at fungere korrekt.";
-"about.permission.inputMonitoring" = "Indtastningsovervågning";
-"about.permission.inputMonitoring.description" = "Påkrævet for 'Skjul mens du skriver' funktion";
+"about.permissions.description" = "Farvetilpasning kræver tilladelse til skærmoptagelse. Alt andet i appen virker uden tilladelser.";
 "about.permission.screenRecording" = "Skærmoptagelse";
 "about.permission.screenRecording.description" = "Påkrævet for automatisk farvetilpasning";
 "about.permission.granted" = "Givet";
@@ -199,6 +187,8 @@
 "license.activated.title" = "Licens aktiveret!";
 "license.activated.message" = "Cursor Sightline er nu fuldt aktiveret. Tak for din støtte!";
 "license.restorePurchases" = "Gendan køb";
+"license.storeUnavailable" = "Prisen kunne ikke hentes fra App Store. Tjek internetforbindelsen, og prøv igen.";
+"license.retry" = "Prøv igen";
 
 /* Free Session Expiry */
 
@@ -298,11 +288,9 @@
 "accessibility.shortcutRecorder.recording" = "Tryk en tastekombination for at optage en ny genvej";
 
 /* Keyboard Shortcut Recorder */
-"shortcut.permission.missing" = "Genvejen virker ikke lige nu, fordi Indtastningsovervågning mangler.";
-"shortcut.recorder.placeholder" = "Klik for at optage...";
+"shortcut.unavailable" = "macOS kunne ikke aktivere genvejen. Vælg en anden.";
 "shortcut.recorder.recording" = "⌨️ Tryk tastekombination...";
-
-/* Keyboard Shortcut Permission Alert */
+"shortcut.recorder.needsModifier" = "Brug ⌘ eller ⌃";
 
 /* Window Titles */
 "window.settings.title" = "Indstillinger";

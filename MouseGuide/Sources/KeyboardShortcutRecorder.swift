@@ -1,29 +1,30 @@
 import SwiftUI
 import AppKit
+import Carbon.HIToolbox
 
 struct KeyboardShortcutRecorder: NSViewRepresentable {
-    @Binding var key: String
+    @Binding var keyCode: Int
     @Binding var modifiers: NSEvent.ModifierFlags
 
     func makeNSView(context: Context) -> ShortcutRecorderView {
         let view = ShortcutRecorderView()
-        view.onShortcutRecorded = { recordedKey, recordedModifiers in
-            key = recordedKey
+        view.onShortcutRecorded = { recordedKeyCode, recordedModifiers in
+            keyCode = recordedKeyCode
             modifiers = recordedModifiers
         }
         return view
     }
 
     func updateNSView(_ nsView: ShortcutRecorderView, context: Context) {
-        nsView.currentKey = key
+        nsView.currentKeyCode = keyCode
         nsView.currentModifiers = modifiers
     }
 }
 
 class ShortcutRecorderView: NSView {
-    var onShortcutRecorded: ((String, NSEvent.ModifierFlags) -> Void)?
-    var currentKey: String = "L"
-    var currentModifiers: NSEvent.ModifierFlags = [.shift, .control]
+    var onShortcutRecorded: ((Int, NSEvent.ModifierFlags) -> Void)?
+    var currentKeyCode: Int = CrosshairsSettings.Defaults.activationKeyCode
+    var currentModifiers: NSEvent.ModifierFlags = CrosshairsSettings.Defaults.activationModifiers
 
     private var isRecording = false
     private var localMonitor: Any?
@@ -70,20 +71,14 @@ class ShortcutRecorderView: NSView {
     }
 
     private func shortcutString() -> String {
-        var parts: [String] = []
-        if currentModifiers.contains(.control) { parts.append("⌃") }
-        if currentModifiers.contains(.option) { parts.append("⌥") }
-        if currentModifiers.contains(.shift) { parts.append("⇧") }
-        if currentModifiers.contains(.command) { parts.append("⌘") }
-
-        if !parts.isEmpty {
-            return parts.joined() + currentKey
-        }
-        return LocalizedString.shortcutRecorderPlaceholder
+        KeyboardShortcut.displayString(keyCode: currentKeyCode, modifiers: currentModifiers)
     }
 
     @objc private func startRecording() {
+        guard !isRecording else { return }
         isRecording = true
+        // The registered hot key would otherwise fire instead of being recorded.
+        NotificationCenter.default.post(name: KeyboardShortcut.recordingChanged, object: true)
         button.title = LocalizedString.shortcutRecorderRecording
         button.highlight(true)
 
@@ -108,28 +103,37 @@ class ShortcutRecorderView: NSView {
     }
 
     private func handleKeyEvent(_ event: NSEvent) {
-        guard isRecording else { return }
+        guard isRecording, event.type == .keyDown else { return }
 
-        // Get the key
-        guard let characters = event.charactersIgnoringModifiers?.uppercased(),
-              !characters.isEmpty,
-              event.type == .keyDown else { return }
+        // Only the four real modifiers: arrow and function keys also carry
+        // .function and .numericPad, which would leak into the label and menu.
+        let modifiers = event.modifierFlags.intersection(KeyboardShortcut.relevantModifiers)
+        let keyCode = Int(event.keyCode)
 
-        let key = characters
-        let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        if keyCode == kVK_Escape && modifiers.isEmpty {
+            stopRecording()
+            return
+        }
 
-        // Require at least one modifier
-        guard !modifiers.intersection([.command, .option, .control, .shift]).isEmpty else {
+        guard KeyboardShortcut.isAllowed(modifiers) else {
+            // Say why, not just beep - the title is also what VoiceOver reads.
             NSSound.beep()
+            button.title = LocalizedString.shortcutRecorderNeedsModifier
+            button.setAccessibilityLabel(LocalizedString.shortcutRecorderNeedsModifier)
+            NSAccessibility.post(
+                element: button,
+                notification: .announcementRequested,
+                userInfo: [.announcement: LocalizedString.shortcutRecorderNeedsModifier]
+            )
             return
         }
 
         // Update the shortcut
-        currentKey = key
+        currentKeyCode = keyCode
         currentModifiers = modifiers
 
         // Notify callback
-        onShortcutRecorded?(key, modifiers)
+        onShortcutRecorded?(keyCode, modifiers)
 
         // Stop recording
         stopRecording()
@@ -139,7 +143,9 @@ class ShortcutRecorderView: NSView {
     }
 
     private func stopRecording() {
+        guard isRecording else { return }
         isRecording = false
+        NotificationCenter.default.post(name: KeyboardShortcut.recordingChanged, object: false)
         button.highlight(false)
         button.title = shortcutString()
 

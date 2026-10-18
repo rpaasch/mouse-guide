@@ -767,6 +767,7 @@ struct BehaviorTab: View {
     // Observed so Pro sections unlock the moment a purchase resolves
     @ObservedObject var storeKitManager = StoreKitManager.shared
     @State private var showResetConfirmation = false
+    @State private var shortcutUnavailable = false
     weak var appDelegate: AppDelegate?
 
     private var hasFullAccess: Bool {
@@ -882,18 +883,7 @@ struct BehaviorTab: View {
                             HStack {
                                 Text(LocalizedString.behaviorAutoHideTyping)
                                 Spacer()
-                                Toggle("", isOn: Binding(
-                                    get: { settings.autoHideWhileTyping },
-                                    set: { newValue in
-                                        if newValue {
-                                            // Check permission before enabling
-                                            handleAutoHideWhileTypingToggle(enable: true)
-                                        } else {
-                                            // Disable without permission check
-                                            settings.autoHideWhileTyping = false
-                                        }
-                                    }
-                                ))
+                                Toggle("", isOn: $settings.autoHideWhileTyping)
                                     .labelsHidden()
                                     .toggleStyle(.switch)
                                     .accessibilityLabel("\(LocalizedString.accessibilityBehaviorAutoHideTypingLabel), \(settings.autoHideWhileTyping ? LocalizedString.accessibilityStateOn : LocalizedString.accessibilityStateOff)")
@@ -1013,34 +1003,32 @@ struct BehaviorTab: View {
                             .fontWeight(.medium)
 
                         KeyboardShortcutRecorder(
-                            key: $settings.activationKey,
+                            keyCode: $settings.activationKeyCode,
                             modifiers: $settings.activationModifiers
                         )
                         .frame(width: 160, height: 28)
-                        .onChange(of: settings.activationKey) { _ in
+                        .onChange(of: settings.activationKeyCode) { _ in
                             handleKeyboardShortcutChange()
                         }
                         .onChange(of: settings.activationModifiers) { _ in
                             handleKeyboardShortcutChange()
                         }
+                        .onAppear {
+                            shortcutUnavailable = appDelegate?.keyboardShortcutMonitor?.isRegistered == false
+                        }
 
                         // Without this the shortcut simply disappears from the
-                        // menu when permission is missing, with no explanation.
-                        if !settings.hasInputMonitoringPermission() {
+                        // menu when macOS refuses it, with no explanation.
+                        if shortcutUnavailable {
                             HStack(spacing: 8) {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundColor(.orange)
                                     .accessibilityHidden(true)
-                                Text(LocalizedString.shortcutPermissionMissing)
+                                Text(LocalizedString.shortcutUnavailable)
                                     .font(.caption)
                                     .foregroundColor(.orange)
-                                Button(LocalizedString.aboutPermissionOpenSettings) {
-                                    if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
-                                        NSWorkspace.shared.open(url)
-                                    }
-                                }
-                                .font(.caption)
                             }
+                            .accessibilityElement(children: .combine)
                         }
 
                         Divider()
@@ -1147,16 +1135,10 @@ struct BehaviorTab: View {
     // MARK: - Permission Handlers
 
     private func handleKeyboardShortcutChange() {
-        // Recreate keyboard monitor with new shortcut settings
-        // Input Monitoring permission is requested at app launch, so this should just work
+        // Re-register the hot key with the new combination
         appDelegate?.setupKeyboardMonitor()
+        shortcutUnavailable = appDelegate?.keyboardShortcutMonitor?.isRegistered == false
         NSLog("✅ Keyboard shortcut updated")
-    }
-
-    private func handleAutoHideWhileTypingToggle(enable: Bool) {
-        // Just toggle the setting - Input Monitoring permission is requested at app launch
-        settings.autoHideWhileTyping = enable
-        NSLog("✅ Auto-hide while typing: \(enable)")
     }
 }
 
@@ -1300,6 +1282,24 @@ struct LicenseTab: View {
                             .accessibilityLabel(LocalizedString.accessibilityLicenseBuyLabel)
                             .accessibilityHint(LocalizedString.accessibilityLicenseBuyHint)
 
+                            // A disabled button needs a reason next to it.
+                            if storeKitManager.product == nil && storeKitManager.productUnavailable {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .foregroundColor(.orange)
+                                        .accessibilityHidden(true)
+                                    Text(LocalizedString.licenseStoreUnavailable)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                    Spacer()
+                                    Button(LocalizedString.licenseRetry) {
+                                        Task { await storeKitManager.loadProducts() }
+                                    }
+                                    .font(.caption)
+                                }
+                            }
+
                             Divider()
 
                             Button(action: restorePurchases) {
@@ -1324,6 +1324,11 @@ struct LicenseTab: View {
                 }
             }
             .padding(.vertical, 24)
+        }
+        .task {
+            if storeKitManager.product == nil {
+                await storeKitManager.loadProducts()
+            }
         }
         .alert(LocalizedString.licenseActivatedTitle, isPresented: $showPurchaseSuccess) {
             Button(LocalizedString.commonOK) {}
@@ -1557,7 +1562,6 @@ struct AboutTab: View {
 
 struct PermissionsSection: View {
     @ObservedObject var settings: CrosshairsSettings
-    @State private var inputMonitoringGranted: Bool = false
     @State private var screenRecordingGranted: Bool = false
     @State private var refreshTimer: Timer?
 
@@ -1573,18 +1577,6 @@ struct PermissionsSection: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             VStack(spacing: 12) {
-                // Input Monitoring Permission
-                PermissionRow(
-                    title: LocalizedString.aboutPermissionInputMonitoring,
-                    description: LocalizedString.aboutPermissionInputMonitoringDescription,
-                    isGranted: inputMonitoringGranted,
-                    onOpenSettings: {
-                        openInputMonitoringSettings()
-                    }
-                )
-
-                Divider()
-
                 // Screen Recording Permission
                 PermissionRow(
                     title: LocalizedString.aboutPermissionScreenRecording,
@@ -1617,14 +1609,7 @@ struct PermissionsSection: View {
     }
 
     private func refreshPermissionStatus() {
-        inputMonitoringGranted = settings.hasInputMonitoringPermission()
         screenRecordingGranted = settings.hasScreenRecordingPermission()
-    }
-
-    private func openInputMonitoringSettings() {
-        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
-            NSWorkspace.shared.open(url)
-        }
     }
 
     private func openScreenRecordingSettings() {

@@ -5,7 +5,7 @@
 
 /* First run */
 "welcome.title" = "Welcome to Cursor Sightline";
-"welcome.message" = "Cursor Sightline draws a crosshair that follows your mouse pointer, so it is easy to spot.\n\nThe app lives in the menu bar at the top right. Click the crosshair icon to switch it on and off or open the settings — you can also press ⇧⌃L at any time.\n\nFor that shortcut to work, macOS will now ask for Input Monitoring access. If you decline, everything else still works; you just use the menu bar instead.";
+"welcome.message" = "Cursor Sightline draws a crosshair that follows your mouse pointer, so it is easy to spot.\n\nThe app lives in the menu bar at the top right. Click the crosshair icon to switch it on and off or open the settings — you can also press ⌃⇧L at any time, whichever app you are in.";
 "welcome.continue" = "Continue";
 
 /* Pro gating */
@@ -23,7 +23,7 @@
 /* Settings */
 "settings.activation" = "Activation";
 "settings.keyboardShortcut" = "Keyboard Shortcut";
-"settings.shortcutHelp" = "Press the keyboard shortcut to toggle on/off";
+"settings.shortcutHelp" = "Press the shortcut in any app to switch the crosshair on and off. It must include ⌘ or ⌃.";
 
 "settings.crosshairColor" = "Color:";
 "settings.borderColor" = "Border Color:";
@@ -80,26 +80,16 @@
 
 /* Alerts - Accessibility */
 
-/* Alerts - Input Monitoring */
-"alert.inputMonitoring.title" = "Input Monitoring Permission Missing";
-"alert.inputMonitoring.message" = "You have enabled \"Hide while typing\", but the app doesn't have Input Monitoring permission.";
-"alert.inputMonitoring.explanation" = "This permission is necessary to:";
-"alert.inputMonitoring.feature1" = "• Detect when you're typing";
-"alert.inputMonitoring.feature2" = "• Automatically hide the crosshair while you type";
-"alert.inputMonitoring.instruction" = "Click \"Open Settings\" to grant permission.";
-
 /* Alerts - Development */
 
 /* Alerts - About */
 
 /* Permissions */
-"permission.button.openSettings" = "Open System Settings";
 
 /* Common */
 "common.ok" = "OK";
 
 /* Common Buttons */
-"common.button.later" = "Later";
 
 /* Appearance Tab */
 "appearance.colors" = "Colors";
@@ -163,9 +153,7 @@
 "about.madeBy" = "Made by Rasmus Paasch with ❤️ in Dyssegård, Denmark";
 "about.copyright" = "Copyright © 2026 Rasmus Paasch";
 "about.permissions" = "System Permissions";
-"about.permissions.description" = "Cursor Sightline needs the following permissions to work correctly.";
-"about.permission.inputMonitoring" = "Input Monitoring";
-"about.permission.inputMonitoring.description" = "Required for 'Hide while typing' feature";
+"about.permissions.description" = "Color adaptation needs Screen Recording access. Everything else in the app works without any permissions.";
 "about.permission.screenRecording" = "Screen Recording";
 "about.permission.screenRecording.description" = "Required for automatic color adaptation";
 "about.permission.granted" = "Granted";
@@ -199,6 +187,8 @@
 "license.activated.title" = "License Activated!";
 "license.activated.message" = "Cursor Sightline is now fully activated. Thanks for your support!";
 "license.restorePurchases" = "Restore Purchases";
+"license.storeUnavailable" = "Couldn't get the price from the App Store. Check your internet connection and try again.";
+"license.retry" = "Try Again";
 
 /* Free Session Expiry */
 
@@ -298,11 +288,9 @@
 "accessibility.shortcutRecorder.recording" = "Press a key combination to record a new shortcut";
 
 /* Keyboard Shortcut Recorder */
-"shortcut.permission.missing" = "The shortcut does not work right now because Input Monitoring is missing.";
-"shortcut.recorder.placeholder" = "Click to record...";
+"shortcut.unavailable" = "macOS could not activate this shortcut. Choose a different one.";
 "shortcut.recorder.recording" = "⌨️ Press key combination...";
-
-/* Keyboard Shortcut Permission Alert */
+"shortcut.recorder.needsModifier" = "Use ⌘ or ⌃";
 
 /* Window Titles */
 "window.settings.title" = "Settings";

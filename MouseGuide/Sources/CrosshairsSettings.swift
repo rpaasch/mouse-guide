@@ -1,6 +1,6 @@
 import SwiftUI
 import AppKit
-import IOKit
+import Carbon.HIToolbox
 
 class CrosshairsSettings: ObservableObject {
     static let shared = CrosshairsSettings()
@@ -30,7 +30,7 @@ class CrosshairsSettings: ObservableObject {
         static let autoHideTypingDelay = 1.5
         static let invertColors = false
         static let orientation = CrosshairOrientation.both
-        static let activationKey = "L"
+        static let activationKeyCode = kVK_ANSI_L
         static let activationModifiers: NSEvent.ModifierFlags = [.shift, .control]
         static let glidingEnabled = false
         static let glidingSpeed = 0.5
@@ -124,9 +124,10 @@ class CrosshairsSettings: ObservableObject {
         didSet { saveSetting("orientation", orientation.rawValue) }
     }
 
-    // Keyboard shortcut
-    @Published var activationKey: String {
-        didSet { saveSetting("activationKey", activationKey) }
+    // Keyboard shortcut - a virtual key code, because the hot key is bound to
+    // a physical key. The label shown for it comes from the keyboard layout.
+    @Published var activationKeyCode: Int {
+        didSet { saveSetting("activationKeyCode", activationKeyCode) }
     }
 
     @Published var activationModifiers: NSEvent.ModifierFlags {
@@ -205,9 +206,13 @@ class CrosshairsSettings: ObservableObject {
         let lineStyleRaw = defaults.string(forKey: "lineStyle") ?? Defaults.lineStyle.rawValue
         self.lineStyle = LineStyle(rawValue: lineStyleRaw) ?? Defaults.lineStyle
 
-        self.activationKey = defaults.string(forKey: "activationKey") ?? Defaults.activationKey
-        let modifiersRaw = defaults.integer(forKey: "activationModifiers")
-        self.activationModifiers = modifiersRaw == 0 ? Defaults.activationModifiers : NSEvent.ModifierFlags(rawValue: UInt(modifiersRaw))
+        // Builds before 1.0 stored the shortcut as a character under
+        // "activationKey". None of them was ever released, so it is not migrated.
+        self.activationKeyCode = (defaults.object(forKey: "activationKeyCode") as? Int) ?? Defaults.activationKeyCode
+        let storedModifiers = NSEvent.ModifierFlags(rawValue: UInt(defaults.integer(forKey: "activationModifiers")))
+            .intersection(KeyboardShortcut.relevantModifiers)
+        // Earlier builds accepted ⇧ alone, which a hot key cannot be allowed to swallow.
+        self.activationModifiers = KeyboardShortcut.isAllowed(storedModifiers) ? storedModifiers : Defaults.activationModifiers
 
         // Language - default to system language if available, otherwise English
         if let savedLanguage = defaults.string(forKey: "language") {
@@ -264,7 +269,7 @@ class CrosshairsSettings: ObservableObject {
         autoHideTypingDelay = Defaults.autoHideTypingDelay
         invertColors = Defaults.invertColors
         orientation = Defaults.orientation
-        activationKey = Defaults.activationKey
+        activationKeyCode = Defaults.activationKeyCode
         activationModifiers = Defaults.activationModifiers
         glidingEnabled = Defaults.glidingEnabled
         glidingSpeed = Defaults.glidingSpeed
@@ -386,20 +391,9 @@ class CrosshairsSettings: ObservableObject {
 
     // MARK: - Permission Helpers
 
-    /// Check if Input Monitoring permission is granted
-    func hasInputMonitoringPermission() -> Bool {
-        let status = IOHIDCheckAccess(kIOHIDRequestTypeListenEvent)
-        return status == kIOHIDAccessTypeGranted
-    }
-
     /// Check if Screen Recording permission is granted
     func hasScreenRecordingPermission() -> Bool {
         return CGPreflightScreenCaptureAccess()
-    }
-
-    /// Request Input Monitoring permission - triggers macOS permission dialog
-    func requestInputMonitoringPermission() -> Bool {
-        return IOHIDRequestAccess(kIOHIDRequestTypeListenEvent)
     }
 
     /// Request Screen Recording permission

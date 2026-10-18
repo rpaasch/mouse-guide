@@ -36,11 +36,13 @@ skiftes i Indstillinger.
 
 ## Tastaturgenvej
 
-**⇧⌃L** (Shift + Control + L) slår trådkorset til og fra. Genvejen kan ændres
-under Indstillinger → Adfærd → Aktivering.
+**⌃⇧L** (Control + Shift + L) slår trådkorset til og fra, uanset hvilket program
+der er forrest. Genvejen kan ændres under Indstillinger → Adfærd → Aktivering.
 
-Genvejen kræver tilladelsen Indtastningsovervågning. Uden den virker den ikke,
-og menulinjen viser den derfor ikke — brug menupunktet i stedet.
+Genvejen er registreret som systemgenvej (`RegisterEventHotKey`) og kræver ingen
+tilladelser. Den tager kombinationen fra det program, der er forrest, så den
+skal indeholde ⌘ eller ⌃ — ellers kunne den spærre for almindelig skrivning
+(⌥2 er @ på et dansk tastatur).
 
 ## Gratis og fuld version
 
@@ -56,10 +58,12 @@ maskiner med samme Apple-konto.
 
 | Tilladelse | Bruges til | Påkrævet? |
 |---|---|---|
-| Indtastningsovervågning | Tastaturgenvej, skjul-mens-du-skriver | Nej, kun til de funktioner |
 | Skærmoptagelse | Automatisk farvetilpasning | Nej, kun til den funktion |
 
-Ingen af dem er nødvendige for at vise trådkorset. Status kan ses under
+Appen beder ikke om Indtastningsovervågning eller Tilgængelighed. App Review
+afviste i august 2026 en version, der lyttede til tastaturet (retningslinje
+2.4.5). Skjul-mens-du-skriver læser nu kun, hvor længe siden der sidst blev
+trykket på en tast — aldrig hvilken. Status for skærmoptagelse kan ses under
 Indstillinger → Om, hvorfra man også kan åbne Systemindstillinger direkte.
 
 Bemærk at macOS knytter tilladelser til appens placering. Flytter du appen
@@ -88,7 +92,7 @@ MouseGuide/
 │   ├── CrosshairsSettings.swift      Indstillinger, standardværdier, gating
 │   ├── SettingsView.swift            Indstillingsvindue (SwiftUI)
 │   ├── MenuBarManager.swift          Menulinje
-│   ├── KeyboardShortcutMonitor.swift Global genvejstast
+│   ├── KeyboardShortcutMonitor.swift Global genvejstast (systemgenvej)
 │   ├── KeyboardShortcutRecorder.swift Optagelse af ny genvej
 │   ├── StoreKitManager.swift         Køb og gendannelse
 │   ├── LaunchAtLogin.swift           Login-element

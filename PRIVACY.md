@@ -18,23 +18,23 @@ Cursor Sightline is designed with privacy in mind. We do not collect, store, or 
 
 ## Permissions
 
-Cursor Sightline requires the following system permissions to function:
-
-### Input Monitoring (Optional)
-- **Purpose:** To detect keyboard shortcuts for toggling crosshairs and auto-hiding while typing
-- **Data:** Keyboard events are processed locally and never stored or transmitted
-- **Without this permission:** The keyboard shortcut feature will not work
+Cursor Sightline asks for one system permission, and only for one feature:
 
 ### Screen Recording (Optional)
 - **Purpose:** To sample the background color under the cursor for automatic color adaptation
 - **Data:** A small area around the cursor is sampled locally to determine brightness. No screenshots are saved or transmitted.
 - **Without this permission:** Automatic color adaptation will not work
 
+### Keyboard
+Cursor Sightline does not monitor the keyboard and does not ask for Input Monitoring or Accessibility access.
+- **Keyboard shortcut:** Registered with macOS as a system hot key. The app is told only when that one combination is pressed.
+- **Hide while typing:** The app asks macOS how long ago a key was last pressed. It never learns which key.
+
 ## Data Storage
 
 Cursor Sightline stores only:
 - Your preferences (locally in macOS preferences)
-- Trial period information (locally in Application Support)
+- Whether the full version has been purchased (locally in macOS preferences, so the app starts with the right appearance before the App Store has answered)
 
 No data is ever transmitted to external servers.
 

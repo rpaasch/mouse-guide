@@ -17,10 +17,8 @@ class CrosshairsWindowManager {
     private var lastMouseMoveTime: TimeInterval = 0
     private var isFirstFrame = true  // Skip gliding delay on first frame
     private var debugFrameCount = 0  // For debug printing
-    private var keyboardEventMonitor: Any?  // Global monitor - works when app is NOT frontmost
-    private var localKeyboardEventMonitor: Any?  // Local monitor - works when app IS frontmost
-    private var unhideTimer: Timer?
-    private var lastAutoHideWhileTypingValue: Bool = false
+    private var shownAt: TimeInterval = 0          // systemUptime when show() last ran
+    private var lastTypingCheck: TimeInterval = 0
 
     // Visibility is driven by independent reasons to hide. None of them may
     // touch the windows directly - see applyVisibility().
@@ -29,6 +27,33 @@ class CrosshairsWindowManager {
     private var windowsVisible = true
 
     private var shouldBeVisible: Bool { !hiddenByTyping && !hiddenByFullscreen }
+
+    // MARK: - Typing detection
+
+    /// Hides the crosshair for a moment after a key press, so it does not sit
+    /// on top of the text being written.
+    ///
+    /// Reads only how long ago the last key went down - never which key - and
+    /// does not listen to the keyboard, so it needs no Input Monitoring.
+    /// Listening is what App Review rejected in August 2026 (guideline 2.4.5).
+    /// Measured from a sandboxed build without that permission: the value is
+    /// the real one, no prompt appears, and the call adds no permission check
+    /// of its own. tccd does log silent Input Monitoring checks at launch, but
+    /// a plain windowed app with no such call gets exactly the same ones.
+    private func updateTypingState(now: TimeInterval) {
+        guard settings.autoHideWhileTyping else {
+            hiddenByTyping = false
+            return
+        }
+        guard now - lastTypingCheck >= 0.05 else { return }
+        lastTypingCheck = now
+
+        let sinceKeyDown = CGEventSource.secondsSinceLastEventType(.combinedSessionState, eventType: .keyDown)
+        // The shortcut that showed the crosshair is itself a key press. It must
+        // not count as typing, or the crosshair would vanish as it appears.
+        let pressedSinceShown = sinceKeyDown < now - shownAt
+        hiddenByTyping = pressedSinceShown && sinceKeyDown < settings.autoHideTypingDelay
+    }
 
     // MARK: - Fullscreen detection
 
@@ -93,6 +118,7 @@ class CrosshairsWindowManager {
     private func applyVisibility() {
         guard windowsVisible != shouldBeVisible else { return }
         windowsVisible = shouldBeVisible
+        NSLog("👁 Crosshair \(windowsVisible ? "shown" : "hidden") - typing: \(hiddenByTyping), fullscreen: \(hiddenByFullscreen)")
 
         if windowsVisible {
             let currentMouseLocation = NSEvent.mouseLocation
@@ -114,6 +140,7 @@ class CrosshairsWindowManager {
         NSLog("🚀 show() ENTRY - calling hide() first")
         hide() // Clean up any existing windows
         NSLog("✅ hide() completed successfully")
+        shownAt = ProcessInfo.processInfo.systemUptime
 
         let settings = CrosshairsSettings.shared
         NSLog("🚀 show() called - hasFullAccess = \(settings.hasFullAccess)")
@@ -150,10 +177,6 @@ class CrosshairsWindowManager {
         startTracking()
         NSLog("✅ startTracking() completed")
 
-        // Start keyboard monitoring if enabled and track initial value
-        lastAutoHideWhileTypingValue = settings.autoHideWhileTyping
-        startKeyboardMonitoring()
-
         // Listen for screen configuration changes
         NotificationCenter.default.addObserver(
             self,
@@ -181,24 +204,6 @@ class CrosshairsWindowManager {
 
     @objc private func settingsChanged() {
         NSLog("⚙️ Settings changed - updating crosshairs")
-
-        // Check if autoHideWhileTyping setting specifically changed
-        let currentAutoHideWhileTyping = settings.autoHideWhileTyping
-        if currentAutoHideWhileTyping != lastAutoHideWhileTypingValue {
-            NSLog("   📍 autoHideWhileTyping changed: \(lastAutoHideWhileTypingValue) → \(currentAutoHideWhileTyping)")
-            lastAutoHideWhileTypingValue = currentAutoHideWhileTyping
-
-            // Start or stop keyboard monitoring based on new value
-            if currentAutoHideWhileTyping {
-                startKeyboardMonitoring()
-                // Permission check is now handled by the toggle in SettingsView
-                // No automatic popups here
-            } else {
-                stopKeyboardMonitoring()
-                // Show windows if they were hidden
-                unhideAfterTyping()
-            }
-        }
 
         // Restart tracking to apply gliding changes
         stopTracking()
@@ -241,9 +246,6 @@ class CrosshairsWindowManager {
     func hide() {
         NSLog("🔴 hide() called - cleaning up \(windows.count) windows")
         stopTracking()
-        stopKeyboardMonitoring()
-        unhideTimer?.invalidate()
-        unhideTimer = nil
 
         // Reset visibility state so the next show() starts from a clean slate
         hiddenByTyping = false
@@ -331,6 +333,7 @@ class CrosshairsWindowManager {
 
     private func updateCursorPosition() {
         updateFullscreenState(now: Date().timeIntervalSince1970)
+        updateTypingState(now: ProcessInfo.processInfo.systemUptime)
         applyVisibility()
 
         // Don't update position while hidden - applyVisibility() re-seats it
@@ -395,80 +398,6 @@ class CrosshairsWindowManager {
         mouseTracker.currentScreen = NSScreen.screens.first { screen in
             screen.frame.contains(mouseTracker.position)
         }
-    }
-
-    private func startKeyboardMonitoring() {
-        guard settings.autoHideWhileTyping else {
-            print("⌨️ Keyboard monitoring NOT started - setting is disabled")
-            return
-        }
-
-        stopKeyboardMonitoring()
-
-        print("⌨️ Starting keyboard monitoring for hide-while-typing...")
-
-        // Global monitor - works when app is NOT frontmost
-        keyboardEventMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            self?.handleKeyPress(event)
-        }
-
-        // Local monitor - works when app IS frontmost
-        localKeyboardEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            self?.handleKeyPress(event)
-            return event  // Pass through - don't consume typing events
-        }
-
-        if keyboardEventMonitor != nil {
-            print("✅ Global keyboard monitoring started")
-        } else {
-            print("⚠️ Global keyboard monitoring failed - Input Monitoring permission may be missing")
-        }
-
-        if localKeyboardEventMonitor != nil {
-            print("✅ Local keyboard monitoring started")
-        }
-    }
-
-    private func stopKeyboardMonitoring() {
-        if let monitor = keyboardEventMonitor {
-            NSEvent.removeMonitor(monitor)
-            keyboardEventMonitor = nil
-        }
-        if let monitor = localKeyboardEventMonitor {
-            NSEvent.removeMonitor(monitor)
-            localKeyboardEventMonitor = nil
-        }
-    }
-
-    private func handleKeyPress(_ event: NSEvent) {
-        // Dispatch to main thread for thread safety
-        // Event monitors can be called from background threads
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            guard self.settings.autoHideWhileTyping else { return }
-
-            print("⌨️ Key pressed: \(event.charactersIgnoringModifiers ?? "unknown")")
-
-            if !self.hiddenByTyping {
-                print("🙈 Hiding crosshairs due to typing")
-                self.hiddenByTyping = true
-                self.applyVisibility()
-            }
-
-            // Reset unhide timer
-            self.unhideTimer?.invalidate()
-            self.unhideTimer = Timer.scheduledTimer(withTimeInterval: self.settings.autoHideTypingDelay, repeats: false) { [weak self] _ in
-                self?.unhideAfterTyping()
-            }
-        }
-    }
-
-    private func unhideAfterTyping() {
-        guard hiddenByTyping else { return }
-
-        print("👀 Showing crosshairs again after typing stopped")
-        hiddenByTyping = false
-        applyVisibility()
     }
 
     deinit {

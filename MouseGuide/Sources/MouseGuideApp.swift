@@ -1,6 +1,5 @@
 import SwiftUI
 import AppKit
-import IOKit
 
 @main
 struct MouseGuideApp: App {
@@ -64,16 +63,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        // Explain the app before macOS asks for anything. A permission prompt
-        // is the first thing a new user would otherwise see, from an app with
-        // no Dock icon and no window - which reads as a failed install.
+        // An app with no Dock icon and no window otherwise reads as a failed
+        // install, so say where it lives.
         showFirstRunIntroductionIfNeeded()
 
-        // Proactively request Input Monitoring permission at launch
-        // This ensures keyboard shortcuts work globally from the start
-        requestInputMonitoringPermission()
-
-        // Setup keyboard monitor (will work after permission is granted)
+        // A system hot key - needs no permission, so it works from first launch.
         setupKeyboardMonitor()
         NSLog("✅ App initialized with keyboard shortcuts")
     }
@@ -103,51 +97,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.runModal()
     }
 
-    private func requestInputMonitoringPermission() {
-        NSLog("🔐 Proactively requesting Input Monitoring permission...")
-
-        // Use IOHIDRequestAccess - the proper API for triggering Input Monitoring dialog
-        let granted = IOHIDRequestAccess(kIOHIDRequestTypeListenEvent)
-
-        if granted {
-            NSLog("✅ Input Monitoring permission is GRANTED")
-        } else {
-            NSLog("⚠️ Input Monitoring permission NOT granted yet")
-            // Show dialog to guide user to System Settings
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.showInputMonitoringPermissionDialog()
-            }
-        }
-    }
-
-    private func showInputMonitoringPermissionDialog() {
-        let alert = NSAlert()
-        alert.messageText = LocalizedString.alertInputMonitoringTitle
-        alert.informativeText = """
-\(LocalizedString.alertInputMonitoringMessage)
-
-\(LocalizedString.alertInputMonitoringExplanation)
-\(LocalizedString.alertInputMonitoringFeature1)
-\(LocalizedString.alertInputMonitoringFeature2)
-
-\(LocalizedString.alertInputMonitoringInstruction)
-"""
-        alert.alertStyle = .informational
-        alert.addButton(withTitle: LocalizedString.permissionButtonOpenSettings)
-        alert.addButton(withTitle: LocalizedString.commonButtonLater)
-
-        let response = alert.runModal()
-        if response == .alertFirstButtonReturn {
-            // Open System Settings to Input Monitoring
-            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
-                NSWorkspace.shared.open(url)
-            }
-        }
-    }
-
     func setupKeyboardMonitor() {
-        // Always recreate monitor to ensure it's fresh
-        // This is important after user grants Input Monitoring permission
+        // Release the old hot key before the new one is registered, so the two
+        // never exist at once.
         if keyboardShortcutMonitor != nil {
             print("⌨️ Recreating keyboard monitor...")
             keyboardShortcutMonitor = nil
@@ -156,7 +108,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyboardShortcutMonitor = KeyboardShortcutMonitor(appDelegate: self)
         print("✅ Keyboard shortcut monitor created/refreshed")
 
-        // Update menu bar to show shortcut now that monitor is active
+        // The menu shows the shortcut only if the system accepted it
         menuBarManager?.updateToggleState()
     }
 

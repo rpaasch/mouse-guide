@@ -1,5 +1,3 @@
 /* English localization for Info.plist */
 
-"NSInputMonitoringUsageDescription" = "Cursor Sightline needs access to keyboard input to toggle the crosshair with a keyboard shortcut and automatically hide it while you type.";
-
 "NSScreenCaptureUsageDescription" = "Cursor Sightline needs screen recording access to automatically adapt the crosshair color based on the background under the mouse cursor.";

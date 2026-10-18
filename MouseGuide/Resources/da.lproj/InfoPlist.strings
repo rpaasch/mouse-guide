@@ -1,5 +1,3 @@
 /* Danish localization for Info.plist */
 
-"NSInputMonitoringUsageDescription" = "Cursor Sightline har brug for adgang til tastaturindtastning for at kunne aktivere/deaktivere trådkorset med tastaturgenvej og skjule det automatisk mens du skriver.";
-
 "NSScreenCaptureUsageDescription" = "Cursor Sightline har brug for skærmoptagelse for at kunne tilpasse trådkorsets farve automatisk baseret på baggrunden under musemarkøren.";

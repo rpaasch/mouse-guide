@@ -102,15 +102,14 @@ class MenuBarManager {
         updateShortcutDisplay()
     }
 
-    /// Shows the shortcut the user has actually configured, and only when Input
-    /// Monitoring is granted - the global monitor is created regardless of
-    /// permission, so anything based on its existence would advertise a
-    /// shortcut that silently does nothing.
+    /// Shows the shortcut the user has actually configured, and only when macOS
+    /// accepted it as a hot key - otherwise the menu would advertise a shortcut
+    /// that silently does nothing.
     private func updateShortcutDisplay() {
         let settings = CrosshairsSettings.shared
 
-        if settings.hasInputMonitoringPermission() {
-            toggleMenuItem?.keyEquivalent = settings.activationKey.lowercased()
+        if appDelegate?.keyboardShortcutMonitor?.isRegistered == true {
+            toggleMenuItem?.keyEquivalent = KeyboardShortcut.menuKeyEquivalent(for: settings.activationKeyCode)
             toggleMenuItem?.keyEquivalentModifierMask = settings.activationModifiers
         } else {
             toggleMenuItem?.keyEquivalent = ""
