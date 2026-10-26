@@ -75,3 +75,9 @@ scripts/pngtool
 scripts/warpmouse
 scripts/shots/
 scripts/backdrop
+
+# Wider: the Xcode project is generated from Wider/project.yml
+Wider/Wider.xcodeproj/
+Wider/Extension/Info.plist
+Wider/node_modules/
+Wider/tests/popup.png

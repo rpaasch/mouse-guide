@@ -1,0 +1,11 @@
+{
+  "extensionName": { "message": "Wider" },
+  "extensionDescription": { "message": "Lader websider bruge hele frontskærmen, også pladsen ved siden af Safaris knapper." },
+  "modeWide": { "message": "Bred" },
+  "modeNormal": { "message": "Normal" },
+  "pageOff": { "message": "Slået fra på denne side" },
+  "reloadHint": { "message": "Genindlæs siden, hvis den ikke ændrer sig." },
+  "reportSite": { "message": "Rapportér dette site" },
+  "reportSubject": { "message": "Wider: site ser forkert ud" },
+  "unavailable": { "message": "Wider kan ikke køre på denne side. Giv Wider adgang til websitet i udvidelsesmenuen (puslespilsikonet), og genindlæs." }
+}

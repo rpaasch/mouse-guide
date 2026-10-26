@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main id="ready" hidden>
+    <p id="host" class="host"></p>
+
+    <button id="toggle" class="toggle" type="button" aria-pressed="false">
+      <span class="arrows" aria-hidden="true">&#x2194;&#xFE0E;</span>
+      <span id="mode" class="mode"></span>
+    </button>
+
+    <label class="row">
+      <input id="pageOff" type="checkbox">
+      <span data-i18n="pageOff"></span>
+    </label>
+
+    <p class="hint" data-i18n="reloadHint"></p>
+
+    <a id="report" class="report" data-i18n="reportSite"></a>
+  </main>
+
+  <main id="unavailable" hidden>
+    <p class="hint" data-i18n="unavailable"></p>
+  </main>
+
+  <script src="settings.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

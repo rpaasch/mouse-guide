@@ -1,0 +1,11 @@
+{
+  "extensionName": { "message": "Wider" },
+  "extensionDescription": { "message": "Lets websites use the full front screen, including the space beside Safari's controls." },
+  "modeWide": { "message": "Wide" },
+  "modeNormal": { "message": "Normal" },
+  "pageOff": { "message": "Off on this page" },
+  "reloadHint": { "message": "If the page doesn't change, reload it." },
+  "reportSite": { "message": "Report this site" },
+  "reportSubject": { "message": "Wider: site doesn't look right" },
+  "unavailable": { "message": "Wider can't run on this page. Allow Wider for this website in the extensions menu (puzzle icon), then reload." }
+}

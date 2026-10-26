@@ -1,0 +1,262 @@
+{
+  "sourceLanguage": "en",
+  "version": "1.0",
+  "strings": {
+    "intro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let websites use the full front screen, including the space beside Safari's controls."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lad websider bruge hele frontskærmen, også pladsen ved siden af Safaris knapper."
+          }
+        }
+      }
+    },
+    "setup.title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on Wider"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slå Wider til"
+          }
+        }
+      }
+    },
+    "setup.step1": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings → Apps → Safari → Extensions."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Åbn Indstillinger → Apps → Safari → Udvidelser."
+          }
+        }
+      }
+    },
+    "setup.step2": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on Wider."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slå Wider til."
+          }
+        }
+      }
+    },
+    "setup.step3": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In Safari, open the extensions menu and allow Wider on all websites."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Åbn udvidelsesmenuen i Safari, og giv Wider adgang til alle websteder."
+          }
+        }
+      }
+    },
+    "setup.step4": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reload pages that were already open."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genindlæs sider, der allerede var åbne."
+          }
+        }
+      }
+    },
+    "use.title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Using Wider"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sådan bruges Wider"
+          }
+        }
+      }
+    },
+    "use.toggle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the round Wider button to switch between wide and normal."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryk på den runde Wider-knap for at skifte mellem bred og normal."
+          }
+        }
+      }
+    },
+    "use.perSite": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your choice is saved for each site, and you can turn Wider off on single pages."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit valg gemmes for hvert site, og du kan slå Wider fra på enkelte sider."
+          }
+        }
+      }
+    },
+    "use.limits": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sites with fixed headers or their own layout limits may not widen cleanly."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sites med faste toplinjer eller egne layoutgrænser bliver ikke altid pænt brede."
+          }
+        }
+      }
+    },
+    "report.title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report a website"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapportér et website"
+          }
+        }
+      }
+    },
+    "report.placeholder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "https://example.com"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "https://eksempel.dk"
+          }
+        }
+      }
+    },
+    "report.send": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send report"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send rapport"
+          }
+        }
+      }
+    },
+    "report.footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only the address you enter is shared, in a mail you send yourself."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kun adressen, du skriver, deles, i en mail du selv sender."
+          }
+        }
+      }
+    },
+    "report.subject": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wider: site doesn't look right"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wider: site ser forkert ud"
+          }
+        }
+      }
+    },
+    "privacy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wider doesn't collect your browsing data. Your choices stay on this device."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wider indsamler ikke dine browserdata. Dine valg bliver på denne enhed."
+          }
+        }
+      }
+    }
+  }
+}
