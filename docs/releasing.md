@@ -131,32 +131,6 @@ still operates in both, so both remain selectable — Apple's 2022 withdrawal fr
 Russia covered hardware sales and Apple Pay, not App Store distribution. Leave
 the exclusion alone unless the decision is revisited.
 
-(The purchase, by contrast, is set to all 175 territories. The app's narrower
-list is what governs where it can actually be bought.)
-
-## Submitting an in-app purchase for review
-
-The first in-app purchase must be reviewed together with an app version —
-App Store Connect says so on the version page, and `POST
-/v1/inAppPurchaseSubmissions` refuses a standalone first purchase with
-`STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID`.
-
-The API can do it, but the relationship is easy to get wrong. On
-`reviewSubmissionItems` it is **`inAppPurchaseVersion`**, pointing at the record
-under `/v2/inAppPurchases/{id}/versions` — *not* at the purchase itself.
-`inAppPurchase`, `inAppPurchaseV2` and `inAppPurchases` are all rejected as
-unknown relationships. So:
-
-1. `POST /v1/reviewSubmissions` — app relationship, `platform: MAC_OS`
-2. `POST /v1/reviewSubmissionItems` — `appStoreVersion` → the version
-3. `POST /v1/reviewSubmissionItems` — `inAppPurchaseVersion` → the purchase's
-   version record
-4. Check the submission has **2 items**, then `PATCH … {"submitted": true}`
-
-Items cannot be added once submitted; the only way back is Cancel Submission,
-which puts the version into `DEVELOPER_REJECTED` (a normal state, not an error)
-and costs the place in the review queue.
-
 ## Getting a released-macOS machine
 
 The dev Mac runs macOS 27.0 seed and has no second system volume. Options:
@@ -215,14 +189,11 @@ cannot be submitted for review until it has.
 
 "Data not collected" is accurate for this app, verified against the source:
 
-- No networking, analytics or tracking code of any kind. The only
-  `com.apple.security.network.client` use is StoreKit product lookup and
-  purchase; `StoreKitManager.swift` makes no calls of its own.
-- Input monitoring and screen capture are processed locally and never stored or
-  transmitted — they read keystroke events and sample pixel brightness under
-  the cursor.
-- Preferences and the trial flag are stored locally (UserDefaults /
-  Application Support).
-- Purchase data is collected by Apple, not by us, so it is not declarable here.
+- No networking, analytics or tracking code of any kind. The app has no network
+  entitlement, so the sandbox blocks network access outright.
+- Screen capture is processed locally and never stored or transmitted — it
+  samples pixel brightness under the cursor, and only when color adaptation is on.
+- Hide-while-typing reads only how long ago a key was pressed, never which key.
+- Preferences are stored locally (UserDefaults).
 
 This matches `PRIVACY.md`.

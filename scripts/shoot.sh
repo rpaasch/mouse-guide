@@ -109,7 +109,7 @@ capture() {
     defaults write "$PREFS" hasCompletedFirstRun -bool true
     defaults write "$PREFS" language -string "$LOCALE"
 
-    open -a "$APP" --args -fullAccessForScreenshots ${EXTRA:-}
+    open -a "$APP" --args -screenshotMode ${EXTRA:-}
     sleep 4
 
     # The settings window opens at 850x700 wherever macOS decides, which on an

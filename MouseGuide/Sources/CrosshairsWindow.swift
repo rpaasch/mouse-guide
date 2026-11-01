@@ -142,21 +142,7 @@ class CrosshairsWindowManager {
         NSLog("✅ hide() completed successfully")
         shownAt = ProcessInfo.processInfo.systemUptime
 
-        let settings = CrosshairsSettings.shared
-        NSLog("🚀 show() called - hasFullAccess = \(settings.hasFullAccess)")
-
-        // In free version, only show on main screen
-        let screensToUse: [NSScreen]
-        if settings.hasFullAccess {
-            screensToUse = NSScreen.screens
-            NSLog("   ✅ Full access - showing on all \(screensToUse.count) screens")
-        } else {
-            screensToUse = NSScreen.main.map { [$0] } ?? []
-            NSLog("   🔒 Limited access - showing on main screen only")
-        }
-
-        NSLog("🔍 DEBUG: After if/else, screensToUse.count = \(screensToUse.count)")
-        NSLog("🔍 DEBUG: screensToUse array = \(screensToUse)")
+        let screensToUse = NSScreen.screens
 
         // Create a window for each screen
         NSLog("📍 Creating windows for \(screensToUse.count) screens")
@@ -192,14 +178,6 @@ class CrosshairsWindowManager {
             name: NSNotification.Name("CrosshairsSettingsChanged"),
             object: nil
         )
-
-        // Listen for purchase state changes
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(purchaseStateChanged),
-            name: NSNotification.Name("PurchaseStateChanged"),
-            object: nil
-        )
     }
 
     @objc private func settingsChanged() {
@@ -215,30 +193,6 @@ class CrosshairsWindowManager {
         for window in windows {
             if let contentView = window.contentView {
                 contentView.setNeedsDisplay(contentView.bounds)
-            }
-        }
-    }
-
-    @objc private func purchaseStateChanged() {
-        NSLog("📢 Purchase state changed - updating crosshairs")
-
-        // Check if we need to recreate windows (e.g., multi-monitor restriction)
-        let currentWindowCount = windows.count
-        let settings = CrosshairsSettings.shared
-        let expectedWindowCount = settings.hasFullAccess ? NSScreen.screens.count : 1
-
-        if currentWindowCount != expectedWindowCount {
-            // Window count changed - recreate
-            hide()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.show()
-            }
-        } else {
-            // Just redraw with new settings
-            for window in windows {
-                if let contentView = window.contentView {
-                    contentView.setNeedsDisplay(contentView.bounds)
-                }
             }
         }
     }
@@ -550,10 +504,10 @@ class CrosshairsNativeView: NSView {
     }
     
     private func drawCrosshairs(in context: CGContext, center: CGPoint, viewSize: CGSize) {
-        let thickness = CGFloat(settings.effectiveThickness)
+        let thickness = CGFloat(settings.thickness)
         let edgePointerThickness = CGFloat(settings.edgePointerThickness)
-        let centerRadius = CGFloat(settings.effectiveCenterRadius)
-        let baseBorderSize = CGFloat(settings.effectiveBorderSize)
+        let centerRadius = CGFloat(settings.centerRadius)
+        let baseBorderSize = CGFloat(settings.borderSize)
 
         // No logging in here: this runs on every display-link tick, on every
         // screen. NSLog serialises a string and hits the unified log each time,
@@ -566,7 +520,10 @@ class CrosshairsNativeView: NSView {
         // Effective border size - enforce minimum 1px when color adaptation is active
         let effectiveBorderSize: CGFloat
 
-        if settings.effectiveInvertColors {
+        // Capturing the screen without permission makes macOS show its own prompt,
+        // which must only ever follow the user switching this on in Settings. If the
+        // permission is gone, draw the chosen colors; Settings explains why.
+        if settings.invertColors && settings.hasScreenRecordingPermission() {
             // Dynamic color inversion based on background with hysteresis to prevent flickering
             let backgroundColor = sampleBackgroundColor(at: mouseTracker.position)
             let brightness = backgroundColor.brightnessValue
@@ -587,26 +544,26 @@ class CrosshairsNativeView: NSView {
 
             if isUsingLightCrosshair {
                 // Light crosshair with dark border
-                crosshairColor = NSColor.white.withAlphaComponent(settings.effectiveOpacity)
-                borderColor = NSColor.black.withAlphaComponent(settings.effectiveOpacity)
+                crosshairColor = NSColor.white.withAlphaComponent(settings.opacity)
+                borderColor = NSColor.black.withAlphaComponent(settings.opacity)
             } else {
                 // Dark crosshair with light border
-                crosshairColor = NSColor.black.withAlphaComponent(settings.effectiveOpacity)
-                borderColor = NSColor.white.withAlphaComponent(settings.effectiveOpacity)
+                crosshairColor = NSColor.black.withAlphaComponent(settings.opacity)
+                borderColor = NSColor.white.withAlphaComponent(settings.opacity)
             }
 
             // Enforce minimum 1px border when color adaptation is active for guaranteed contrast
             effectiveBorderSize = max(baseBorderSize, 1.0)
         } else {
-            crosshairColor = NSColor(settings.effectiveCrosshairColor).withAlphaComponent(settings.effectiveOpacity)
-            borderColor = NSColor(settings.effectiveBorderColor).withAlphaComponent(settings.effectiveOpacity)
+            crosshairColor = NSColor(settings.crosshairColor).withAlphaComponent(settings.opacity)
+            borderColor = NSColor(settings.borderColor).withAlphaComponent(settings.opacity)
             effectiveBorderSize = baseBorderSize
         }
         
         context.setLineCap(.round)
 
         // Set line style (solid, dashed, dotted)
-        switch settings.effectiveLineStyle {
+        switch settings.lineStyle {
         case .solid:
             context.setLineDash(phase: 0, lengths: [])
         case .dashed:
@@ -618,7 +575,7 @@ class CrosshairsNativeView: NSView {
         }
 
         // Draw circle orientation mode
-        if settings.effectiveOrientation == .circle {
+        if settings.orientation == .circle {
             let circleRadius = CGFloat(settings.circleRadius)
             let circlePath = CGPath(ellipseIn: CGRect(
                 x: center.x - circleRadius,
@@ -629,7 +586,7 @@ class CrosshairsNativeView: NSView {
 
             // Draw circle fill if opacity > 0
             if settings.circleFillOpacity > 0 {
-                let circleFillColor = NSColor(settings.effectiveCircleFillColor).withAlphaComponent(CGFloat(settings.circleFillOpacity))
+                let circleFillColor = NSColor(settings.circleFillColor).withAlphaComponent(CGFloat(settings.circleFillOpacity))
                 context.setFillColor(circleFillColor.cgColor)
                 context.addPath(circlePath)
                 context.fillPath()
@@ -654,11 +611,11 @@ class CrosshairsNativeView: NSView {
         }
 
         // Draw horizontal line
-        if settings.effectiveOrientation == .horizontal || settings.effectiveOrientation == .both {
+        if settings.orientation == .horizontal || settings.orientation == .both {
             let leftStart: CGPoint
             let rightEnd: CGPoint
 
-            if settings.effectiveUseFixedLength {
+            if settings.useFixedLength {
                 let halfLength = CGFloat(settings.fixedLength) / 2
                 leftStart = CGPoint(x: max(0, center.x - halfLength), y: center.y)
                 rightEnd = CGPoint(x: min(viewSize.width, center.x + halfLength), y: center.y)
@@ -668,7 +625,7 @@ class CrosshairsNativeView: NSView {
             }
 
             // Check if reading line mode is enabled (only for horizontal orientation)
-            let useReadingLine = (settings.effectiveOrientation == .horizontal && settings.effectiveUseReadingLine)
+            let useReadingLine = (settings.orientation == .horizontal && settings.useReadingLine)
 
             if useReadingLine {
                 // Reading line mode: draw continuous line with no gap
@@ -717,11 +674,11 @@ class CrosshairsNativeView: NSView {
         }
         
         // Draw vertical line
-        if settings.effectiveOrientation == .vertical || settings.effectiveOrientation == .both {
+        if settings.orientation == .vertical || settings.orientation == .both {
             let topStart: CGPoint
             let bottomEnd: CGPoint
             
-            if settings.effectiveUseFixedLength {
+            if settings.useFixedLength {
                 let halfLength = CGFloat(settings.fixedLength) / 2
                 topStart = CGPoint(x: center.x, y: max(0, center.y - halfLength))
                 bottomEnd = CGPoint(x: center.x, y: min(viewSize.height, center.y + halfLength))
@@ -757,7 +714,7 @@ class CrosshairsNativeView: NSView {
         }
 
         // Draw edge pointers
-        if settings.effectiveOrientation == .edgePointers {
+        if settings.orientation == .edgePointers {
             // Pointer size controlled by edgePointerThickness
             let pointerSize = (edgePointerThickness * 4) + centerRadius / 4
 

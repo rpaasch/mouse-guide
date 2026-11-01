@@ -53,9 +53,6 @@ enum LocalizedString {
     static var welcomeContinue: String { "welcome.continue".localized() }
 
     // Pro gating
-    static var proBadge: String { "pro.badge".localized() }
-    static var proBadgeAccessibility: String { "pro.badge.accessibility".localized() }
-    static var proLockedValueNote: String { "pro.lockedValue.note".localized() }
 
     // Permissions
     static var shortcutUnavailable: String { "shortcut.unavailable".localized() }
@@ -160,6 +157,7 @@ enum LocalizedString {
     static var behaviorColorAdaptation: String { "behavior.colorAdaptation".localized() }
     static var behaviorColorAdaptationDescription: String { "behavior.colorAdaptation.description".localized() }
     static var behaviorColorAdaptationInfo: String { "behavior.colorAdaptation.info".localized() }
+    static var behaviorColorAdaptationPermissionMissing: String { "behavior.colorAdaptation.permissionMissing".localized() }
     static var behaviorGeneral: String { "behavior.general".localized() }
     static var behaviorAutoHideTyping: String { "behavior.autoHideTyping".localized() }
     static var behaviorAutoHideTypingDescription: String { "behavior.autoHideTyping.description".localized() }
@@ -208,7 +206,6 @@ enum LocalizedString {
     static var aboutResetConfirmReset: String { "about.reset.confirm.reset".localized() }
 
     // Common
-    static var commonOK: String { "common.ok".localized() }
 
     // Formatted Values
     static func formatPercentVisible(_ value: Double) -> String {
@@ -228,20 +225,6 @@ enum LocalizedString {
     }
 
     // License Tab
-    static var licenseStatus: String { "license.status".localized() }
-    static var licenseActivated: String { "license.activated".localized() }
-    static var licenseThankyou: String { "license.thankyou".localized() }
-    static var licenseFree: String { "license.free".localized() }
-    static var licenseFreeRestrictions: String { "license.freeRestrictions".localized() }
-    static var licenseChecking: String { "license.checking".localized() }
-    static var licenseBuyTitle: String { "license.buyTitle".localized() }
-    static var licenseBuyDescription: String { "license.buyDescription".localized() }
-    static var licenseBuyNow: String { "license.buyNow".localized() }
-    static var licenseActivatedTitle: String { "license.activated.title".localized() }
-    static var licenseActivatedMessage: String { "license.activated.message".localized() }
-    static var licenseRestorePurchases: String { "license.restorePurchases".localized() }
-    static var licenseStoreUnavailable: String { "license.storeUnavailable".localized() }
-    static var licenseRetry: String { "license.retry".localized() }
 
     // Free Session Expiry
 
@@ -308,13 +291,6 @@ enum LocalizedString {
     static var accessibilityBehaviorGlidingHint: String { "accessibility.behavior.gliding.hint".localized() }
 
     // Accessibility - License
-    static var accessibilityLicenseActive: String { "accessibility.license.active".localized() }
-    static var accessibilityLicenseRestoreLabel: String { "accessibility.license.restore.label".localized() }
-    static var accessibilityLicenseRestoreHint: String { "accessibility.license.restore.hint".localized() }
-    static var accessibilityLicenseBuyLabel: String { "accessibility.license.buy.label".localized() }
-    static var accessibilityLicenseBuyHint: String { "accessibility.license.buy.hint".localized() }
-    static var accessibilityLicenseRestorePreviousLabel: String { "accessibility.license.restorePrevious.label".localized() }
-    static var accessibilityLicenseRestorePreviousHint: String { "accessibility.license.restorePrevious.hint".localized() }
 
     // Accessibility - Updates
 

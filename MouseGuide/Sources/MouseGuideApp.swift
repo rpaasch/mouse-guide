@@ -32,11 +32,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         _ = CrosshairsSettings.shared
         NSLog("✅ Settings initialized")
 
-        // Resolve purchase status; StoreKitManager caches the result and posts
-        // PurchaseStateChanged when it lands, which triggers a redraw.
-        _ = StoreKitManager.shared
-        NSLog("✅ StoreKit manager initialized")
-
         // Setup notification observer for crosshairs visibility changes (for MenuBarManager)
         NotificationCenter.default.addObserver(
             self,
@@ -50,11 +45,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menuBarManager = MenuBarManager(appDelegate: self)
         NSLog("✅ MenuBarManager initialized")
 
+        // A system hot key - needs no permission, so it works from first launch.
+        setupKeyboardMonitor()
+
         // App Store screenshots need an empty screen and the crosshair already
-        // drawn. Both alerts below would land on top of the shot, and the
+        // drawn. The welcome dialog below would land on top of the shot, and the
         // crosshair is runtime-only state that no preference can preset.
         if Self.screenshotMode {
-            NSLog("📸 Screenshot mode - skipping permission prompts")
+            NSLog("📸 Screenshot mode - skipping the welcome dialog")
             showCrosshairs()
             if ProcessInfo.processInfo.arguments.contains("-showSettingsForScreenshots") {
                 NSApp.activate(ignoringOtherApps: true)
@@ -66,18 +64,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // An app with no Dock icon and no window otherwise reads as a failed
         // install, so say where it lives.
         showFirstRunIntroductionIfNeeded()
-
-        // A system hot key - needs no permission, so it works from first launch.
-        setupKeyboardMonitor()
         NSLog("✅ App initialized with keyboard shortcuts")
     }
 
-    /// The same DEBUG-only launch argument that unlocks the full-version
-    /// appearance in CrosshairsSettings. One flag drives the whole screenshot
-    /// setup, and none of it can reach a Release build.
+    /// A DEBUG-only launch argument for the App Store screenshots. None of it
+    /// can reach a Release build.
     private static var screenshotMode: Bool {
         #if DEBUG
-        return ProcessInfo.processInfo.arguments.contains("-fullAccessForScreenshots")
+        return ProcessInfo.processInfo.arguments.contains("-screenshotMode")
         #else
         return false
         #endif

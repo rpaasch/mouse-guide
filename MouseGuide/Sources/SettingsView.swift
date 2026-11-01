@@ -17,14 +17,12 @@ struct SettingsView: View {
     enum SettingsCategory: String, CaseIterable {
         case appearance
         case behavior
-        case license
         case about
 
         var localizedName: String {
             switch self {
             case .appearance: return "settings.category.appearance".localized()
             case .behavior: return "settings.category.behavior".localized()
-            case .license: return "settings.category.license".localized()
             case .about: return "settings.category.about".localized()
             }
         }
@@ -33,7 +31,6 @@ struct SettingsView: View {
             switch self {
             case .appearance: return "paintbrush.fill"
             case .behavior: return "gearshape.fill"
-            case .license: return "key.fill"
             case .about: return "info.circle"
             }
         }
@@ -91,8 +88,6 @@ struct SettingsView: View {
                         AppearanceTab(settings: settings)
                     case .behavior:
                         BehaviorTab(settings: settings, appDelegate: appDelegate)
-                    case .license:
-                        LicenseTab(settings: settings)
                     case .about:
                         AboutTab(settings: settings)
                     }
@@ -176,36 +171,18 @@ struct SettingsView: View {
 
 struct AppearanceTab: View {
     @ObservedObject var settings: CrosshairsSettings
-    // Observed so Pro sections unlock the moment a purchase resolves
-    @ObservedObject var storeKitManager = StoreKitManager.shared
-
-    private var hasFullAccess: Bool {
-        settings.hasFullAccess
-    }
-
-    /// Free users see the appearance they actually get, not a stored value they
-    /// cannot apply. Without this the slider reads 5 px while the screen draws
-    /// 2 px, which makes the app look broken rather than limited - and VoiceOver
-    /// reads out the wrong number with no visual context to contradict it.
-    private func shown(_ binding: Binding<Double>, free: Double) -> Binding<Double> {
-        hasFullAccess ? binding : .constant(free)
-    }
-
-    private func shown(_ binding: Binding<Color>, free: Color) -> Binding<Color> {
-        hasFullAccess ? binding : .constant(free)
-    }
 
     private var isHorizontalPlain: Bool {
-        settings.effectiveOrientation == .horizontal && !settings.effectiveUseReadingLine
+        settings.orientation == .horizontal && !settings.useReadingLine
     }
 
     private var isReadingLine: Bool {
-        settings.effectiveOrientation == .horizontal && settings.effectiveUseReadingLine
+        settings.orientation == .horizontal && settings.useReadingLine
     }
 
     // Dynamic opacity description based on orientation
     private var opacityDescription: String {
-        switch settings.effectiveOrientation {
+        switch settings.orientation {
         case .circle:
             return LocalizedString.appearanceOpacityDescriptionCircle
         case .edgePointers:
@@ -249,7 +226,7 @@ struct AppearanceTab: View {
             VStack(alignment: .leading, spacing: 24) {
                 // Orientation Section
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeader(title: LocalizedString.settingsOrientation, requiresPro: !hasFullAccess)
+                    SectionHeader(title: LocalizedString.settingsOrientation)
 
                     VStack(alignment: .leading, spacing: 12) {
                         VStack(alignment: .leading, spacing: 8) {
@@ -306,8 +283,8 @@ struct AppearanceTab: View {
                                 settings.orientation = .vertical
                             }) {
                                 HStack(spacing: 8) {
-                                    Image(systemName: settings.effectiveOrientation == .vertical ? "circle.inset.filled" : "circle")
-                                        .foregroundColor(settings.effectiveOrientation == .vertical ? .accentColor : .secondary)
+                                    Image(systemName: settings.orientation == .vertical ? "circle.inset.filled" : "circle")
+                                        .foregroundColor(settings.orientation == .vertical ? .accentColor : .secondary)
                                         .accessibilityHidden(true)
                                     Image(systemName: "arrow.up.and.down")
                                         .foregroundColor(.primary)
@@ -318,7 +295,7 @@ struct AppearanceTab: View {
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel(LocalizedString.accessibilityOrientationVerticalLabel)
-                            .accessibilityAddTraits(settings.effectiveOrientation == .vertical ? [.isButton, .isSelected] : .isButton)
+                            .accessibilityAddTraits(settings.orientation == .vertical ? [.isButton, .isSelected] : .isButton)
                             .accessibilityHint(LocalizedString.accessibilityOrientationVerticalHint)
 
                             // Both
@@ -326,8 +303,8 @@ struct AppearanceTab: View {
                                 settings.orientation = .both
                             }) {
                                 HStack(spacing: 8) {
-                                    Image(systemName: settings.effectiveOrientation == .both ? "circle.inset.filled" : "circle")
-                                        .foregroundColor(settings.effectiveOrientation == .both ? .accentColor : .secondary)
+                                    Image(systemName: settings.orientation == .both ? "circle.inset.filled" : "circle")
+                                        .foregroundColor(settings.orientation == .both ? .accentColor : .secondary)
                                         .accessibilityHidden(true)
                                     Image(systemName: "arrow.up.left.and.arrow.down.right")
                                         .foregroundColor(.primary)
@@ -338,7 +315,7 @@ struct AppearanceTab: View {
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel(LocalizedString.accessibilityOrientationBothLabel)
-                            .accessibilityAddTraits(settings.effectiveOrientation == .both ? [.isButton, .isSelected] : .isButton)
+                            .accessibilityAddTraits(settings.orientation == .both ? [.isButton, .isSelected] : .isButton)
                             .accessibilityHint(LocalizedString.accessibilityOrientationBothHint)
 
                             // Edge Pointers
@@ -346,8 +323,8 @@ struct AppearanceTab: View {
                                 settings.orientation = .edgePointers
                             }) {
                                 HStack(spacing: 8) {
-                                    Image(systemName: settings.effectiveOrientation == .edgePointers ? "circle.inset.filled" : "circle")
-                                        .foregroundColor(settings.effectiveOrientation == .edgePointers ? .accentColor : .secondary)
+                                    Image(systemName: settings.orientation == .edgePointers ? "circle.inset.filled" : "circle")
+                                        .foregroundColor(settings.orientation == .edgePointers ? .accentColor : .secondary)
                                         .accessibilityHidden(true)
                                     Image(systemName: "arrowtriangle.right.fill")
                                         .foregroundColor(.primary)
@@ -358,7 +335,7 @@ struct AppearanceTab: View {
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel(LocalizedString.accessibilityOrientationEdgePointersLabel)
-                            .accessibilityAddTraits(settings.effectiveOrientation == .edgePointers ? [.isButton, .isSelected] : .isButton)
+                            .accessibilityAddTraits(settings.orientation == .edgePointers ? [.isButton, .isSelected] : .isButton)
                             .accessibilityHint(LocalizedString.accessibilityOrientationEdgePointersHint)
 
                             // Circle
@@ -366,8 +343,8 @@ struct AppearanceTab: View {
                                 settings.orientation = .circle
                             }) {
                                 HStack(spacing: 8) {
-                                    Image(systemName: settings.effectiveOrientation == .circle ? "circle.inset.filled" : "circle")
-                                        .foregroundColor(settings.effectiveOrientation == .circle ? .accentColor : .secondary)
+                                    Image(systemName: settings.orientation == .circle ? "circle.inset.filled" : "circle")
+                                        .foregroundColor(settings.orientation == .circle ? .accentColor : .secondary)
                                         .accessibilityHidden(true)
                                     Image(systemName: "circle")
                                         .foregroundColor(.primary)
@@ -378,7 +355,7 @@ struct AppearanceTab: View {
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel(LocalizedString.accessibilityOrientationCircleLabel)
-                            .accessibilityAddTraits(settings.effectiveOrientation == .circle ? [.isButton, .isSelected] : .isButton)
+                            .accessibilityAddTraits(settings.orientation == .circle ? [.isButton, .isSelected] : .isButton)
                             .accessibilityHint(LocalizedString.accessibilityOrientationCircleHint)
                         }
 
@@ -395,45 +372,37 @@ struct AppearanceTab: View {
                     .cornerRadius(8)
                 }
                 .padding(.horizontal, 24)
-                .disabled(!hasFullAccess)
-                .opacity(hasFullAccess ? 1.0 : 0.6)
 
                 // Dimensions Section
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeader(title: LocalizedString.appearanceDimensions, requiresPro: !hasFullAccess)
+                    SectionHeader(title: LocalizedString.appearanceDimensions)
 
                     VStack(alignment: .leading, spacing: 16) {
-                        if !hasFullAccess {
-                            Text(LocalizedString.proLockedValueNote)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
                         SettingSlider(
                             label: LocalizedString.settingsOpacity,
                             description: opacityDescription,
-                            value: shown($settings.opacity, free: CrosshairsSettings.FreeTier.opacity),
+                            value: $settings.opacity,
                             range: 0.1...1.0,
                             format: { LocalizedString.formatPercentVisible($0) }
                         )
 
                         // Center radius only relevant for crosshair orientations, not circle or edge pointers
-                        if settings.effectiveOrientation != .circle && settings.effectiveOrientation != .edgePointers {
+                        if settings.orientation != .circle && settings.orientation != .edgePointers {
                             SettingSlider(
                                 label: LocalizedString.settingsCenterRadius,
                                 description: LocalizedString.appearanceCenterRadiusDescription,
-                                value: shown($settings.centerRadius, free: CrosshairsSettings.FreeTier.centerRadius),
+                                value: $settings.centerRadius,
                                 range: 0...100,
                                 format: { LocalizedString.formatPixels($0) }
                             )
                         }
 
                         // Thickness slider - hide for edge pointers since they use their own thickness setting
-                        if settings.effectiveOrientation != .edgePointers {
+                        if settings.orientation != .edgePointers {
                             SettingSlider(
                                 label: LocalizedString.settingsThickness,
                                 description: LocalizedString.appearanceThicknessDescription,
-                                value: shown($settings.thickness, free: CrosshairsSettings.FreeTier.thickness),
+                                value: $settings.thickness,
                                 range: 1...50,
                                 format: { LocalizedString.formatPixels($0) }
                             )
@@ -442,13 +411,13 @@ struct AppearanceTab: View {
                         SettingSlider(
                             label: LocalizedString.settingsBorderSize,
                             description: LocalizedString.appearanceBorderSizeDescription,
-                            value: shown($settings.borderSize, free: CrosshairsSettings.FreeTier.borderSize),
+                            value: $settings.borderSize,
                             range: 0...10,
                             format: { LocalizedString.formatPixels($0) }
                         )
 
                         // Circle-specific settings - only show when Circle orientation is selected
-                        if settings.effectiveOrientation == .circle {
+                        if settings.orientation == .circle {
                             SettingSlider(
                                 label: LocalizedString.settingsCircleRadius,
                                 description: LocalizedString.appearanceCircleRadiusDescription,
@@ -467,7 +436,7 @@ struct AppearanceTab: View {
                         }
 
                         // Edge pointer-specific settings - only show when Edge Pointers orientation is selected
-                        if settings.effectiveOrientation == .edgePointers {
+                        if settings.orientation == .edgePointers {
                             SettingSlider(
                                 label: LocalizedString.settingsEdgePointerThickness,
                                 description: LocalizedString.appearanceEdgePointerThicknessDescription,
@@ -484,12 +453,10 @@ struct AppearanceTab: View {
                     .cornerRadius(8)
                 }
                 .padding(.horizontal, 24)
-                .disabled(!hasFullAccess)
-                .opacity(hasFullAccess ? 1.0 : 0.6)
 
                 // Colors Section
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeader(title: LocalizedString.appearanceColors, requiresPro: !hasFullAccess)
+                    SectionHeader(title: LocalizedString.appearanceColors)
 
                     VStack(alignment: .leading, spacing: 16) {
                         if settings.invertColors {
@@ -508,10 +475,10 @@ struct AppearanceTab: View {
                             HStack {
                                 Text(LocalizedString.settingsCrosshairColor)
                                 Spacer()
-                                ColorPicker("", selection: shown($settings.crosshairColor, free: CrosshairsSettings.FreeTier.crosshairColor))
+                                ColorPicker("", selection: $settings.crosshairColor)
                                     .labelsHidden()
                                     .frame(width: 60)
-                                    .disabled(settings.invertColors || !hasFullAccess)
+                                    .disabled(settings.invertColors)
                                     .accessibilityLabel(LocalizedString.accessibilityColorCrosshairLabel)
                                     .accessibilityValue(colorNameForAccessibility(settings.crosshairColor))
                                     .accessibilityHint(LocalizedString.accessibilityColorCrosshairHint)
@@ -549,10 +516,10 @@ struct AppearanceTab: View {
                             HStack {
                                 Text(LocalizedString.settingsBorderColor)
                                 Spacer()
-                                ColorPicker("", selection: shown($settings.borderColor, free: CrosshairsSettings.FreeTier.borderColor))
+                                ColorPicker("", selection: $settings.borderColor)
                                     .labelsHidden()
                                     .frame(width: 60)
-                                    .disabled(settings.invertColors || !hasFullAccess)
+                                    .disabled(settings.invertColors)
                                     .accessibilityLabel(LocalizedString.accessibilityColorBorderLabel)
                                     .accessibilityValue(colorNameForAccessibility(settings.borderColor))
                                     .accessibilityHint(LocalizedString.accessibilityColorBorderHint)
@@ -583,7 +550,7 @@ struct AppearanceTab: View {
                                 .foregroundColor(.secondary)
 
                             // Circle Fill Color - only show in circle mode
-                            if settings.effectiveOrientation == .circle {
+                            if settings.orientation == .circle {
                                 Divider()
                                     .padding(.vertical, 12)
 
@@ -596,7 +563,7 @@ struct AppearanceTab: View {
                                     ColorPicker("", selection: $settings.circleFillColor)
                                         .labelsHidden()
                                         .frame(width: 60)
-                                        .disabled(settings.invertColors || !hasFullAccess)
+                                        .disabled(settings.invertColors)
                                         .accessibilityLabel(LocalizedString.accessibilityColorCircleFillLabel)
                                         .accessibilityValue(colorNameForAccessibility(settings.circleFillColor))
                                         .accessibilityHint(LocalizedString.accessibilityColorCircleFillHint)
@@ -636,13 +603,11 @@ struct AppearanceTab: View {
                     .cornerRadius(8)
                 }
                 .padding(.horizontal, 24)
-                .disabled(!hasFullAccess)
-                .opacity(hasFullAccess ? 1.0 : 0.6)
 
                 // Length Section - only show for line-based orientations, not for circle or edge pointers
-                if settings.effectiveOrientation != .circle && settings.effectiveOrientation != .edgePointers {
+                if settings.orientation != .circle && settings.orientation != .edgePointers {
                     VStack(alignment: .leading, spacing: 12) {
-                    SectionHeader(title: LocalizedString.settingsLength, requiresPro: !hasFullAccess)
+                    SectionHeader(title: LocalizedString.settingsLength)
 
                         VStack(alignment: .leading, spacing: 6) {
                             HStack {
@@ -658,7 +623,7 @@ struct AppearanceTab: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
 
-                            if settings.effectiveUseFixedLength {
+                            if settings.useFixedLength {
                                 Divider().padding(.vertical, 4)
                                 SettingSlider(
                                     label: LocalizedString.settingsFixedLength,
@@ -676,13 +641,11 @@ struct AppearanceTab: View {
                         .cornerRadius(8)
                     }
                     .padding(.horizontal, 24)
-                    .disabled(!hasFullAccess)
-                    .opacity(hasFullAccess ? 1.0 : 0.6)
                 }
 
                 // Line Style Section
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeader(title: LocalizedString.settingsLineStyle, requiresPro: !hasFullAccess)
+                    SectionHeader(title: LocalizedString.settingsLineStyle)
 
                     VStack(alignment: .leading, spacing: 8) {
                         // Solid
@@ -690,8 +653,8 @@ struct AppearanceTab: View {
                             settings.lineStyle = .solid
                         }) {
                             HStack(spacing: 8) {
-                                Image(systemName: settings.effectiveLineStyle == .solid ? "circle.inset.filled" : "circle")
-                                    .foregroundColor(settings.effectiveLineStyle == .solid ? .accentColor : .secondary)
+                                Image(systemName: settings.lineStyle == .solid ? "circle.inset.filled" : "circle")
+                                    .foregroundColor(settings.lineStyle == .solid ? .accentColor : .secondary)
                                     .accessibilityHidden(true)
                                 Image(systemName: "line.horizontal.3")
                                     .foregroundColor(.primary)
@@ -702,7 +665,7 @@ struct AppearanceTab: View {
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(LocalizedString.accessibilityLineStyleSolidLabel)
-                        .accessibilityAddTraits(settings.effectiveLineStyle == .solid ? [.isButton, .isSelected] : .isButton)
+                        .accessibilityAddTraits(settings.lineStyle == .solid ? [.isButton, .isSelected] : .isButton)
                         .accessibilityHint(LocalizedString.accessibilityLineStyleSolidHint)
 
                         // Dashed
@@ -710,8 +673,8 @@ struct AppearanceTab: View {
                             settings.lineStyle = .dashed
                         }) {
                             HStack(spacing: 8) {
-                                Image(systemName: settings.effectiveLineStyle == .dashed ? "circle.inset.filled" : "circle")
-                                    .foregroundColor(settings.effectiveLineStyle == .dashed ? .accentColor : .secondary)
+                                Image(systemName: settings.lineStyle == .dashed ? "circle.inset.filled" : "circle")
+                                    .foregroundColor(settings.lineStyle == .dashed ? .accentColor : .secondary)
                                     .accessibilityHidden(true)
                                 Image(systemName: "line.horizontal.3.decrease")
                                     .foregroundColor(.primary)
@@ -722,7 +685,7 @@ struct AppearanceTab: View {
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(LocalizedString.accessibilityLineStyleDashedLabel)
-                        .accessibilityAddTraits(settings.effectiveLineStyle == .dashed ? [.isButton, .isSelected] : .isButton)
+                        .accessibilityAddTraits(settings.lineStyle == .dashed ? [.isButton, .isSelected] : .isButton)
                         .accessibilityHint(LocalizedString.accessibilityLineStyleDashedHint)
 
                         // Dotted
@@ -730,8 +693,8 @@ struct AppearanceTab: View {
                             settings.lineStyle = .dotted
                         }) {
                             HStack(spacing: 8) {
-                                Image(systemName: settings.effectiveLineStyle == .dotted ? "circle.inset.filled" : "circle")
-                                    .foregroundColor(settings.effectiveLineStyle == .dotted ? .accentColor : .secondary)
+                                Image(systemName: settings.lineStyle == .dotted ? "circle.inset.filled" : "circle")
+                                    .foregroundColor(settings.lineStyle == .dotted ? .accentColor : .secondary)
                                     .accessibilityHidden(true)
                                 Image(systemName: "circle.grid.3x3")
                                     .foregroundColor(.primary)
@@ -742,7 +705,7 @@ struct AppearanceTab: View {
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(LocalizedString.accessibilityLineStyleDottedLabel)
-                        .accessibilityAddTraits(settings.effectiveLineStyle == .dotted ? [.isButton, .isSelected] : .isButton)
+                        .accessibilityAddTraits(settings.lineStyle == .dotted ? [.isButton, .isSelected] : .isButton)
                         .accessibilityHint(LocalizedString.accessibilityLineStyleDottedHint)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -752,8 +715,6 @@ struct AppearanceTab: View {
                     .cornerRadius(8)
                 }
                 .padding(.horizontal, 24)
-                .disabled(!hasFullAccess)
-                .opacity(hasFullAccess ? 1.0 : 0.6)
             }
             .padding(.vertical, 24)
         }
@@ -764,22 +725,16 @@ struct AppearanceTab: View {
 
 struct BehaviorTab: View {
     @ObservedObject var settings: CrosshairsSettings
-    // Observed so Pro sections unlock the moment a purchase resolves
-    @ObservedObject var storeKitManager = StoreKitManager.shared
     @State private var showResetConfirmation = false
     @State private var shortcutUnavailable = false
     weak var appDelegate: AppDelegate?
-
-    private var hasFullAccess: Bool {
-        settings.hasFullAccess
-    }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 // Color Adaptation
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeader(title: LocalizedString.behaviorColorAdaptation, requiresPro: !hasFullAccess)
+                    SectionHeader(title: LocalizedString.behaviorColorAdaptation)
 
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
@@ -788,22 +743,11 @@ struct BehaviorTab: View {
                             Toggle("", isOn: Binding(
                                 get: { settings.invertColors },
                                 set: { newValue in
-                                    if newValue {
-                                        // Request Screen Recording permission first
+                                    // The switch stays on while permission is missing, so
+                                    // the warning below can say why nothing has changed.
+                                    settings.invertColors = newValue
+                                    if newValue && !settings.hasScreenRecordingPermission() {
                                         settings.requestScreenRecordingPermission()
-
-                                        // Check if permission was granted after a short delay
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                            if settings.hasScreenRecordingPermission() {
-                                                settings.invertColors = true
-                                                NSLog("✅ Screen Recording permission granted - color adaptation enabled")
-                                            } else {
-                                                settings.invertColors = false
-                                                NSLog("⚠️ Screen Recording permission denied - color adaptation disabled")
-                                            }
-                                        }
-                                    } else {
-                                        settings.invertColors = false
                                     }
                                 }
                             ))
@@ -822,7 +766,7 @@ struct BehaviorTab: View {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundColor(.orange)
                                     .accessibilityHidden(true)
-                                Text(LocalizedString.aboutPermissionMissing)
+                                Text(LocalizedString.behaviorColorAdaptationPermissionMissing)
                                     .font(.caption)
                                     .foregroundColor(.orange)
                                 Button(LocalizedString.aboutPermissionOpenSettings) {
@@ -852,8 +796,6 @@ struct BehaviorTab: View {
                     .cornerRadius(8)
                 }
                 .padding(.horizontal, 24)
-                .disabled(!hasFullAccess)
-                .opacity(hasFullAccess ? 1.0 : 0.6)
 
                 // General Behavior
                 VStack(alignment: .leading, spacing: 12) {
@@ -935,7 +877,7 @@ struct BehaviorTab: View {
 
                 // Gliding Cursor
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeader(title: LocalizedString.settingsGliding, requiresPro: !hasFullAccess)
+                    SectionHeader(title: LocalizedString.settingsGliding)
 
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
@@ -989,8 +931,6 @@ struct BehaviorTab: View {
                     .cornerRadius(8)
                 }
                 .padding(.horizontal, 24)
-                .disabled(!hasFullAccess)
-                .opacity(hasFullAccess ? 1.0 : 0.6)
 
                 // Keyboard Shortcut
                 VStack(alignment: .leading, spacing: 12) {
@@ -1142,228 +1082,6 @@ struct BehaviorTab: View {
     }
 }
 
-// MARK: - License Tab
-
-struct LicenseTab: View {
-    @ObservedObject var settings: CrosshairsSettings
-    @ObservedObject var storeKitManager = StoreKitManager.shared
-    @State private var showPurchaseSuccess: Bool = false
-    @State private var isPurchasing: Bool = false
-
-    private var isPurchased: Bool {
-        if case .purchased = storeKitManager.purchaseState { return true }
-        return false
-    }
-
-    private var isChecking: Bool {
-        if case .checking = storeKitManager.purchaseState { return true }
-        return false
-    }
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                // Purchase status
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(LocalizedString.licenseStatus)
-                        .font(.headline)
-
-                    VStack(alignment: .leading, spacing: 16) {
-                        if isPurchased {
-                            HStack(spacing: 12) {
-                                Image(systemName: "checkmark.seal.fill")
-                                    .font(.system(size: 40))
-                                    .foregroundColor(.green)
-                                    .accessibilityHidden(true)
-
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(LocalizedString.licenseActivated)
-                                        .font(.headline)
-                                        .foregroundColor(.green)
-
-                                    Text(LocalizedString.licenseThankyou)
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .accessibilityElement(children: .combine)
-                            .accessibilityLabel(LocalizedString.accessibilityLicenseActive)
-                        } else if isChecking {
-                            HStack(spacing: 12) {
-                                ProgressView()
-                                    .controlSize(.large)
-                                Text(LocalizedString.licenseChecking)
-                                    .foregroundColor(.secondary)
-                            }
-                        } else {
-                            VStack(alignment: .leading, spacing: 12) {
-                                HStack(spacing: 12) {
-                                    Image(systemName: "gift.fill")
-                                        .font(.system(size: 40))
-                                        .foregroundColor(.purple)
-                                        .accessibilityHidden(true)
-
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(LocalizedString.licenseFree)
-                                            .font(.headline)
-                                            .foregroundColor(.purple)
-                                    }
-                                }
-
-                                Text(LocalizedString.licenseFreeRestrictions)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                    .padding(.top, 4)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 24)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                }
-                .padding(.horizontal, 24)
-
-                if isPurchased {
-                    // Only restore is relevant once purchased
-                    VStack(alignment: .leading, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 16) {
-                            Button(action: restorePurchases) {
-                                HStack {
-                                    Image(systemName: "arrow.clockwise.circle.fill")
-                                    Text(LocalizedString.licenseRestorePurchases)
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 8)
-                            }
-                            .buttonStyle(.bordered)
-                            .accessibilityLabel(LocalizedString.accessibilityLicenseRestoreLabel)
-                            .accessibilityHint(LocalizedString.accessibilityLicenseRestoreHint)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 16)
-                        .padding(.horizontal, 24)
-                        .background(Color(NSColor.controlBackgroundColor))
-                        .cornerRadius(8)
-                    }
-                    .padding(.horizontal, 24)
-                } else {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text(LocalizedString.licenseBuyTitle)
-                            .font(.headline)
-
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text(LocalizedString.licenseBuyDescription)
-                                .font(.body)
-
-                            Button(action: purchaseNow) {
-                                HStack {
-                                    if isPurchasing {
-                                        ProgressView()
-                                            .controlSize(.small)
-                                    }
-                                    Image(systemName: "cart.fill")
-                                    // Show the price on the button: asking people
-                                    // to tap "Buy" to discover the cost is both
-                                    // poor manners and an App Review risk.
-                                    if let price = storeKitManager.product?.displayPrice {
-                                        Text("\(LocalizedString.licenseBuyNow) · \(price)")
-                                    } else {
-                                        Text(LocalizedString.licenseBuyNow)
-                                    }
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 12)
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .controlSize(.large)
-                            .disabled(isPurchasing || storeKitManager.product == nil)
-                            .accessibilityLabel(LocalizedString.accessibilityLicenseBuyLabel)
-                            .accessibilityHint(LocalizedString.accessibilityLicenseBuyHint)
-
-                            // A disabled button needs a reason next to it.
-                            if storeKitManager.product == nil && storeKitManager.productUnavailable {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "exclamationmark.triangle.fill")
-                                        .foregroundColor(.orange)
-                                        .accessibilityHidden(true)
-                                    Text(LocalizedString.licenseStoreUnavailable)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                    Spacer()
-                                    Button(LocalizedString.licenseRetry) {
-                                        Task { await storeKitManager.loadProducts() }
-                                    }
-                                    .font(.caption)
-                                }
-                            }
-
-                            Divider()
-
-                            Button(action: restorePurchases) {
-                                HStack {
-                                    Image(systemName: "arrow.clockwise.circle.fill")
-                                    Text(LocalizedString.licenseRestorePurchases)
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 8)
-                            }
-                            .buttonStyle(.bordered)
-                            .accessibilityLabel(LocalizedString.accessibilityLicenseRestorePreviousLabel)
-                            .accessibilityHint(LocalizedString.accessibilityLicenseRestorePreviousHint)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 16)
-                        .padding(.horizontal, 24)
-                        .background(Color(NSColor.controlBackgroundColor))
-                        .cornerRadius(8)
-                    }
-                    .padding(.horizontal, 24)
-                }
-            }
-            .padding(.vertical, 24)
-        }
-        .task {
-            if storeKitManager.product == nil {
-                await storeKitManager.loadProducts()
-            }
-        }
-        .alert(LocalizedString.licenseActivatedTitle, isPresented: $showPurchaseSuccess) {
-            Button(LocalizedString.commonOK) {}
-        } message: {
-            Text(LocalizedString.licenseActivatedMessage)
-        }
-    }
-
-    private func purchaseNow() {
-        isPurchasing = true
-
-        Task {
-            NSLog("🛒 Starting StoreKit purchase...")
-            let success = await storeKitManager.purchase()
-
-            await MainActor.run {
-                isPurchasing = false
-
-                if success {
-                    NSLog("✅ Purchase successful!")
-                    showPurchaseSuccess = true
-                } else {
-                    NSLog("❌ Purchase failed or cancelled")
-                }
-            }
-        }
-    }
-
-    private func restorePurchases() {
-        Task {
-            await storeKitManager.restorePurchases()
-        }
-    }
-}
-
 // MARK: - Helper Views
 
 struct SettingRow<Content: View>: View {
@@ -1436,33 +1154,14 @@ struct SettingSlider: View {
     }
 }
 
-/// Section title with an optional Pro marker.
-///
-/// The marker is folded into the accessibility label rather than left as a
-/// separate visual element: a purple rectangle reading "Pro" tells a sighted
-/// user the section is locked, but conveys nothing to VoiceOver.
+/// Section title, marked as a header for VoiceOver.
 struct SectionHeader: View {
     let title: String
-    var requiresPro: Bool = false
 
     var body: some View {
-        HStack(spacing: 8) {
-            Text(title)
-                .font(.headline)
-            if requiresPro {
-                Text(LocalizedString.proBadge)
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(Color.purple)
-                    .cornerRadius(4)
-            }
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(requiresPro ? "\(title), \(LocalizedString.proBadgeAccessibility)" : title)
-        .accessibilityAddTraits(.isHeader)
+        Text(title)
+            .font(.headline)
+            .accessibilityAddTraits(.isHeader)
     }
 }
 

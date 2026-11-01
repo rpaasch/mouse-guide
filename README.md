@@ -44,15 +44,10 @@ tilladelser. Den tager kombinationen fra det program, der er forrest, så den
 skal indeholde ⌘ eller ⌃ — ellers kunne den spærre for almindelig skrivning
 (⌥2 er @ på et dansk tastatur).
 
-## Gratis og fuld version
+## Pris
 
-Appen er gratis at bruge. Gratis-versionen viser ét fast trådkors: 2px rød
-streg med sort kant, begge retninger, på hovedskærmen.
-
-Køb i appen (Indstillinger → Licens) låser op for tilpasning — alle seks
-tilstande, frie farver og dimensioner, linjestil, automatisk farvetilpasning og
-visning på alle skærme. Det er et engangskøb; køb kan gendannes på andre
-maskiner med samme Apple-konto.
+Appen er gratis, og alle funktioner er med. Den har ingen køb i appen og ingen
+netværksadgang.
 
 ## Tilladelser
 
@@ -79,9 +74,6 @@ xcodebuild -project MouseGuide.xcodeproj -scheme MouseGuide -configuration Debug
 
 Eller åbn `MouseGuide.xcodeproj` i Xcode og tryk ⌘R.
 
-Køb testes lokalt gennem `MouseGuide/MouseGuideProducts.storekit` — vælg
-StoreKit-konfigurationen i schemets Run-indstillinger.
-
 ## Projektstruktur
 
 ```
@@ -94,7 +86,6 @@ MouseGuide/
 │   ├── MenuBarManager.swift          Menulinje
 │   ├── KeyboardShortcutMonitor.swift Global genvejstast (systemgenvej)
 │   ├── KeyboardShortcutRecorder.swift Optagelse af ny genvej
-│   ├── StoreKitManager.swift         Køb og gendannelse
 │   ├── LaunchAtLogin.swift           Login-element
 │   ├── Localizable.swift             Lokaliseringshjælper
 │   └── BuildInfo.swift               Version og byggeplacering

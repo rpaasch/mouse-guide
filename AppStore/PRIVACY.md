@@ -1,6 +1,6 @@
 # Privacy Policy for Cursor Sightline
 
-**Last updated: February 2026**
+**Last updated: November 2026**
 
 ## Overview
 
@@ -34,9 +34,8 @@ Cursor Sightline does not monitor the keyboard and does not ask for Input Monito
 
 Cursor Sightline stores only:
 - Your preferences (locally in macOS preferences)
-- Whether the full version has been purchased (locally in macOS preferences, so the app starts with the right appearance before the App Store has answered)
 
-No data is ever transmitted to external servers.
+No data is ever transmitted to external servers. The app has no network access at all.
 
 ## Third Parties
 

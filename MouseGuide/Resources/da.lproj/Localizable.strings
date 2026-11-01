@@ -8,11 +8,6 @@
 "welcome.message" = "Cursor Sightline tegner et trådkors der følger musemarkøren, så den er nem at få øje på.\n\nAppen bor i menulinjen øverst til højre. Klik på trådkors-ikonet for at slå den til og fra eller åbne indstillingerne — du kan også trykke ⌃⇧L når som helst, uanset hvilket program du er i.";
 "welcome.continue" = "Fortsæt";
 
-/* Pro gating */
-"pro.badge" = "Pro";
-"pro.badge.accessibility" = "kræver den fulde version";
-"pro.lockedValue.note" = "Viser gratis-visningen. Køb for at kunne ændre den.";
-
 /* Menu Bar */
 "menu.toggleLabel" = "Vis Cursor Sightline";
 "menu.settings" = "Indstillinger...";
@@ -67,7 +62,6 @@
 /* Settings Categories */
 "settings.category.appearance" = "Udseende";
 "settings.category.behavior" = "Adfærd";
-"settings.category.license" = "Licens";
 "settings.category.about" = "Om";
 
 /* Language / Sprog */
@@ -87,7 +81,6 @@
 /* Permissions */
 
 /* Common */
-"common.ok" = "OK";
 
 /* Common Buttons */
 
@@ -116,6 +109,7 @@
 "behavior.colorAdaptation" = "Farvetilpasning";
 "behavior.colorAdaptation.description" = "Vælg automatisk sort eller hvid farve baseret på baggrunden under markøren";
 "behavior.colorAdaptation.info" = "Når denne er slået til, ignoreres dine valgte farver i Udseende-fanen";
+"behavior.colorAdaptation.permissionMissing" = "Kræver tilladelse til skærmoptagelse. Indtil da bruges dine valgte farver.";
 "behavior.general" = "Generelt";
 "settings.autoHideFullscreen" = "Skjul i fuldskærm når musen står stille";
 "behavior.autoHideFullscreen.description" = "Skjul trådkorset når et program fylder hele skærmen og musen ikke har bevæget sig i et par sekunder — typisk mens du ser video";
@@ -173,24 +167,6 @@
 "format.seconds" = "%.1f sek";
 "format.speed" = "%.2f";
 "format.delay" = "%.2f s";
-
-/* License Tab */
-"license.status" = "Licensstatus";
-"license.activated" = "Cursor Sightline er aktiveret";
-"license.thankyou" = "Tak for din støtte!";
-"license.free" = "Gratis version";
-"license.freeRestrictions" = "Et fast rødt trådkors på én skærm. Køb for at låse op for alle seks tilstande, egne farver og størrelser, linjestile, farvetilpasning og alle dine skærme.";
-"license.checking" = "Tjekker licensstatus…";
-"license.buyTitle" = "Køb Cursor Sightline";
-"license.buyDescription" = "Få fuld adgang uden begrænsninger";
-"license.buyNow" = "Køb nu";
-"license.activated.title" = "Licens aktiveret!";
-"license.activated.message" = "Cursor Sightline er nu fuldt aktiveret. Tak for din støtte!";
-"license.restorePurchases" = "Gendan køb";
-"license.storeUnavailable" = "Prisen kunne ikke hentes fra App Store. Tjek internetforbindelsen, og prøv igen.";
-"license.retry" = "Prøv igen";
-
-/* Free Session Expiry */
 
 /* Updates */
 
@@ -253,15 +229,6 @@
 "accessibility.behavior.launchAtLogin.hint" = "Starter automatisk Cursor Sightline når du logger ind på din Mac";
 "accessibility.behavior.gliding.label" = "Aktiver glidende markør";
 "accessibility.behavior.gliding.hint" = "Får Cursor Sightline til at glide jævnt for at følge markørbevægelser i stedet for at hoppe øjeblikkeligt";
-
-/* Accessibility - License */
-"accessibility.license.active" = "Licens aktiv. Cursor Sightline er fuldt aktiveret. Tak for din støtte";
-"accessibility.license.restore.label" = "Gendan køb";
-"accessibility.license.restore.hint" = "Synkroniserer dine køb med Apple";
-"accessibility.license.buy.label" = "Køb Cursor Sightline fuld version";
-"accessibility.license.buy.hint" = "Køber livstidsadgang gennem Apple In-App Purchase";
-"accessibility.license.restorePrevious.label" = "Gendan tidligere køb";
-"accessibility.license.restorePrevious.hint" = "Gendanner dit køb hvis du købte Cursor Sightline på en anden enhed";
 
 /* Accessibility - Updates */
 

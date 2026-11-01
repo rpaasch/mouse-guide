@@ -8,11 +8,6 @@
 "welcome.message" = "Cursor Sightline draws a crosshair that follows your mouse pointer, so it is easy to spot.\n\nThe app lives in the menu bar at the top right. Click the crosshair icon to switch it on and off or open the settings — you can also press ⌃⇧L at any time, whichever app you are in.";
 "welcome.continue" = "Continue";
 
-/* Pro gating */
-"pro.badge" = "Pro";
-"pro.badge.accessibility" = "requires the full version";
-"pro.lockedValue.note" = "Showing the free appearance. Buy to change it.";
-
 /* Menu Bar */
 "menu.toggleLabel" = "Show Cursor Sightline";
 "menu.settings" = "Settings...";
@@ -67,7 +62,6 @@
 /* Settings Categories */
 "settings.category.appearance" = "Appearance";
 "settings.category.behavior" = "Behavior";
-"settings.category.license" = "License";
 "settings.category.about" = "About";
 
 /* Language / Sprog */
@@ -87,7 +81,6 @@
 /* Permissions */
 
 /* Common */
-"common.ok" = "OK";
 
 /* Common Buttons */
 
@@ -116,6 +109,7 @@
 "behavior.colorAdaptation" = "Color Adaptation";
 "behavior.colorAdaptation.description" = "Automatically choose black or white color based on the background under the cursor";
 "behavior.colorAdaptation.info" = "When this is enabled, your selected colors in the Appearance tab are ignored";
+"behavior.colorAdaptation.permissionMissing" = "Needs Screen Recording access. Until then your chosen colors are used.";
 "behavior.general" = "General";
 "settings.autoHideFullscreen" = "Hide in fullscreen while the mouse is still";
 "behavior.autoHideFullscreen.description" = "Hide the crosshair when an app fills the whole screen and the mouse has not moved for a few seconds — typically while watching video";
@@ -173,24 +167,6 @@
 "format.seconds" = "%.1f sec";
 "format.speed" = "%.2f";
 "format.delay" = "%.2f s";
-
-/* License Tab */
-"license.status" = "License Status";
-"license.activated" = "Cursor Sightline is activated";
-"license.thankyou" = "Thanks for your support!";
-"license.free" = "Free version";
-"license.freeRestrictions" = "A fixed red crosshair on one screen. Buy to unlock all six modes, your own colours and sizes, line styles, colour adaptation and all your displays.";
-"license.checking" = "Checking license status...";
-"license.buyTitle" = "Buy Cursor Sightline";
-"license.buyDescription" = "Get full access without restrictions";
-"license.buyNow" = "Buy Now";
-"license.activated.title" = "License Activated!";
-"license.activated.message" = "Cursor Sightline is now fully activated. Thanks for your support!";
-"license.restorePurchases" = "Restore Purchases";
-"license.storeUnavailable" = "Couldn't get the price from the App Store. Check your internet connection and try again.";
-"license.retry" = "Try Again";
-
-/* Free Session Expiry */
 
 /* Updates */
 
@@ -253,15 +229,6 @@
 "accessibility.behavior.launchAtLogin.hint" = "Automatically starts Cursor Sightline when you log in to your Mac";
 "accessibility.behavior.gliding.label" = "Enable gliding cursor";
 "accessibility.behavior.gliding.hint" = "Makes the crosshair smoothly glide to follow cursor movements instead of jumping instantly";
-
-/* Accessibility - License */
-"accessibility.license.active" = "License active. Cursor Sightline is fully activated. Thank you for your support";
-"accessibility.license.restore.label" = "Restore purchases";
-"accessibility.license.restore.hint" = "Syncs your purchases with Apple";
-"accessibility.license.buy.label" = "Buy Cursor Sightline full version";
-"accessibility.license.buy.hint" = "Purchases lifetime access through Apple In-App Purchase";
-"accessibility.license.restorePrevious.label" = "Restore previous purchases";
-"accessibility.license.restorePrevious.hint" = "Restores your purchase if you bought Cursor Sightline on another device";
 
 /* Accessibility - Updates */
 

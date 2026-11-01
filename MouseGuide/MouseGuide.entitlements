@@ -4,8 +4,5 @@
 <dict>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
-	<!-- StoreKit product lookup and purchase -->
-	<key>com.apple.security.network.client</key>
-	<true/>
 </dict>
 </plist>

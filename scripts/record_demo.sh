@@ -1,8 +1,7 @@
 #!/bin/bash
 #
 # Records the screen demo App Review asked for under Guideline 2.1: launching
-# the app, the menu bar icon, the crosshair following the pointer, Settings,
-# and where the in-app purchase is offered.
+# the app, the menu bar icon, the crosshair following the pointer and Settings.
 #
 # Records the WHOLE screen on purpose -- Apple wants to see the app launch and
 # the menu bar, which a window-only capture cannot show. A backdrop window
@@ -10,14 +9,8 @@
 # chat window, project names and all, into the frame. WATCH THE RECORDING
 # BEFORE SENDING IT anyway -- whatever is on screen goes to Apple.
 #
-# Two things this deliberately does NOT do:
-#
-#   * It never clicks Buy Now. A script must not be able to start a purchase.
-#     To get the payment sheet on camera, click it yourself while recording.
-#   * It does not reset the permission prompts. Those are granted already, so
-#     they will not reappear. If you want them in the recording, revoke them
-#     first in System Settings > Privacy & Security (Input Monitoring and
-#     Screen Recording), then run this.
+# It does not show the Screen Recording prompt. That appears only when automatic
+# color adaptation is switched on, and it is already granted on this machine.
 #
 # Usage: scripts/record_demo.sh [en|da] [output.mov]
 #
@@ -98,7 +91,7 @@ REC=$!
 sleep 4   # let the recording settle on a clean desktop before anything happens
 
 # 1. Launch. The menu bar icon appearing is the first thing Apple should see.
-#    Deliberately WITHOUT -fullAccessForScreenshots: that flag calls
+#    Deliberately WITHOUT -screenshotMode: that flag calls
 #    showCrosshairs() itself at launch, so the menu click below would toggle the
 #    crosshair straight back off -- which is exactly what ruined the first take.
 #    Without it the app behaves as it does for a real user, which is what a
@@ -137,14 +130,6 @@ EOF
 sleep 3
 "$HERE/warpmouse" 700 400
 sleep 4
-
-# 5. The purchase location. Sidebar rows sit 32 points apart from Appearance at
-#    y=123, so License -- the third -- is at 187. Stop here: showing where the
-#    purchase lives is the point, and clicking Buy Now is not this script's job.
-"$HERE/warpmouse" 300 187 click
-sleep 3
-"$HERE/warpmouse" 700 500
-sleep 6
 
 wait $REC
 echo "Done: $OUT"

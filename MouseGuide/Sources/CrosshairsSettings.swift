@@ -5,11 +5,6 @@ import Carbon.HIToolbox
 class CrosshairsSettings: ObservableObject {
     static let shared = CrosshairsSettings()
 
-    /// Key for the cached purchase flag in UserDefaults. StoreKitManager writes
-    /// it; everything else reads it. Declared here rather than on
-    /// StoreKitManager so non-main-actor code can reach it.
-    static let purchaseCacheKey = "isPurchased"
-
     /// Single source of truth for default values. Both `init` and
     /// `resetToDefaults()` read from here, so the two cannot drift apart -
     /// which is how reset previously ended up missing seven settings.
@@ -17,7 +12,7 @@ class CrosshairsSettings: ObservableObject {
         static let crosshairColor = Color.red
         static let borderColor = Color.black
         static let circleFillColor = Color.red
-        static let opacity = 0.75
+        static let opacity = 1.0
         static let centerRadius = 20.0
         static let thickness = 5.0
         static let edgePointerThickness = 1.0
@@ -37,22 +32,6 @@ class CrosshairsSettings: ObservableObject {
         static let glidingDelay = 0.2
         static let circleRadius = 50.0
         static let circleFillOpacity = 0.0
-        static let lineStyle = LineStyle.solid
-    }
-
-    /// Appearance used when the full version has not been purchased.
-    /// Deliberately sparse - one fixed look, no customisation - but legible.
-    /// The 1px border is not a feature; it is what keeps a red line visible
-    /// against a red or dark background, and the whole point of the app is
-    /// being seen.
-    enum FreeTier {
-        static let crosshairColor = Color.red
-        static let borderColor = Color.black
-        static let thickness = 2.0
-        static let borderSize = 1.0
-        static let centerRadius = 10.0
-        static let opacity = 1.0
-        static let orientation = CrosshairOrientation.both
         static let lineStyle = LineStyle.solid
     }
 
@@ -223,15 +202,6 @@ class CrosshairsSettings: ObservableObject {
         }
 
         LocalizationManager.shared.setLanguage(self.language)
-
-        self.hasFullAccess = defaults.bool(forKey: Self.purchaseCacheKey) || Self.screenshotOverride
-        NotificationCenter.default.addObserver(
-            forName: .init("PurchaseStateChanged"),
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.refreshPurchaseState()
-        }
     }
 
     private static func storedDouble(_ key: String, default fallback: Double) -> Double {
@@ -304,89 +274,6 @@ class CrosshairsSettings: ObservableObject {
         let b = Double(rgb & 0x0000FF) / 255.0
 
         return Color(red: r, green: g, blue: b)
-    }
-
-    // MARK: - Purchase-based Feature Availability
-
-    /// True when the full version has been purchased.
-    ///
-    /// Held in memory rather than read on demand: every `effective*` property
-    /// consults it, and the draw path touches roughly ten of them per frame per
-    /// screen. It is refreshed from the cache StoreKitManager writes, whenever
-    /// `PurchaseStateChanged` fires.
-    ///
-    /// Known trade-off: the underlying flag can be forged with `defaults write`,
-    /// so gating is not tamper-proof. Accepted deliberately for a low-priced
-    /// utility - the alternative costs a visible flash at launch.
-    @Published private(set) var hasFullAccess: Bool = false
-
-    /// Lets a Debug build present the full-version appearance without a real
-    /// purchase, so App Store screenshots can show what is actually being sold.
-    /// Compiled out of Release entirely - it cannot ship.
-    private static var screenshotOverride: Bool {
-        #if DEBUG
-        return ProcessInfo.processInfo.arguments.contains("-fullAccessForScreenshots")
-        #else
-        return false
-        #endif
-    }
-
-    private func refreshPurchaseState() {
-        let latest = UserDefaults.standard.bool(forKey: Self.purchaseCacheKey) || Self.screenshotOverride
-        guard latest != hasFullAccess else { return }
-        hasFullAccess = latest
-        NotificationCenter.default.post(name: .init("CrosshairsSettingsChanged"), object: nil)
-    }
-
-    var effectiveCrosshairColor: Color {
-        hasFullAccess ? crosshairColor : FreeTier.crosshairColor
-    }
-
-    var effectiveBorderColor: Color {
-        hasFullAccess ? borderColor : FreeTier.borderColor
-    }
-
-    var effectiveCircleFillColor: Color {
-        hasFullAccess ? circleFillColor : FreeTier.crosshairColor
-    }
-
-    var effectiveThickness: Double {
-        hasFullAccess ? thickness : FreeTier.thickness
-    }
-
-    var effectiveOpacity: Double {
-        hasFullAccess ? opacity : FreeTier.opacity
-    }
-
-    var effectiveCenterRadius: Double {
-        hasFullAccess ? centerRadius : FreeTier.centerRadius
-    }
-
-    var effectiveBorderSize: Double {
-        hasFullAccess ? borderSize : FreeTier.borderSize
-    }
-
-    var effectiveInvertColors: Bool {
-        hasFullAccess ? invertColors : false
-    }
-
-    /// Locked to a fixed value for free users rather than "whatever was last
-    /// selected", so nobody is stranded in e.g. circle mode after buying and
-    /// refunding, or after upgrading from an older build.
-    var effectiveOrientation: CrosshairOrientation {
-        hasFullAccess ? orientation : FreeTier.orientation
-    }
-
-    var effectiveLineStyle: LineStyle {
-        hasFullAccess ? lineStyle : FreeTier.lineStyle
-    }
-
-    var effectiveUseFixedLength: Bool {
-        hasFullAccess ? useFixedLength : false
-    }
-
-    var effectiveUseReadingLine: Bool {
-        hasFullAccess ? useReadingLine : false
     }
 
     // MARK: - Permission Helpers
