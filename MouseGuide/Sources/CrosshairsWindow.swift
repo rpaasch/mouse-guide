@@ -877,12 +877,12 @@ class CrosshairsNativeView: NSView {
     private func sampleBackgroundColor(at position: CGPoint) -> NSColor {
         // Create a small rect around cursor to sample
         let sampleSize = Self.sampleSize
-        // The cursor position counts up from the bottom of the primary screen, and
-        // the capture below counts down from its top.
-        let primaryHeight = NSScreen.screens.first?.frame.height ?? 0
+        // The position counts from the bottom of the primary screen, the capture
+        // from its top. Without this the color comes from the mirrored spot.
+        let primaryScreenHeight = NSScreen.screens.first?.frame.height ?? 0
         let sampleRect = CGRect(
             x: position.x - sampleSize / 2,
-            y: primaryHeight - position.y - sampleSize / 2,
+            y: primaryScreenHeight - position.y - sampleSize / 2,
             width: sampleSize,
             height: sampleSize
         )
