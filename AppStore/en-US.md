@@ -44,8 +44,8 @@ Accessibility
 • Helps track the cursor
 • Reading line mode for on-screen reading
 
-**FREE AND FULL VERSION:**
-Cursor Sightline is free to use and shows a fixed red crosshair on one screen. A single in-app purchase unlocks all six modes, your own colours and sizes, line styles, automatic colour adaptation and all your displays. No subscription, no time limit.
+**FREE:**
+Cursor Sightline is free, and every feature is included. No in-app purchases, no subscription, no ads.
 
 **PRIVACY:**
 Cursor Sightline collects no personal data. The only permission it asks for is Screen Recording – and only if you turn on automatic color adaptation. The keyboard shortcut works without any permissions.

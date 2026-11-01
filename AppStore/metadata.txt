@@ -54,8 +54,8 @@ Accessibility
 • Helps track the cursor
 • Reading line mode for on-screen reading
 
-FREE AND FULL VERSION:
-Cursor Sightline is free to use and shows a fixed red crosshair on one screen. A single in-app purchase unlocks all six modes, your own colours and sizes, line styles, automatic colour adaptation and all your displays. No subscription, no time limit.
+FREE:
+Cursor Sightline is free, and every feature is included. No in-app purchases, no subscription, no ads.
 
 PRIVACY:
 Cursor Sightline collects no personal data. The only permission it asks for is Screen Recording – and only if you turn on automatic color adaptation. The keyboard shortcut works without any permissions.
@@ -122,8 +122,8 @@ Tilgængelighed
 • Hjælper med at spore markøren
 • Læselinje-tilstand til læsning på skærmen
 
-GRATIS OG FULD VERSION:
-Cursor Sightline er gratis at bruge og viser et fast rødt trådkors på én skærm. Et enkelt køb i appen låser op for alle seks tilstande, egne farver og størrelser, linjestile, automatisk farvetilpasning og alle dine skærme. Ingen abonnement, ingen tidsgrænse.
+GRATIS:
+Cursor Sightline er gratis, og alle funktioner er med. Ingen køb i appen, intet abonnement, ingen reklamer.
 
 PRIVATLIV:
 Cursor Sightline indsamler ingen personlige data. Den eneste tilladelse appen beder om, er skærmoptagelse – og kun hvis du slår automatisk farvetilpasning til. Tastaturgenvejen virker uden tilladelser.
@@ -160,11 +160,6 @@ PRIVACY POLICY URL:
 https://github.com/rpaasch/mouse-guide/blob/main/PRIVACY.md
 
 PRICE:
-Free with In-App Purchase (Full Version)
-
-IN-APP PURCHASE:
-- Name: Cursor Sightline Pro
-- Price: [TBD]
-- Description: Unlock all features including multi-monitor support, all crosshair modes, and customization options.
+Free
 
 ═══════════════════════════════════════════════════════════════════════════════

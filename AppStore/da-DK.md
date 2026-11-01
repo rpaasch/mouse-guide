@@ -44,8 +44,8 @@ Tilgængelighed
 • Hjælper med at spore markøren
 • Læselinje-tilstand til læsning på skærmen
 
-**GRATIS OG FULD VERSION:**
-Cursor Sightline er gratis at bruge og viser et fast rødt trådkors på én skærm. Et enkelt køb i appen låser op for alle seks tilstande, egne farver og størrelser, linjestile, automatisk farvetilpasning og alle dine skærme. Ingen abonnement, ingen tidsgrænse.
+**GRATIS:**
+Cursor Sightline er gratis, og alle funktioner er med. Ingen køb i appen, intet abonnement, ingen reklamer.
 
 **PRIVATLIV:**
 Cursor Sightline indsamler ingen personlige data. Den eneste tilladelse appen beder om, er skærmoptagelse – og kun hvis du slår automatisk farvetilpasning til. Tastaturgenvejen virker uden tilladelser.

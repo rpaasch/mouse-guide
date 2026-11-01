@@ -17,7 +17,7 @@ We tested a Release build with the app's Input Monitoring and Accessibility perm
 
 3. Guideline 2.1(b) - Buy Now button greyed out
 
-The button was disabled because the In-App Purchase product could not be loaded: our Paid Apps Agreement was not yet in effect. It is now active. [CHECK: Paid Apps Agreement shows Active in App Store Connect before sending] We have also changed the app so this cannot go unexplained again: it reloads the product whenever the License pane opens, and if the App Store cannot be reached it says so next to the button and offers to try again.
+The button no longer exists. Cursor Sightline is now free with every feature included, and the in-app purchase has been removed from the app and from this submission. [CHECK: the purchase is out of the submission before sending] The app also no longer has the network client entitlement. The screen recording we sent on 17 August still shows how the app works, except for the License pane, which is gone. We can send a new recording on request.
 
 The only permission the app can request is Screen Recording, and only when the user turns on automatic color adaptation in Settings. It samples the brightness under the pointer locally; nothing is recorded, stored or transmitted.
 
