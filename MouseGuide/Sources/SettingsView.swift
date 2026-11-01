@@ -1232,11 +1232,14 @@ struct AboutTab: View {
                 Divider()
                     .padding(.horizontal, 24)
 
-                // Permissions Section
-                PermissionsSection(settings: settings)
+                // Only with color adaptation on: the one thing that needs a permission.
+                // Otherwise an orange "missing" reads as a fault in an app that lacks nothing.
+                if settings.invertColors {
+                    PermissionsSection(settings: settings)
 
-                Divider()
-                    .padding(.horizontal, 24)
+                    Divider()
+                        .padding(.horizontal, 24)
+                }
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(LocalizedString.aboutMadeBy)

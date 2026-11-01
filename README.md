@@ -58,8 +58,9 @@ netværksadgang.
 Appen beder ikke om Indtastningsovervågning eller Tilgængelighed. App Review
 afviste i august 2026 en version, der lyttede til tastaturet (retningslinje
 2.4.5). Skjul-mens-du-skriver læser nu kun, hvor længe siden der sidst blev
-trykket på en tast — aldrig hvilken. Status for skærmoptagelse kan ses under
-Indstillinger → Om, hvorfra man også kan åbne Systemindstillinger direkte.
+trykket på en tast — aldrig hvilken. Når farvetilpasning er slået til, kan status
+for skærmoptagelse ses under Indstillinger → Om, hvorfra man også kan åbne
+Systemindstillinger direkte.
 
 Bemærk at macOS knytter tilladelser til appens placering. Flytter du appen
 efter at have givet dem, skal de gives igen.
