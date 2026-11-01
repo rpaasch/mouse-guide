@@ -413,7 +413,8 @@ class CrosshairsNativeView: NSView {
 
     private static let sampleSize: CGFloat = 20
     private static let sampleInterval: TimeInterval = 0.1
-    private static let movingSampleInterval: TimeInterval = 1.0 / 30.0
+    private static let movingSampleInterval: TimeInterval = 1.0 / 60.0
+    private static let movingSampleDistance: CGFloat = 2
 
     init(mouseTracker: MouseTracker, settings: CrosshairsSettings, screenFrame: NSRect) {
         self.mouseTracker = mouseTracker
@@ -852,9 +853,10 @@ class CrosshairsNativeView: NSView {
     }
 
     // Brightness under the cursor, captured again only when due: steadily while the
-    // pointer rests, so a change underneath it still shows, and sooner once half the
-    // sampled square is new. A fast swipe passes that distance on every frame, so
-    // the shorter interval is what limits capturing while the pointer moves.
+    // pointer rests, so a change underneath it still shows, and sooner as soon as it
+    // moves. The distance is small because a slow drag across an edge is where a late
+    // color shows most, and 2 points is a tenth of the sampled square. A fast swipe
+    // passes it on every frame, so the shorter interval limits capturing there.
     private func backgroundBrightness(at position: CGPoint) -> CGFloat {
         let now = ProcessInfo.processInfo.systemUptime
 
@@ -862,7 +864,7 @@ class CrosshairsNativeView: NSView {
             let elapsed = now - lastSampleTime
             let moved = hypot(position.x - lastSamplePosition.x, position.y - lastSamplePosition.y)
             let isDue = elapsed >= Self.sampleInterval
-                || (elapsed >= Self.movingSampleInterval && moved >= Self.sampleSize / 2)
+                || (elapsed >= Self.movingSampleInterval && moved >= Self.movingSampleDistance)
             guard isDue else { return cachedBrightness }
         }
 
