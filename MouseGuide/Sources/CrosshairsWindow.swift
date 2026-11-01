@@ -405,6 +405,16 @@ class CrosshairsNativeView: NSView {
     // true = currently using light crosshair, false = currently using dark crosshair
     private var isUsingLightCrosshair: Bool = true
 
+    // The last capture of the background. Every capture makes macOS check the
+    // Screen Recording permission, so draws reuse this until a new one is due.
+    private var cachedBrightness: CGFloat?
+    private var lastSampleTime: TimeInterval = 0
+    private var lastSamplePosition: CGPoint = .zero
+
+    private static let sampleSize: CGFloat = 20
+    private static let sampleInterval: TimeInterval = 0.1
+    private static let movingSampleInterval: TimeInterval = 1.0 / 30.0
+
     init(mouseTracker: MouseTracker, settings: CrosshairsSettings, screenFrame: NSRect) {
         self.mouseTracker = mouseTracker
         self.settings = settings
@@ -525,8 +535,7 @@ class CrosshairsNativeView: NSView {
         // permission is gone, draw the chosen colors; Settings explains why.
         if settings.invertColors && settings.hasScreenRecordingPermission() {
             // Dynamic color inversion based on background with hysteresis to prevent flickering
-            let backgroundColor = sampleBackgroundColor(at: mouseTracker.position)
-            let brightness = backgroundColor.brightnessValue
+            let brightness = backgroundBrightness(at: mouseTracker.position)
 
             // Hysteresis thresholds to prevent flickering at boundary
             let switchToDarkThreshold: CGFloat = 0.6   // Switch to dark crosshair only if clearly light
@@ -842,10 +851,32 @@ class CrosshairsNativeView: NSView {
         context.fillPath()
     }
 
+    // Brightness under the cursor, captured again only when due: steadily while the
+    // pointer rests, so a change underneath it still shows, and sooner once half the
+    // sampled square is new. A fast swipe passes that distance on every frame, so
+    // the shorter interval is what limits capturing while the pointer moves.
+    private func backgroundBrightness(at position: CGPoint) -> CGFloat {
+        let now = ProcessInfo.processInfo.systemUptime
+
+        if let cachedBrightness {
+            let elapsed = now - lastSampleTime
+            let moved = hypot(position.x - lastSamplePosition.x, position.y - lastSamplePosition.y)
+            let isDue = elapsed >= Self.sampleInterval
+                || (elapsed >= Self.movingSampleInterval && moved >= Self.sampleSize / 2)
+            guard isDue else { return cachedBrightness }
+        }
+
+        let brightness = sampleBackgroundColor(at: position).brightnessValue
+        cachedBrightness = brightness
+        lastSampleTime = now
+        lastSamplePosition = position
+        return brightness
+    }
+
     // Sample the background color at cursor position
     private func sampleBackgroundColor(at position: CGPoint) -> NSColor {
         // Create a small rect around cursor to sample
-        let sampleSize: CGFloat = 20
+        let sampleSize = Self.sampleSize
         // The cursor position counts up from the bottom of the primary screen, and
         // the capture below counts down from its top.
         let primaryHeight = NSScreen.screens.first?.frame.height ?? 0
