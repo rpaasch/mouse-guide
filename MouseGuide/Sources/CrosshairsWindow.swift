@@ -411,6 +411,10 @@ class CrosshairsNativeView: NSView {
     private var lastSampleTime: TimeInterval = 0
     private var lastSamplePosition: CGPoint = .zero
 
+    // Edge pointers sit far from the cursor, so each has its own color state.
+    private var edgePointerUsesLight: [PointerDirection: Bool] = [:]
+    private var nextEdgePointer = 0
+
     private static let sampleSize: CGFloat = 20
     private static let sampleInterval: TimeInterval = 0.1
     private static let movingSampleInterval: TimeInterval = 1.0 / 60.0
@@ -534,33 +538,21 @@ class CrosshairsNativeView: NSView {
         // Capturing the screen without permission makes macOS show its own prompt,
         // which must only ever follow the user switching this on in Settings. If the
         // permission is gone, draw the chosen colors; Settings explains why.
-        if settings.invertColors && settings.hasScreenRecordingPermission() {
-            // Dynamic color inversion based on background with hysteresis to prevent flickering
-            let brightness = backgroundBrightness(at: mouseTracker.position)
-
-            // Hysteresis thresholds to prevent flickering at boundary
-            let switchToDarkThreshold: CGFloat = 0.6   // Switch to dark crosshair only if clearly light
-            let switchToLightThreshold: CGFloat = 0.4  // Switch to light crosshair only if clearly dark
-
-            // Update color state with hysteresis
-            if brightness > switchToDarkThreshold {
-                // Clearly light background → use dark crosshair
-                isUsingLightCrosshair = false
-            } else if brightness < switchToLightThreshold {
-                // Clearly dark background → use light crosshair
-                isUsingLightCrosshair = true
+        let adaptsColors = settings.invertColors && settings.hasScreenRecordingPermission()
+        if adaptsColors {
+            // Dynamic color inversion based on background with hysteresis to prevent flickering.
+            // Edge pointers choose their own colors below: what lies under the cursor says
+            // nothing about the screen edges.
+            if settings.orientation != .edgePointers {
+                isUsingLightCrosshair = usesLightCrosshair(
+                    on: backgroundBrightness(at: mouseTracker.position),
+                    current: isUsingLightCrosshair
+                )
             }
-            // If between 0.4-0.6, keep current state (hysteresis zone)
 
-            if isUsingLightCrosshair {
-                // Light crosshair with dark border
-                crosshairColor = NSColor.white.withAlphaComponent(settings.opacity)
-                borderColor = NSColor.black.withAlphaComponent(settings.opacity)
-            } else {
-                // Dark crosshair with light border
-                crosshairColor = NSColor.black.withAlphaComponent(settings.opacity)
-                borderColor = NSColor.white.withAlphaComponent(settings.opacity)
-            }
+            let colors = adaptiveColors(light: isUsingLightCrosshair)
+            crosshairColor = colors.fill
+            borderColor = colors.border
 
             // Enforce minimum 1px border when color adaptation is active for guaranteed contrast
             effectiveBorderSize = max(baseBorderSize, 1.0)
@@ -731,62 +723,28 @@ class CrosshairsNativeView: NSView {
             // Hide distance - pointer disappears when mouse is within this distance
             let hideDistance = pointerSize * 1.5
 
-            // Top pointer (pointing down towards mouse)
-            let topX = center.x
-            let topY: CGFloat = 0
-            let topDist = abs(center.y - topY)
-            if topDist > hideDistance {
-                drawTrianglePointer(in: context,
-                                  at: CGPoint(x: topX, y: topY),
-                                  size: pointerSize,
-                                  direction: .down,
-                                  color: crosshairColor,
-                                  borderColor: borderColor,
-                                  thickness: edgePointerThickness,
-                                  effectiveBorderSize: effectiveBorderSize)
+            // Top, bottom, left and right, each pointing towards the mouse
+            let visiblePointers = [
+                EdgePointer(direction: .down, position: CGPoint(x: center.x, y: 0), distance: abs(center.y)),
+                EdgePointer(direction: .up, position: CGPoint(x: center.x, y: viewSize.height), distance: abs(center.y - viewSize.height)),
+                EdgePointer(direction: .right, position: CGPoint(x: 0, y: center.y), distance: abs(center.x)),
+                EdgePointer(direction: .left, position: CGPoint(x: viewSize.width, y: center.y), distance: abs(center.x - viewSize.width))
+            ].filter { $0.distance > hideDistance }
+
+            if adaptsColors {
+                refreshEdgePointerColor(among: visiblePointers, viewSize: viewSize)
             }
 
-            // Bottom pointer (pointing up towards mouse)
-            let bottomX = center.x
-            let bottomY = viewSize.height
-            let bottomDist = abs(center.y - bottomY)
-            if bottomDist > hideDistance {
+            for pointer in visiblePointers {
+                let colors = adaptsColors
+                    ? adaptiveColors(light: edgePointerUsesLight[pointer.direction] ?? true)
+                    : (fill: crosshairColor, border: borderColor)
                 drawTrianglePointer(in: context,
-                                  at: CGPoint(x: bottomX, y: bottomY),
+                                  at: pointer.position,
                                   size: pointerSize,
-                                  direction: .up,
-                                  color: crosshairColor,
-                                  borderColor: borderColor,
-                                  thickness: edgePointerThickness,
-                                  effectiveBorderSize: effectiveBorderSize)
-            }
-
-            // Left pointer (pointing right towards mouse)
-            let leftX: CGFloat = 0
-            let leftY = center.y
-            let leftDist = abs(center.x - leftX)
-            if leftDist > hideDistance {
-                drawTrianglePointer(in: context,
-                                  at: CGPoint(x: leftX, y: leftY),
-                                  size: pointerSize,
-                                  direction: .right,
-                                  color: crosshairColor,
-                                  borderColor: borderColor,
-                                  thickness: edgePointerThickness,
-                                  effectiveBorderSize: effectiveBorderSize)
-            }
-
-            // Right pointer (pointing left towards mouse)
-            let rightX = viewSize.width
-            let rightY = center.y
-            let rightDist = abs(center.x - rightX)
-            if rightDist > hideDistance {
-                drawTrianglePointer(in: context,
-                                  at: CGPoint(x: rightX, y: rightY),
-                                  size: pointerSize,
-                                  direction: .left,
-                                  color: crosshairColor,
-                                  borderColor: borderColor,
+                                  direction: pointer.direction,
+                                  color: colors.fill,
+                                  borderColor: colors.border,
                                   thickness: edgePointerThickness,
                                   effectiveBorderSize: effectiveBorderSize)
             }
@@ -795,6 +753,12 @@ class CrosshairsNativeView: NSView {
 
     private enum PointerDirection {
         case up, down, left, right
+    }
+
+    private struct EdgePointer {
+        let direction: PointerDirection
+        let position: CGPoint
+        let distance: CGFloat   // from the cursor, along the axis it points
     }
 
     private func drawTrianglePointer(in context: CGContext,
@@ -852,20 +816,24 @@ class CrosshairsNativeView: NSView {
         context.fillPath()
     }
 
-    // Brightness under the cursor, captured again only when due: steadily while the
-    // pointer rests, so a change underneath it still shows, and sooner as soon as it
-    // moves. The distance is small because a slow drag across an edge is where a late
-    // color shows most, and 2 points is a tenth of the sampled square. A fast swipe
-    // passes it on every frame, so the shorter interval limits capturing there.
+    // Whether to capture again: steadily while the pointer rests, so a change
+    // underneath it still shows, and sooner as soon as it moves. The distance is small
+    // because a slow drag across an edge is where a late color shows most, and 2 points
+    // is a tenth of the sampled square. A fast swipe passes it on every frame, so the
+    // shorter interval limits capturing there.
+    private func isCaptureDue(at position: CGPoint, now: TimeInterval) -> Bool {
+        let elapsed = now - lastSampleTime
+        let moved = hypot(position.x - lastSamplePosition.x, position.y - lastSamplePosition.y)
+        return elapsed >= Self.sampleInterval
+            || (elapsed >= Self.movingSampleInterval && moved >= Self.movingSampleDistance)
+    }
+
+    // Brightness under the cursor, captured again only when due
     private func backgroundBrightness(at position: CGPoint) -> CGFloat {
         let now = ProcessInfo.processInfo.systemUptime
 
-        if let cachedBrightness {
-            let elapsed = now - lastSampleTime
-            let moved = hypot(position.x - lastSamplePosition.x, position.y - lastSamplePosition.y)
-            let isDue = elapsed >= Self.sampleInterval
-                || (elapsed >= Self.movingSampleInterval && moved >= Self.movingSampleDistance)
-            guard isDue else { return cachedBrightness }
+        if let cachedBrightness, !isCaptureDue(at: position, now: now) {
+            return cachedBrightness
         }
 
         let brightness = sampleBackgroundColor(at: position).brightnessValue
@@ -873,6 +841,59 @@ class CrosshairsNativeView: NSView {
         lastSampleTime = now
         lastSamplePosition = position
         return brightness
+    }
+
+    // Edge pointers take turns on the line's captures, one each time a capture is due,
+    // so this mode captures no more often. A pointer without a color yet goes first, so
+    // all of them are right from the start.
+    private func refreshEdgePointerColor(among pointers: [EdgePointer], viewSize: CGSize) {
+        guard !pointers.isEmpty else { return }
+
+        let now = ProcessInfo.processInfo.systemUptime
+        let cursor = mouseTracker.position
+        let uncolored = pointers.first { edgePointerUsesLight[$0.direction] == nil }
+        guard uncolored != nil || isCaptureDue(at: cursor, now: now) else { return }
+
+        nextEdgePointer = (nextEdgePointer + 1) % pointers.count
+        let pointer = uncolored ?? pointers[nextEdgePointer]
+
+        // Keep the sampled square on this screen, and convert from view coordinates
+        let inset = Self.sampleSize / 2
+        let x = min(max(pointer.position.x, inset), viewSize.width - inset)
+        let y = min(max(pointer.position.y, inset), viewSize.height - inset)
+        let brightness = sampleBackgroundColor(
+            at: CGPoint(x: screenFrame.minX + x, y: screenFrame.maxY - y)
+        ).brightnessValue
+
+        edgePointerUsesLight[pointer.direction] = usesLightCrosshair(
+            on: brightness,
+            current: edgePointerUsesLight[pointer.direction] ?? true
+        )
+        lastSampleTime = now
+        lastSamplePosition = cursor
+    }
+
+    private func usesLightCrosshair(on brightness: CGFloat, current: Bool) -> Bool {
+        // Hysteresis thresholds to prevent flickering at boundary
+        let switchToDarkThreshold: CGFloat = 0.6   // Switch to dark crosshair only if clearly light
+        let switchToLightThreshold: CGFloat = 0.4  // Switch to light crosshair only if clearly dark
+
+        if brightness > switchToDarkThreshold {
+            // Clearly light background → use dark crosshair
+            return false
+        } else if brightness < switchToLightThreshold {
+            // Clearly dark background → use light crosshair
+            return true
+        }
+        // If between 0.4-0.6, keep current state (hysteresis zone)
+        return current
+    }
+
+    private func adaptiveColors(light: Bool) -> (fill: NSColor, border: NSColor) {
+        let white = NSColor.white.withAlphaComponent(settings.opacity)
+        let black = NSColor.black.withAlphaComponent(settings.opacity)
+        // A light crosshair gets a dark border, and a dark one a light border
+        return light ? (fill: white, border: black) : (fill: black, border: white)
     }
 
     // Sample the background color at cursor position
